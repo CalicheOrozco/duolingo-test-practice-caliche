@@ -12,15 +12,15 @@ function RealWordsTestComp() {
       } = useForm();
     
       const selectedBtn =
-        "text-white text-center p-2 w-24 cursor-pointer rounded-xl bg-orange-600 font-bold rounded-lg";
+        "text-white text-center p-2 w-32 cursor-pointer rounded-xl bg-orange-600 font-bold rounded-lg";
       const unselectedBtn =
-        "text-white text-center p-2 w-24 cursor-pointer rounded-xl border-2 border-orange-900 lg:hover:bg-orange-600 font-bold rounded-lg";
+        "text-white text-center p-2 w-32 cursor-pointer rounded-xl border-2 border-orange-900 lg:hover:bg-orange-600 font-bold rounded-lg";
       const correctAnswer =
-        "text-white text-center p-2 w-24 cursor-pointer rounded-xl bg-green-400 font-bold rounded-lg";
+        "text-white text-center p-2 w-32 cursor-pointer rounded-xl bg-green-400 font-bold rounded-lg";
       const wrongAnswer =
-        "text-white text-center p-2 w-24 cursor-pointer rounded-xl bg-red-400 font-bold rounded-lg";
+        "text-white text-center p-2 w-32 cursor-pointer rounded-xl bg-red-400 font-bold rounded-lg";
       const noAnswerCorrect =
-        "text-white text-center p-2 w-24 cursor-pointer rounded-xl bg-yellow-400 font-bold rounded-lg";
+        "text-white text-center p-2 w-32 cursor-pointer rounded-xl bg-yellow-400 font-bold rounded-lg";
     
       const [wordLists, setWordLists] = useState([]);
       const [wordList, setWordList] = useState(null);
@@ -153,7 +153,7 @@ function RealWordsTestComp() {
               <h1 className=" text-4xl font-bold  text-white text-center py-5">
                 Type the statement that you hear
               </h1>
-              <div className="flex justify-around p-1 flex-wrap md:flex-row items-center gap-2">
+              <div className="flex justify-around p-1 flex-wrap md:flex-row items-center gap-3">
                 {/* bottons with the words */}
                 {wordList.map((word, index) => {
                   return (
