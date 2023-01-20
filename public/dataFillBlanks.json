@@ -1,0 +1,65 @@
+[
+    {
+        "difficulty": "easy",
+        "sentence": ["Born is England, Norton spent most of his early life in South Africa. He", "to San Francisco", "1849", "receiving a bequest", "$40,000 from", " father's",",","aboard", " steam", "Hurlothrumbo. Norton initially made a living as a businessman, but he lost his fortune investing in Peruvian"],
+        "correct_answers": [ {"word": "immigrated", "start": 5}, {"word": "in", "start": 1 }, {"word": "after", "start": 2}, {"word": "of", "start": 1}, {"word": "his", "start": 1}, {"word": "estate", "start": 3}, {"word": "arriving", "start": 4},{"word": "the", "start": 1}, {"word": "yards", "start": 1}]
+        
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Baseball uniforms were first worn by the New York Knickerbockers Baseball Club in the 1800s. Their", "were pants", "of blue wool, white flannel", "and straw", ".Since then, the", "have gone", "many", "More items,","and many other", "were done and", "to baseball uniforms", "the years. The", "of baseball uniforms", "changed, little by little over time."],
+        "correct_answers": [ {"word": "uniforms", "start": 4}, {"word": "made", "start": 2 }, {"word": "shirts", "start": 3}, {"word": "hats", "start": 2}, {"word": "uniforms", "start": 4}, {"word": "through", "start": 3}, {"word": "changes", "start": 3},{"word": "ideas", "start": 2}, {"word": "improvements", "start": 5}, {"word": "added", "start": 2}, {"word": "over", "start": 2}, {"word": "style", "start": 2}, {"word": "also", "start": 2}]
+        
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["The closing ceremony of the Olympic Games takes place after all sporting events have concluded. Flag-bearers", "each", "country enter the", ". They are", "by the athletes", "enter together", "any national distinction. Three", "flags are hoisted", "the corresponding national","are",". The flag","Greece to honor the", "of the Olympic Games,", "flag of the", "host country, and the flag of the country", "the next Summer or Winter Olympic Games is also flown."],
+        "correct_answers": [ {"word": "from", "start": 2},{"word": "participating", "start": 5}, {"word": "stadium", "start": 3 }, {"word": "followed", "start": 4}, {"word": "who", "start": 1}, {"word": "without", "start": 3}, {"word": "national", "start": 4}, {"word": "while", "start": 2},{"word": "anthems", "start": 3}, {"word": "played", "start": 3}, {"word": "of", "start": 1}, {"word": "birthplace", "start": 6}, {"word": "the", "start": 1}, {"word": "current", "start": 3}, {"word": "hosting", "start": 3}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["Minneapolis is a city in Minnesota. It is","to St. Paul, Minnesota. St. Paul","Minneapolis are","the Twin Cities","they are","next to each",". Minneapolis is the","city in Minnesota", "about 370,000", ". People who live there", "the lakes,", ", and",". The Mississippi River runs through the city."],
+        "correct_answers": [ {"word": "next", "start": 2}, {"word": "and", "start": 1 }, {"word": "called", "start": 2}, {"word": "because", "start": 3}, {"word": "right", "start": 2}, {"word": "other", "start": 2}, {"word": "biggest", "start": 3},{"word": "with", "start": 2}, {"word": "people", "start": 2}, {"word": "enjoy", "start": 2}, {"word": "parks", "start": 2}, {"word": "river", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence":["Elvis Presley was an American singer, musician, and actor. He","often","as the most","and most famous","of the 20th century and is", "regarded as a", "icon. He was","of the first","most","in rock and roll",". He also","in many",". He is one of the most well-known","from","20th century","the",". He is so popular that some people know him as only ''Elvis'', or as ''The King of Rock and Roll.''"],
+        "correct_answers": [ {"word": "is", "start": 1}, {"word": "regarded", "start": 4 }, {"word": "influential", "start": 5}, {"word": "musicians", "start": 4}, {"word": "widely", "start": 2}, {"word": "cultural", "start": 4}, {"word": "one", "start": 1},{"word": "and", "start": 1}, {"word": "famous", "start": 2}, {"word": "music", "start": 2}, {"word": "starred", "start": 3}, {"word": "movies", "start": 2}, {"word": "people", "start": 2}, {"word": "the", "start": 1}, {"word": "around", "start": 3}, {"word": "world", "start": 2}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence":["The British Museum in London is one of the world's largest and most","museums of","history and",". It has","than seven million","from all", ". They","and document the", "of human culture","its", "to", "present. As","all other","museums", "art galleries","Britain, the Museum charges no admission fee."],
+        "correct_answers": [ {"word": "important", "start": 4}, {"word": "human", "start": 2 }, {"word": "culture", "start": 3}, {"word": "more", "start": 2}, {"word": "objects", "start": 2}, {"word": "continents", "start": 5}, {"word": "illustrate", "start": 5},{"word": "story", "start": 2}, {"word": "from", "start": 2}, {"word": "beginning", "start": 4}, {"word": "the", "start": 1}, {"word": "with", "start": 2}, {"word": "national", "start": 4}, {"word": "and", "start": 1}, {"word": "in", "start": 1}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence":["Physical exercise is recommended for management of mild depression and","a moderate","on symptoms. It is","to","use of", "or psychological therapies for","people. In older people, it does", "to decrease depression."],
+        "correct_answers": [ {"word": "has", "start": 1}, {"word": "effect", "start": 3 }, {"word": "equivalent", "start": 5}, {"word": "the", "start": 1}, {"word": "medication", "start": 5}, {"word": "most", "start": 1}, {"word": "appear", "start": 3}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Astronomy is one of the oldest sciences. Ancient people","the positions of the","to navigate, and to","when was the","time to plant",". Astronomy","very","to astrophysics. A","subject, cosmology, is concerned","studying the Universe as a", ", and the way the","changed","time. Astronomy","not the same", "astrology, the belief that motion of the stars and the planets may affect human lives."],
+        "correct_answers": [ {"word": "used", "start": 2}, {"word": "stars", "start": 2 }, {"word": "find", "start": 2}, {"word": "best", "start": 2}, {"word": "crops", "start": 2}, {"word": "is", "start": 1}, {"word": "similar", "start": 3}, {"word": "related", "start": 3}, {"word": "with", "start": 2}, {"word": "whole", "start": 2}, {"word": "universe", "start": 4}, {"word": "over", "start": 2}, {"word": "is", "start": 1}, {"word": "as", "start": 1}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Country music has its roots and beginnings in folk music. The old cowboy","pioneer","of the American frontier were","in the early twentieth",", and","were","of pop", "songs by rural", ". Country musicians also", "new musical instruments, like the Hawaiian steel guitar."],
+        "correct_answers": [ {"word": "and", "start": 1}, {"word": "songs", "start": 2 }, {"word": "popular", "start": 3}, {"word": "century", "start": 3}, {"word": "so", "start": 1}, {"word": "arrangements", "start": 5}, {"word": "music", "start": 2}, {"word": "performers", "start": 5}, {"word": "adapted", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["The orchestral score of the opera was published in late 1899 by Casa Ricordi. In", "to his other operas, Puccini", "to be satisfied","his","score", "remained", "unchanged in the 1909 edition", "by Osbourne McConachy. An unamended edition","published by Dover Press in 1991."],
+        "correct_answers": [ {"word": "contrast", "start": 4}, {"word": "appeared", "start": 4 }, {"word": "with", "start": 2}, {"word": "initial", "start": 3}, {"word": "which", "start": 2}, {"word": "relatively", "start": 5}, {"word": "prepared", "start": 4}, {"word": "was", "start": 1}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Gorillas live in the rainforests in central Africa. They","live on the",", but", "can also", ". When on the", ", they walk on their", "and finger", ". Troops of gorillas", "slowly", "the forests", "Central Africa. For about", "of their day they", "for leaves, vines, and", "shoots to", ". Sometimes the", "eat ants", "termites. For the", "of the day, they lay in the sun and play with their children."],
+        "correct_answers": [ {"word": "mostly", "start": 3}, {"word": "ground", "start": 3 }, {"word": "they", "start": 2}, {"word": "climb", "start": 3}, {"word": "ground", "start": 3}, {"word": "feet", "start": 2}, {"word": "knuckles", "start": 4}, {"word": "wander", "start": 2}, {"word": "through", "start": 3}, {"word": "of", "start": 1}, {"word": "half", "start": 2}, {"word": "search", "start": 3}, {"word": "bamboo", "start": 3}, {"word": "eat", "start": 1}, {"word": "also", "start": 2}, {"word": "or", "start": 1}, {"word": "rest", "start": 2}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["The people in Iceland are mostly of Scandinavian origin. The","they", "is Icelandic. The","has","changed","in 1,000",", so Icelanders","still","to","the sagas", "the Vikings", "many",". Most","in Iceland","Christian. Most of", "are Lutheran. Icelandic", "are", "to be the", "people","Earth."],
+        "correct_answers": [{"word": "language", "start": 4}, {"word": "speak", "start": 2}, {"word": "language", "start": 4}, {"word": "not", "start": 1},{"word": "much", "start": 2}, {"word": "years", "start": 2},{"word": "are", "start": 1},{"word": "able", "start": 2}, {"word": "read", "start": 2},{"word": "about", "start": 2}, {"word": "without", "start": 3}, {"word": "problems", "start": 3}, {"word": "people", "start": 2}, {"word": "are", "start": 1}, {"word": "them", "start": 2}, {"word": "people", "start": 2}, {"word": "considered", "start": 4}, {"word": "happiest", "start": 4}, {"word": "on", "start": 1}]
+    }
+
+]

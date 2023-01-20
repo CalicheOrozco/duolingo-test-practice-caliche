@@ -1,24 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import ListeningTest from "./pages/Listening-test";
+import ImageTest from "./pages/Image-test";
+import FillInTheBlanks from "./pages/FillInTheBlanks";
+import RealWordsTest from "./pages/RealWordsTest";
+import Index from "./pages/Index";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/listening-test" element={<ListeningTest />} />
+      <Route path="/image-test" element={<ImageTest />} />
+      <Route path="/fill-in-the-blanks" element={<FillInTheBlanks />} />
+      <Route path="/real-words-test" element={<RealWordsTest />} />
+    </Routes>
+
   );
 }
 
