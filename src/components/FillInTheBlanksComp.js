@@ -214,7 +214,7 @@ function FillInTheBlanksComp() {
 
 
   return (
-    <div className="App bg-neutral-800 w-full min-h-[55vh] flex items-center justify-center">
+    <div className="App bg-neutral-800 w-full min-h-[55vh] flex items-center py-3 justify-center">
       {isStarted ? (
         frase ? (
           <div className="px-10">
