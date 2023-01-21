@@ -23,7 +23,7 @@ function FillInTheBlanksComp() {
   // function to get a random phrase
   const getRandomFrase = () => {
     const randomNumero = Math.floor(Math.random() * frases.length);
-    const randomFrase = frases[11];
+    const randomFrase = frases[randomNumero];
     setFrase(randomFrase);
     // remove the phrase that was taken
     const newFrases = frases;
