@@ -17,6 +17,7 @@ function ListeningTestComp() {
   const [isStarted, setIsStarted] = useState(false);
   const [isCorrect, setIsCorrect] = useState();
   const [replay, setReplay] = useState(3);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // fetch to get the information from information.json
   const getAudios = async () => {
@@ -84,10 +85,15 @@ function ListeningTestComp() {
 
   // function to start the audio
   const startAudio = () => {
-    if (replay > 0) {
+    if (replay > 0 && !isPlaying) {
       setReplay(replay - 1);
       const audioFile = new Audio(`Audios/${audio.file}`);
+      setIsPlaying(true);
       audioFile.play();
+      // when the audio is finished
+      audioFile.onended = () => {
+        setIsPlaying(false);
+      }
     }
   };
   return (
@@ -114,7 +120,7 @@ function ListeningTestComp() {
               <div className="flex justify-around p-1 flex-col md:flex-row items-center gap-3 md:gap-0">
                 <HiSpeakerWave
                   className={
-                    replay > 0
+                    replay && !isPlaying > 0
                       ? "text-white text-9xl rounded-full bg-orange-600 p-5 cursor-pointer hover:bg-orange-800"
                       : "text-white text-9xl rounded-full p-5 cursor-not-allowed bg-orange-800"
                   }
