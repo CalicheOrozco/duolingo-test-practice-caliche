@@ -50,6 +50,14 @@ function RealWordsTestComp() {
       const getRandomWordList = () => {
         const randomNum = Math.floor(Math.random() * wordLists.length);
         const randomWordList = wordLists[randomNum];
+
+        // put the first letter of each word in uppercase
+        for (let i = 0; i < randomWordList.length; i++) {
+          randomWordList[i].word = randomWordList[i].word
+            .split(" ")
+            .map((word) => word[0].toUpperCase() + word.slice(1))
+            .join(" ");
+        }
     
         if (randomWordList === undefined) {
           setWordList(null);
