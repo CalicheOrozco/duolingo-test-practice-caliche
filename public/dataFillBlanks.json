@@ -60,6 +60,126 @@
         "difficulty": "hard",
         "sentence": ["The people in Iceland are mostly of Scandinavian origin. The","they", "is Icelandic. The","has","changed","in 1,000",", so Icelanders","still","to","the sagas", "the Vikings", "many",". Most","in Iceland","Christian. Most of", "are Lutheran. Icelandic", "are", "to be the", "people","Earth."],
         "correct_answers": [{"word": "language", "start": 4}, {"word": "speak", "start": 2}, {"word": "language", "start": 4}, {"word": "not", "start": 1},{"word": "much", "start": 2}, {"word": "years", "start": 2},{"word": "are", "start": 1},{"word": "able", "start": 2}, {"word": "read", "start": 2},{"word": "about", "start": 2}, {"word": "without", "start": 3}, {"word": "problems", "start": 3}, {"word": "people", "start": 2}, {"word": "are", "start": 1}, {"word": "them", "start": 2}, {"word": "people", "start": 2}, {"word": "considered", "start": 4}, {"word": "happiest", "start": 4}, {"word": "on", "start": 1}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["A family name is a name shared by people in the same family. Different ", "have different", "for a person's", "name and given ",". In English, the","name is","at the ", ", so it","also called a","name or",". Children","have the","family name","their",". A","woman often","her family name to","the","as her",". Many","put the family name",". Some give a","the mother's family name."],
+        "correct_answers": [{"word": "cultures", "start": 4}, {"word": "orders", "start": 3}, {"word": "family", "start": 3}, {"word": "name", "start": 2}, {"word": "family", "start": 3}, {"word": "always", "start": 3}, {"word": "end", "start": 1}, {"word": "is", "start": 1}, {"word": "last", "start": 2}, {"word": "surname", "start": 3}, {"word": "usually", "start": 3}, {"word": "same", "start": 2}, {"word": "as", "start": 1}, {"word": "father", "start": 3}, {"word": "married", "start": 3}, {"word": "changes", "start": 3}, {"word": "be", "start": 1}, {"word": "same", "start": 2}, {"word": "husband", "start": 3}, {"word": "languages", "start": 4}, {"word": "first", "start": 2}, {"word": "child", "start": 2}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Jimmy Hendrix was an American guitarist, singer and songwriter. Hendrix", "a major","on other rock and roll",". Initially gaining","in England, Hendrix","famous throughout the world after","at","Monterey Pop Festival in 1967, at","he","set his guitar","fire. A self-taught",", unable to","or write","notation, he","played a right-handed Fender Stratocaster guitar turned","and restrung to","left-handed. Jimi Hendrix was","Greatest Guitarist of all Time by Rolling Stone magazine in 2003."],
+        "correct_answers": [{"word": "was", "start": 1}, {"word": "influence", "start": 4}, {"word": "musicians", "start": 4}, {"word": "recognition", "start": 5}, {"word": "became", "start": 3}, {"word": "appearances", "start": 5}, {"word": "the", "start": 1}, {"word": "which", "start": 2}, {"word": "purposely", "start": 4}, {"word": "on", "start": 1}, {"word": "musician", "start":42}, {"word": "read", "start": 2}, {"word": "music", "start": 2}, {"word": "famously", "start": 4}, {"word": "over", "start": 1}, {"word": "play", "start": 2}, {"word": "named", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["The Cuban Missile Crisis was a time of heightened confrontation between the Soviet Union, the United States, and Cuba","the Cold War. It","a proxy","around Cuba. It","when","Soviet Union began","missile","in Cuba in 1962. Together","the","Berlin Blockade, this","is seen as","of t important","of","Cold War have","the","when the Cold War came closest to a nuclear war."],
+        "correct_answers":[{"word": "during", "start": 2}, {"word": "was", "start": 1}, {"word": "conflict", "start": 4}, {"word": "began", "start": 2}, {"word": "the", "start": 1}, {"word": "building", "start": 4}, {"word": "sites", "start": 2}, {"word": "with", "start": 2}, {"word": "earlier", "start": 3}, {"word": "crisis", "start": 3}, {"word": "one", "start": 1}, {"word": "confrontations", "start": 5}, {"word": "the", "start": 1}, {"word": "been", "start": 2}, {"word": "moment", "start": 3}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Bitcoin is a digital and global money system currency. It","people to","or receive money","the",", even to","they don't","or don't",". Money","be","without being","to a","identity. The","field of cryptography is the","for Bitcoin's",". Bitcoin was","by someone using the name Satoshi Nakamoto."],
+        "correct_answers": [{"word": "allows", "start": 3}, {"word": "send", "start": 2}, {"word": "across", "start": 3}, {"word": "internet", "start": 4}, {"word": "someone", "start": 3}, {"word": "know", "start": 2}, {"word": "trush", "start": 2}, {"word": "can", "start": 1}, {"word": "exchanged", "start": 4}, {"word": "linked", "start": 3}, {"word": "real", "start": 2}, {"word": "mathematical", "start": 5}, {"word": "basis", "start": 2}, {"word": "security", "start": 4}, {"word": "invented", "start": 4}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["The Golden Gate Bridge is a suspension bridge that crosses over the San Francisco Bay,","from San Francisco","Marin County, in","U.S. state of California. It was","for","in 1937. When the","was",", its length of 9,266 ft","it the","bridge in the",". There is also a","for people and bicycles."],
+        "correct_answers": [{"word": "going", "start": 2}, {"word": "to", "start": 1}, {"word": "the", "start": 1}, {"word": "opened", "start": 3}, {"word": "use", "start": 1}, {"word": "bridge", "start": 3}, {"word": "finished", "start": 4}, {"word": "made", "start": 2}, {"word": "longest", "start": 3}, {"word": "world", "start": 2}, {"word": "footpath", "start": 4}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Donald Trump was the 45th and current President of the United States. Before","president,","was a","and television",". Trump","the chairman and","of The Trump Organization. Much of his","was made in","estate in New York City, Las Vegas,","Atlantic City. He","to own","Miss Universe pageant. He","the","in his own","show The Apprentice."],
+        "correct_answers": [{"word": "becoming", "start": 4}, {"word": "he", "start": 1}, {"word": "businessman", "start": 5}, {"word": "personality", "start": 5}, {"word": "was", "start": 1}, {"word": "president", "start": 4}, {"word": "money", "start": 2}, {"word": "real", "start": 2}, {"word": "and", "start": 1}, {"word": "used", "start": 2}, {"word": "the", "start": 1}, {"word": "was", "start": 1}, {"word": "star", "start": 2}, {"word": "reality", "start": 3}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["A carpenter is a person who works with wood. They","make cabinets,","houses, or do","things with",". Carpenters","make very","foremen on larger jobs as they","with so much of the","from ground up. Carpenters","always","to their tools","always","how to","the","tools, materials, and ways of working with wood."],
+        "correct_answers": [{"word": "can", "start": 1}, {"word": "build", "start": 2}, {"word": "other", "start": 2}, {"word": "wood", "start": 2}, {"word": "usually", "start": 3}, {"word": "good", "start": 2}, {"word": "deal", "start": 2}, {"word": "project", "start": 3}, {"word": "are", "start": 1}, {"word": "adding", "start": 2}, {"word": "and", "start": 1}, {"word": "learning", "start": 4}, {"word": "use", "start": 1}, {"word": "new", "start": 1}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Not everyone celebrates birthdays, including Jehovah's Witnesses. In","English-speaking",", people","the song ''Happy Birthday to You'' to the person","her or his",". There","similar songs in","languages. A birthday","is usually","and covered with",". Most of the",", the","of candles is the","as the age of the birthday person."],
+        "correct_answers": [{"word": "many", "start": 1}, {"word": "countries", "start": 4}, {"word": "sing", "start": 2}, {"word": "celebrating", "start": 5}, {"word": "birthday", "start": 4}, {"word": "are", "start": 1}, {"word": "other", "start": 2}, {"word": "cake", "start": 2}, {"word": "decorated", "start": 4}, {"word": "candles", "start": 3}, {"word": "time", "start": 2}, {"word": "number", "start": 3}, {"word": "same", "start": 2}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Astronomy is one of the oldest sciences. Ancient","used the","of the stars to",", and to","when was the","time to","crops. Astronomy is","similar","astrophysics. A","subject, cosmology,","concerned with","the Universe as a",", and the","the universe","over time. Astronomy is","the same","astrology, the","that motion of the","and the planets may","human lives."],
+        "correct_answers": [{"word": "people", "start": 3}, {"word": "positions", "start": 4}, {"word": "navigate", "start": 4}, {"word": "find", "start": 2}, {"word": "best", "start": 2}, {"word": "plant", "start": 3}, {"word": "very", "start": 2}, {"word": "to", "start": 1}, {"word": "related", "start": 3}, {"word": "is", "start": 1}, {"word": "studying", "start": 4}, {"word": "whole", "start": 2}, {"word": "way", "start": 1}, {"word": "changed", "start": 3}, {"word": "not", "start": 1}, {"word": "as", "start": 1}, {"word": "belief", "start": 2}, {"word": "stars", "start": 2}, {"word": "affect", "start": 2}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Computational thinking involves looking at a problem and working out a way a","might be","to help you","it. To do this, you need to","how a computer processes",". You probably","computational","at school or","too, but don't","it. If you","a problem and plan out the",", you are using computational thinking."],
+        "correct_answers": [{"word": "computer", "start": 4}, {"word": "able", "start": 2}, {"word": "solve", "start": 2}, {"word": "understand", "start": 5}, {"word": "information", "start": 5}, {"word": "use", "start": 1}, {"word": "thinking", "start": 4}, {"word": "work", "start": 2}, {"word": "realize", "start": 3}, {"word": "analyze", "start": 3}, {"word": "solutions", "start": 4}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["A programmer or software engineer is someone who designs and makes computer programs. They might","one type of computer","or many. Programmers are","thinkers","problem-solvers. They look at","and try to come","with","ways of","them. There is often","than one","to solve a","and programmers try to find the most efficient way."],
+        "correct_answers": [{"word": "use", "start": 1}, {"word": "language", "start": 4}, {"word": "logical", "start": 3}, {"word": "and", "start": 1}, {"word": "problems", "start": 4}, {"word": "up", "start": 1}, {"word": "different", "start": 4}, {"word": "solving", "start": 3}, {"word": "more", "start": 2}, {"word": "way", "start": 1}, {"word": "problem", "start": 3}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["The global computer network called the internet is part of our everyday lives at home. It is","up of millions of","all over the","that are","connected to each other","cable, fibre","wireless links. You can","the internet to","websites,","with people,","pictures and videos, listen to music, or do lots of","amazing things."],
+        "correct_answers": [{"word": "made", "start": 2}, {"word": "computers", "start": 2}, {"word": "world", "start": 2}, {"word": "digitally", "start": 4}, {"word": "by", "start": 1}, {"word": "or", "start": 1}, {"word": "use", "start": 1}, {"word": "browse", "start": 3}, {"word": "communicate", "start": 5}, {"word": "download", "start": 4}, {"word": "other", "start": 2}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["Charts are a great way to show a large amount of data. They can","numbers, words, measurements, or observations in a","that","them easier to","and analyze. It is","to make sure that the","on your chart is","clearly and can be","by","who looks at it. They shouldn't have to ask you to","it."],
+        "correct_answers": [{"word": "represent", "start": 4}, {"word": "way", "start": 1}, {"word": "makes", "start": 2}, {"word": "understand", "start": 5}, {"word": "important", "start": 4}, {"word": "data", "start": 2}, {"word": "presented", "start": 4}, {"word": "understood", "start": 5}, {"word": "anyone", "start": 3}, {"word": "explain", "start": 3}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["A tsunami is a natural disaster that occurs when series of waves in the ocean crash into land. A","has a very","wavelength. It can be hundreds of","long. Usually, a tsunami starts",". The waves","at a great","across an","with little energy",". They can","sand from","and","trees, houses and even whole towns."],
+        "correct_answers": [{"word": "tsunami", "start": 3}, {"word": "long", "start": 2}, {"word": "kilometers", "start": 5}, {"word": "suddenly", "start": 4}, {"word": "travel", "start": 3}, {"word": "speed", "start": 2}, {"word": "ocean", "start": 2}, {"word": "loss", "start": 2}, {"word": "remove", "start": 3}, {"word": "beaches", "start": 3}, {"word": "destroy", "start": 3}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["An antibiotic is a chemical compoundd that kills bacteria or slows their growth. They","used as","to treat and","diseases caused by",". The","antibiotic","was Penicillin, a","antibiotic","by a fungus. Production","antibiotics first","in 1939,","in the","day, they are","by","synthesis. Antibiotics can not be used to treat viruses."],
+        "correct_answers": [{"word": "are", "start": 1}, {"word": "medicine", "start": 4}, {"word": "cure", "start": 2}, {"word": "bacteria", "start": 4}, {"word": "first", "start": 2}, {"word": "discovered", "start": 4}, {"word": "natural", "start": 3}, {"word": "produced", "start": 4}, {"word": "of", "start": 1}, {"word": "began", "start": 2}, {"word": "and", "start": 1}, {"word": "modern", "start": 3}, {"word": "made", "start": 2}, {"word": "chemical", "start": 3}]
+    },
+    {
+        "difficulty": "hard",
+        "sentence": ["Johannes Gutenberg introduced the concept of movable type and the printing press to Europe. While","may not","like a big deal at",", the printing press is","considered as the","important","in","times. Think about how","information is",". Without","and","you wouldn't be able to",", to","on information, or to","scientific",". Prior to Gutenberg introducing the printing press, making a bo was a laborious process in Europe."],
+        "correct_answers": [{"word": "this", "start": 2}, {"word": "sound", "start": 2}, {"word": "first", "start": 2}, {"word": "often", "start": 2}, {"word": "most", "start": 2}, {"word": "invention", "start": 4}, {"word": "modern", "start": 3}, {"word": "important", "start": 4}, {"word": "today", "start": 2}, {"word": "books", "start": 2}, {"word": "computers", "start": 4}, {"word": "learn", "start": 2}, {"word": "pass", "start": 2}, {"word": "share", "start": 2}, {"word": "discoveries", "start": 5}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Birds of prey have been treated very differently over the years. For",", during the Middle Ages, red kites were","valued. As scavengers, they","to keep the","of London and","towns","of waste. However,","towards red kites and","birds of prey","in the 16th",", when a","of laws","people to","them as vermin. It wasn't until 1954 that new laws were passed to make it illegal to kill birds of prey."],
+        "correct_answers": [{"word": "example", "start": 3}, {"word": "highly", "start": 3}, {"word": "helped", "start": 3}, {"word": "streets", "start": 3}, {"word": "other", "start": 2}, {"word": "clean", "start": 2}, {"word": "attitudes", "start": 2}, {"word": "other", "start": 2}, {"word": "changed", "start": 3}, {"word": "century", "start": 3}, {"word": "series", "start": 2}, {"word": "encouraged", "start": 5}, {"word": "kill", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Did you know owls are sometimes a symbol of learning? Libraries and","sometimes use","of owls to","readingor",". Maybe this is","owls can","in the",",","things that","can't see. They are",", quick, and","to",". They","have a watchtful,","look. Owls can't really read, but they are smart."],
+        "correct_answers": [{"word": "bookstores", "start": 5}, {"word": "pictures", "start": 4}, {"word": "represent", "start": 4}, {"word": "wisdom", "start": 3}, {"word": "because", "start": 3}, {"word": "see", "start": 1}, {"word": "dark", "start": 2}, {"word": "detecting", "start": 4}, {"word": "others", "start": 3}, {"word": "silent", "start": 3}, {"word": "keep", "start": 2}, {"word": "themselves", "start": 5}, {"word": "sometimes", "start": 4}, {"word": "thoughtful", "start": 5}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Toy Story is a 1995 American animated movie. It","the first Pixar","movie. Pixar","the movie","Disney packaged it and","the reels of the","to movie",". It was","on November 22, 1995. It was the","animated","to be","done with","instead of hand-drawn",". Toy Story has three",", Toy Story 2 released in 1999, Toy Story 3 released in 2010 and ''Toy Story 4'' released in 2019."],
+        "correct_answers": [{"word": "was", "start": 1}, {"word": "animated", "start": 4}, {"word": "made", "start": 2}, {"word": "while", "start": 2}, {"word": "sold", "start": 2} , {"word": "movie", "start": 2}, {"word": "theaters", "start": 4}, {"word": "released", "start": 4}, {"word": "first", "start": 2}, {"word": "movie", "start": 2}, {"word": "completely", "start": 5}, {"word": "computers", "start": 4}, {"word": "animation", "start": 4}, {"word": "sequels", "start": 3}]
+    },
+    {
+        "difficulty": "easy",
+        "sentence": ["Steve Jobs was a Silicon Valley businessman most famous for his work with the company Apple. Together","Apple co-founder Steve Wozniak, Jobs","make the","of the","computer","in the","1970s. In the","1980s,","at Apple, Jobs was","of the","to see the","of using a mouse to","things on a computer",". Jobs is credited with revolutionizing personal computers."],
+        "correct_answers": [{"word": "with", "start": 2}, {"word": "helped", "start": 3}, {"word": "idea", "start": 2}, {"word": "personal", "start": 4}, {"word": "popular", "start": 3}, {"word": "late", "start": 2}, {"word": "early", "start": 2}, {"word": "still", "start": 2}, {"word": "one", "start": 1}, {"word": "first", "start": 2}, {"word": "potential", "start": 4}, {"word": "control", "start": 3}, {"word": "screen", "start": 3}]
+    },
+    {
+        "difficulty" : "medium",
+        "sentence": ["London is the capital and largest city of England. London","the","city in western Europe, and the world's","financial",". For a long",", London was a","city. All its people lived","the walls that were","by the Romans. This","is still","the City of London. There were many","around the city.",", more","came to","there. Then, step by step, the villages joined together into one huge city."],
+        "correct_answers": [{"word": "is", "start": 1}, {"word": "biggest", "start": 3}, {"word": "largest", "start": 3}, {"word": "centre", "start": 3}, {"word": "time", "start": 2}, {"word": "small", "start": 2}, {"word": "inside", "start": 3}, {"word": "built", "start": 2}, {"word": "area", "start": 2}, {"word": "called", "start": 3}, {"word": "villages", "start": 4}, {"word": "Gradually", "start": 4}, {"word": "people", "start": 2}, {"word": "live", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["Most people in London are British. However, London","has many",". These people come","many different",". They speak many different","and have",""," and",". There are also many people from","countries who","in London on",". Many people visit London as",". They may see the","''Sights of London''. These sights include palaces, churches, and museums."],
+        "correct_answers": [{"word": "also", "start": 1}, {"word": "immigrants", "start": 1}, {"word": "from", "start": 1}, {"word": "countries", "start": 1}, {"word": "languages", "start": 1}, {"word": "different", "start": 1}, {"word": "religions", "start": 1}, {"word": "cultures", "start": 1}, {"word": "different", "start": 1}, {"word": "stay", "start": 2}, {"word": "business", "start": 2}, {"word": "tourists", "start": 2}, {"word": "famous", "start": 2}]
+    },
+    {
+        "difficulty": "medium",
+        "sentence": ["TikTok is a online video sharing social networking service. It","people","short","and","looping videos of 60",". Users can","anything","life hacks to","or even recipes. It is","in Canada, the United States, and other","of the world. It was","released","the name of musical.ly but was","bought out and","TikTok. It is one of the fastest growing social media apps today."],
+        "correct_answers": [{"word": "lets", "start": 2}, {"word": "create", "start": 3}, {"word": "videos", "start": 3}, {"word": "short", "start": 2}, {"word": "seconds", "start": 3}, {"word": "post", "start": 2}, {"word": "from", "start": 2}, {"word": "dances", "start": 3}, {"word": "popular", "start": 3}, {"word": "parts", "start": 2}, {"word": "first", "start": 2}, {"word": "under", "start": 2}, {"word": "later", "start": 2}, {"word": "renamed", "start": 3}]
+    },{
+        "difficulty":"medium",
+        "sentence": ["Journalism refers to the production and distribution of reports on recent events. The","journalism","to the occupation, using","of gathering","and using literary techniques. Various","of journalistic mediums",": print, television,",", Internet, and in the",": newsreels. Concepts of the appropriate","for journalism","between",". In some",", the news media is controlled by government intervention, and is not a fully independent body."],
+        "correct_answers": [{"word": "word", "start": 2}, {"word": "applies", "start": 3}, {"word": "methods", "start": 2}, {"word": "information", "start": 6}, {"word": "forms", "start": 2}, {"word": "include", "start": 3}, {"word": "radio", "start": 2}, {"word": "past", "start": 2}, {"word": "role", "start": 2}, {"word": "vary", "start": 2}, {"word": "countries", "start": 4}, {"word": "nations", "start": 3}]
+
     }
 
 ]
