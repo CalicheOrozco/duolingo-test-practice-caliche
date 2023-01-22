@@ -127,9 +127,14 @@ function RealWordsTestComp() {
       if (selectedWords.includes(keys[i])) {
         // if it is, set the value to true
         data[keys[i]] = "true";
+      }
+      // if the value is true, add 1 to the counter
+      if (data[keys[i]] === "true" && data[keys[i]] === answers[i]) {
         counter++;
       }
     }
+    
+
     // get only the true answers
     let onlyCorrect = Object.keys(answers).filter(
       (key) => answers[key] === "true"
