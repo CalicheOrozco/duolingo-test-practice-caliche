@@ -121,7 +121,7 @@ function ListeningTestComp() {
                 <HiSpeakerWave
                   className={
                     replay && !isPlaying > 0
-                      ? "text-white text-9xl rounded-full bg-orange-600 p-5 cursor-pointer hover:bg-orange-800"
+                      ? "text-white text-9xl rounded-full bg-orange-600 p-5 cursor-pointer lg:hover:bg-orange-800"
                       : "text-white text-9xl rounded-full p-5 cursor-not-allowed bg-orange-800"
                   }
                   onClick={() => {
