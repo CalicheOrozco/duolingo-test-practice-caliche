@@ -212,7 +212,7 @@ export default function ImageTestComp() {
   }, []);
 
   return (
-    <div className="App bg-neutral-800 w-full min-h-[55vh] py-3 flex items-center justify-center px-3">
+    <div className="App bg-neutral-800 w-full min-h-[60vh] py-3 flex items-center justify-center px-3">
       {isStarted ? (
         topic ? (
           <div className="px-10 lg:w-1/2">

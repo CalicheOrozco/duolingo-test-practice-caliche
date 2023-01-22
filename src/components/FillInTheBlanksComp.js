@@ -230,7 +230,7 @@ function FillInTheBlanksComp() {
   let afterAnswers = [];
 
   return (
-    <div className="App bg-neutral-800 w-full min-h-[55vh] flex items-center py-3 justify-center">
+    <div className="App bg-neutral-800 w-full min-h-[60vh] flex items-center py-3 justify-center">
       {isStarted ? (
         frase ? (
           <div className="px-10">
