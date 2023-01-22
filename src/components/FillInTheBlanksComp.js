@@ -269,7 +269,7 @@ function FillInTheBlanksComp() {
                         {item}
                       </span>
                       <div
-                        className="flex mx-1 mt-1"
+                        className={frase.sentence[index + 1]?.charAt(0) === "." || frase.sentence[index + 1]?.charAt(0) === "," ? `flex pl-1 mt-1` : "flex px-1 mt-1"}
                         key={`inputContainer-${index}`}
                       >
                         {frase.correct_answers[index] ? (
@@ -414,7 +414,8 @@ function FillInTheBlanksComp() {
                           </span>
                           {/* correct answer */}
                           <div
-                            className="flex mx-1 mt-1"
+                          
+                            className={frase.sentence[index + 1]?.charAt(0) === "." || frase.sentence[index + 1]?.charAt(0) === "," ? `flex pl-1 mt-1` : "flex px-1 mt-1"}
                             key={`inputContainer-${index}`}
                           >
                             {frase.correct_answers[index] ? (
