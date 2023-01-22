@@ -230,11 +230,11 @@ function RealWordsTestComp() {
                   <p className="text-xl text-center py-3">
                     {!isCorrect ? (
                       <span className="text-red-600 text-xl text-center">
-                        {`you got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
+                        {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     ) : (
                       <span className="text-green-600 text-xl text-center">
-                        {`you got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
+                        {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     )}
                   </p>
