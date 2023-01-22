@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
 
-
 function FillInTheBlanksComp() {
-    const { register, handleSubmit, setFocus, getValues, reset } = useForm();
+  const { register, handleSubmit, setFocus, getValues, reset } = useForm();
 
   const [frases, setFrases] = useState([]);
   const [frase, setFrase] = useState(null);
@@ -12,6 +11,8 @@ function FillInTheBlanksComp() {
   const [submited, setSubmited] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isCorrect, setIsCorrect] = useState();
+  const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
+  const [numCorrectAnswersReceived, setNumCorrectAnswersReceived] = useState(0);
 
   // fetch to get the information from information.json
   const getFrases = async () => {
@@ -29,13 +30,14 @@ function FillInTheBlanksComp() {
     const newFrases = frases;
     newFrases.splice(randomNumero, 1);
     setFrases(newFrases);
-    restart(); 
+    restart();
   };
 
   // function to restart the form
   const restart = () => {
     setIsCorrect(null);
     setSubmited(false);
+    setNumCorrectAnswersReceived(0);
     reset();
   };
 
@@ -93,17 +95,18 @@ function FillInTheBlanksComp() {
       }
       // detect when you press down or left
       if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-        let prevPath = frase.correct_answers[finalNumbers[0] - 1]
+        let prevPath = frase.correct_answers[finalNumbers[0] - 1];
         // if the input name has only one number
         if (finalNumbers.length === 1) {
           const previousInput =
-          //  if the input is the first one
+            //  if the input is the first one
             finalNumbers[0] > 0
-              ? prevPath.word.length - prevPath.start -1
-              : frase.correct_answers[0].word.length - frase.correct_answers[0].start -1
+              ? prevPath.word.length - prevPath.start - 1
+              : frase.correct_answers[0].word.length -
+                frase.correct_answers[0].start - 1;
           // get the path of the previous input
           const path = `answer-${finalNumbers[0] - 1}-${previousInput}`;
-          // if the previous input exists 
+          // if the previous input exists
           if (getValues(path) || getValues(path) === "") {
             setFocus(path);
           }
@@ -136,11 +139,12 @@ function FillInTheBlanksComp() {
           // if the input name has only one number
           if (finalNumbers.length === 1) {
             // get the previous input
-            let prevPath = frase.correct_answers[finalNumbers[0] - 1]
+            let prevPath = frase.correct_answers[finalNumbers[0] - 1];
             const previousInput =
               finalNumbers[0] > 0
-                ? prevPath.word.length - prevPath.start -1
-                : frase.correct_answers[0].word.length - frase.correct_answers[0].start -1
+                ? prevPath.word.length - prevPath.start - 1
+                : frase.correct_answers[0].word.length -
+                  frase.correct_answers[0].start - 1;
             const path = `answer-${finalNumbers[0] - 1}-${previousInput}`;
             // if the previous input exists
             if (getValues(path) || getValues(path) === "") {
@@ -196,11 +200,24 @@ function FillInTheBlanksComp() {
     setFormData(data);
     setSubmited(true);
 
+    counter = 0;
+
     // convert sentence.correct answers to object
     const correct_answers = afterAnswers.reduce((acc, item, index) => {
       acc[`answer-${index}`] = item;
       return acc;
     }, {});
+
+    // check how many correct answers were received
+    for (let i = 0; i < Object.keys(correct_answers).length; i++) {
+      if (correct_answers[`answer-${i}`] === data[`answer-${i}`]) {
+        counter++;
+      }
+    }
+    // set the number of correct answers
+    setNumCorrectAnswers(Object.keys(correct_answers).length);
+    // set the number of correct answers received
+    setNumCorrectAnswersReceived(counter);
     // compare the answers
     if (JSON.stringify(data) === JSON.stringify(correct_answers)) {
       setIsCorrect(true);
@@ -211,7 +228,6 @@ function FillInTheBlanksComp() {
 
   let beforeAnswers = [];
   let afterAnswers = [];
-
 
   return (
     <div className="App bg-neutral-800 w-full min-h-[55vh] flex items-center py-3 justify-center">
@@ -234,11 +250,9 @@ function FillInTheBlanksComp() {
               <h1 className=" text-4xl font-bold  text-white text-center py-5">
                 Type the missing letters to complete the text below
               </h1>
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap p-3">
                 {frase.sentence.map((item, index) => {
-                  
                   if (index <= frase.correct_answers.length - 1) {
-
                     const limit = frase.correct_answers[index].start;
                     let answers = frase.correct_answers[index].word;
                     let before = answers.slice(0, limit);
@@ -258,13 +272,25 @@ function FillInTheBlanksComp() {
                         className="flex mx-1 mt-1"
                         key={`inputContainer-${index}`}
                       >
-                        {frase.correct_answers[index] ? <span className="text-xl text-white" key={`answerWord-${index}`}> {beforeAnswers[index]} </span> : null}
+                        {frase.correct_answers[index] ? (
+                          <span
+                            className="text-xl text-white"
+                            key={`answerWord-${index}`}
+                          >
+                            {" "}
+                            {beforeAnswers[index]}{" "}
+                          </span>
+                        ) : null}
                         {!submited ? (
                           // frase.correct_answers[index].length
                           index === frase.sentence.length - 1 ? null : (
                             // repeat the input the times of frase.correct_answers.length
                             Array.from(
-                              { length: frase.correct_answers[index].word.length - frase.correct_answers[index].start },
+                              {
+                                length:
+                                  frase.correct_answers[index].word.length -
+                                  frase.correct_answers[index].start,
+                              },
                               (v, i) => {
                                 return (
                                   // onChange detect when the input is full go to the next input
@@ -359,43 +385,103 @@ function FillInTheBlanksComp() {
             {/* button repeat and next */}
             <>
               {submited ? (
-                <div className="w-full flex justify-between">
-                  <input
-                    type="submit"
-                    value="Repeat"
-                    onClick={() => {
-                      restart();
-                    }}
-                    className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
-                  />
-                  <input
-                    type="submit"
-                    value="Next"
-                    onClick={() => {
-                      getRandomFrase();
-                    }}
-                    className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
-                  />
-                </div>
-              ) : null}
-              {isCorrect === true ? (
-                <div className="w-full flex justify-center my-3">
-                  {/* put a gif */}
-                  <img
-                    src="https://i.giphy.com/media/yziuK6WtDFMly/giphy.webp"
-                    alt="gif for good job"
-                    className=" w-96 h-80 mt-3"
-                  />
-                </div>
-              ) : isCorrect === false ? (
-                <div className="w-full flex justify-center my-3">
-                  {/* put a gif */}
-                  <img
-                    src="https://i.giphy.com/media/S4BDGxHKIB6nW9PiyA/giphy.webp"
-                    alt="gif for wrong job"
-                    className="w-96 h-80"
-                  />
-                </div>
+                <>
+                  {/* show how many answers */}
+                  <p className="text-xl text-center py-3">
+                    {!isCorrect ? (
+                      <span className="text-red-600 text-xl text-center">
+                        {`you got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
+                      </span>
+                    ) : (
+                      <span className="text-green-600 text-xl text-center">
+                        {`you got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
+                      </span>
+                    )}
+                  </p>
+
+                  {/* show answers */}
+                  
+                  {numCorrectAnswersReceived !== numCorrectAnswers ? (
+                    <div className="flex flex-wrap bg-gray-600 rounded-xl p-3">
+                    {frase.sentence.map((item, index) => {
+                      return (
+                        <div className="flex flex-wrap" key={`div-${index}`}>
+                          <span
+                            className="text-xl text-white mt-1"
+                            key={`sentenceAnswer-${index}`}
+                          >
+                            {item}
+                          </span>
+                          {/* correct answer */}
+                          <div
+                            className="flex mx-1 mt-1"
+                            key={`inputContainer-${index}`}
+                          >
+                            {frase.correct_answers[index] ? (
+                              <span
+                                className="text-xl text-white"
+                                key={`answerCorrectWord-${index}`}
+                              >
+                                {" "}
+                                {beforeAnswers[index]}{" "}
+                              </span>
+                            ) : null}
+                            {submited ? (
+                              <span
+                                className="text-xl text-green-600"
+                                key={`answer-${index}`}
+                              >
+                                {afterAnswers[index]}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  ) : null}
+
+                  {/* show the gif */}
+                  {isCorrect === true ? (
+                    <div className="w-full flex justify-center py-3">
+                      {/* put a gif */}
+                      <img
+                        src="https://i.giphy.com/media/yziuK6WtDFMly/giphy.webp"
+                        alt="gif for good job"
+                        className=" w-96 h-80 mt-3"
+                      />
+                    </div>
+                  ) : isCorrect === false ? (
+                    <div className="w-full flex justify-center">
+                      {/* put a gif */}
+                      <img
+                        src="https://i.giphy.com/media/S4BDGxHKIB6nW9PiyA/giphy.webp"
+                        alt="gif for wrong job"
+                        className="w-96 h-80 my-3"
+                      />
+                    </div>
+                  ) : null}
+
+                  {/* button repeat and next */}
+                  <div className="w-full flex justify-between">
+                    <input
+                      type="submit"
+                      value="Repeat"
+                      onClick={() => {
+                        restart();
+                      }}
+                      className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+                    />
+                    <input
+                      type="submit"
+                      value="Next"
+                      onClick={() => {
+                        getRandomFrase();
+                      }}
+                      className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+                    />
+                  </div>
+                </>
               ) : null}
             </>
           </div>
@@ -422,7 +508,7 @@ function FillInTheBlanksComp() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default FillInTheBlanksComp
+export default FillInTheBlanksComp;
