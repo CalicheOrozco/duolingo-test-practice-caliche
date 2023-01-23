@@ -1,6 +1,6 @@
 {
-  "short_name": "Duolingo Test Practice",
-  "name": "Duolingo English Test Practice by Caliche Orozco",
+  "short_name": "English Certify",
+  "name": "English Certify by Caliche Orozco",
   "icons": [
     {
       "src": "favicon2.ico",
@@ -21,5 +21,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#EA580C",
-  "background_color": "#262626"
+  "background_color": "#404040"
 }
