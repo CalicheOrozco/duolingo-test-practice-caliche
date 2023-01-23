@@ -230,7 +230,7 @@ function FillInTheBlanksComp() {
   let afterAnswers = [];
 
   return (
-    <div className="App bg-neutral-800 w-full min-h-[60vh] flex items-center py-3 justify-center">
+    <div className="App bg-[#404040] w-full min-h-[60vh] flex items-center py-3 justify-center">
       {isStarted ? (
         frase ? (
           <div className="px-10">
@@ -298,7 +298,7 @@ function FillInTheBlanksComp() {
                                     <input
                                       type="text"
                                       key={`input-${index}-${i}`}
-                                      className="bg-[#5F676B] border-2 border-gray-700 text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md"
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
                                       {...register(`answer-${index}-${i}`, {
                                         onChange: (e) => {
                                           e.target.value.length >= 1
@@ -321,7 +321,7 @@ function FillInTheBlanksComp() {
                                     <input
                                       type="text"
                                       key={`input-${index}`}
-                                      className="bg-[#5F676B] border-2 border-gray-700 text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md"
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
                                       {...register(`answer-${index}`, {
                                         onChange: (e) => {
                                           e.target.value.length >= 1
@@ -347,21 +347,21 @@ function FillInTheBlanksComp() {
                         ) : formData[`answer-${index}`] ===
                           afterAnswers[index] ? (
                           <span
-                            className="text-xl text-green-600"
+                            className="text-xl text-green-600 font-bold"
                             key={`answer-${index}`}
                           >
                             {afterAnswers[index]}
                           </span>
                         ) : formData[`answer-${index}`] ? (
                           <span
-                            className="text-xl text-red-600"
+                            className="text-xl text-red-600 font-bold"
                             key={`answer-${index}`}
                           >
                             {formData[`answer-${index}`]}
                           </span>
                         ) : (
                           <span
-                            className="text-xl text-yellow-400"
+                            className="text-xl text-yellow-400 font-bold"
                             key={`answer-${index}`}
                           >
                             {afterAnswers[index]}
@@ -389,11 +389,11 @@ function FillInTheBlanksComp() {
                   {/* show how many answers */}
                   <p className="text-xl text-center py-3">
                     {!isCorrect ? (
-                      <span className="text-red-600 text-xl text-center">
+                      <span className="text-red-600 text-xl text-center font-bold">
                         {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     ) : (
-                      <span className="text-green-600 text-xl text-center">
+                      <span className="text-green-600 text-xl text-center font-bold">
                         {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     )}
@@ -402,7 +402,7 @@ function FillInTheBlanksComp() {
                   {/* show answers */}
                   
                   {numCorrectAnswersReceived !== numCorrectAnswers ? (
-                    <div className="flex flex-wrap bg-gray-600 rounded-xl p-3">
+                    <div className="flex flex-wrap bg-[#737373] rounded-xl p-3">
                     {frase.sentence.map((item, index) => {
                       return (
                         <div className="flex flex-wrap" key={`div-${index}`}>
@@ -429,7 +429,7 @@ function FillInTheBlanksComp() {
                             ) : null}
                             {submited ? (
                               <span
-                                className="text-xl text-green-600"
+                                className="text-xl text-green-600 font-bold"
                                 key={`answer-${index}`}
                               >
                                 {afterAnswers[index]}
@@ -491,7 +491,7 @@ function FillInTheBlanksComp() {
         )
       ) : (
         // main page with the start button
-        <div className="flex flex-col items-center text-center px-5">
+        <div className="flex flex-col items-center text-center px-5 md:px-0">
           <h1 className="text-4xl text-white font-bold mb-3 ">
             Welcome to the test
           </h1>

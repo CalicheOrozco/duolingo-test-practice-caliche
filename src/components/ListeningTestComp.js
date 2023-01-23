@@ -97,7 +97,7 @@ function ListeningTestComp() {
     }
   };
   return (
-    <div className="App bg-neutral-800 w-full min-h-[60vh] py-3 flex items-center justify-center">
+    <div className="App bg-[#404040] w-full min-h-[60vh] py-3 flex items-center justify-center">
       {isStarted ? (
         audio ? (
           <div className="px-10 lg:w-1/2">
@@ -164,11 +164,11 @@ function ListeningTestComp() {
               {submited ? (
                 <div className="text-xl text-center">
                   {isCorrect ? (
-                    <span className="text-green-600 text-xl text-center">
+                    <span className="text-green-600 text-xl text-center font-bold">
                       Correct: The correct answer is: {audio.answer}
                     </span>
                   ) : (
-                    <span className="text-red-600 text-xl text-center">
+                    <span className="text-red-600 text-xl text-center font-bold">
                       Incorrect: The correct answer is: {audio.answer}
                     </span>
                   )}

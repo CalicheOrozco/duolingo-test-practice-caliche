@@ -5,14 +5,14 @@ function Navbar() {
   const { pathname } = useLocation();
 
   return (
-    <div className="bg-gray-800 px-4 py-8 min-h-[10vh] min-w-full">
+    <div className="bg-[#404040] px-4 py-8 min-h-[10vh] min-w-full">
       <div className="flex md:flex-row justify-between items-center">
         <div className="flex flex-col">
           <Link to="/">
             <img
               src="/logo.png"
               alt="Logo Duolingo English Test Practice by Caliche Orozco"
-              className="w-32 h-25"
+              className="w-48 w- h-28"
             />
           </Link>
         </div>

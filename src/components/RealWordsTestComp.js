@@ -38,10 +38,12 @@ function RealWordsTestComp() {
   };
 
   const handleWordClick = (word) => {
-    if (selectedWords.includes(word)) {
-      setSelectedWords(selectedWords.filter((w) => w !== word));
-    } else {
-      setSelectedWords([...selectedWords, word]);
+    if(!submited){
+      if (selectedWords.includes(word)) {
+        setSelectedWords(selectedWords.filter((w) => w !== word));
+      } else {
+        setSelectedWords([...selectedWords, word]);
+      }
     }
   };
 
@@ -154,7 +156,7 @@ function RealWordsTestComp() {
     }
   };
   return (
-    <div className="App bg-neutral-800 w-full min-h-[60vh] py-3 flex items-center justify-center">
+    <div className="App bg-[#404040] w-full min-h-[60vh] py-3 flex items-center justify-center">
       {isStarted ? (
         wordList ? (
           <div className="px-10 lg:w-1/2">
@@ -229,11 +231,11 @@ function RealWordsTestComp() {
                   {/* show how many answers */}
                   <p className="text-xl text-center py-3">
                     {!isCorrect ? (
-                      <span className="text-red-600 text-xl text-center">
+                      <span className="text-red-600 text-xl text-center font-bold">
                         {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     ) : (
-                      <span className="text-green-600 text-xl text-center">
+                      <span className="text-green-600 text-xl text-center font-bold">
                         {`You got ${numCorrectAnswersReceived} correct answers of a posible ${numCorrectAnswers}`}
                       </span>
                     )}
@@ -241,7 +243,7 @@ function RealWordsTestComp() {
 
                   {/* show answers */}
                   {numCorrectAnswersReceived !== numCorrectAnswers ? (
-                    <div className="flex justify-around p-1 flex-wrap bg-gray-600 rounded-xl md:flex-row items-center gap-3 py-5">
+                    <div className="flex justify-around p-1 flex-wrap bg-[#737373] rounded-xl md:flex-row items-center gap-3 py-5">
                       {/* bottons with the words */}
                       {wordList.map((word, index) => {
                         return (
