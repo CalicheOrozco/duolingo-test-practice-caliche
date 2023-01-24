@@ -11,7 +11,7 @@ function Navbar() {
           <Link to="/">
             <img
               src="/logo.png"
-              alt="Logo Duolingo English Test Practice by Caliche Orozco"
+              alt="Logo English Certify by Caliche Orozco"
               className="w-48 w- h-28"
             />
           </Link>
