@@ -29,6 +29,7 @@ function Footer() {
               href="https://github.com/CalicheOrozco"
               className="text-base font-normal text-gray-300"
               target="_blank"
+              rel="noreferrer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -45,6 +46,7 @@ function Footer() {
               href="https://www.linkedin.com/in/calicheorozco/"
               className="text-base font-normal text-gray-300"
               target="_blank"
+              rel="noreferrer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
