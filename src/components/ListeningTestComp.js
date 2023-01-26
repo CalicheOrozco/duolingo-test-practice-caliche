@@ -63,6 +63,7 @@ function ListeningTestComp() {
     if (audios.length > 0) {
       getRandomAudio();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audios]);
 
   const onSubmit = (data) => {

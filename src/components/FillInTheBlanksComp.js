@@ -51,6 +51,7 @@ function FillInTheBlanksComp() {
     if (frases.length > 0) {
       getRandomFrase();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frases]);
 
   // detect when you press the keys

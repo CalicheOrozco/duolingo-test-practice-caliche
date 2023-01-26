@@ -117,6 +117,7 @@ function RealWordsTestComp() {
     if (wordLists.length > 0) {
       getRandomWordList();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wordLists]);
 
   const onSubmit = (data) => {
