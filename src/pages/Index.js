@@ -6,7 +6,7 @@ function Index() {
   return (
     <>
       <Navbar />
-      <div className="App bg-[#404040] w-full min-h-[55vh] flex flex-col px-5 gap-5 items-center justify-center">
+      <div className="App bg-[#404040] w-full min-h-[80vh] flex flex-col px-5 gap-5 items-center justify-center">
         <h1 className="text-2xl text-white font-bold text-center">
           Welcome to the Duolingo English test practice Website by Caliche
           Orozco
