@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
-import QuickImage from "react-quick-image";
 
 export default function ImageTestComp() {
   const {
@@ -11,175 +10,32 @@ export default function ImageTestComp() {
     formState: { errors },
   } = useForm();
 
-  const [topic, setTopic] = useState(null);
+
   const [submited, setSubmited] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [isCorrect, setIsCorrect] = useState();
   const [answer, setAnswer] = useState("");
+  const [urlImg, setUrlImg] = useState("");
+  const [altImg, setAltImg] = useState("");
+  const [linkImg, setLinkImg] = useState("");
+  const [imgUser, setImgUser] = useState("");
+  const [imgUserLink, setImgUserLink] = useState("");
 
-  let topics = [
-    "people",
-    "boy",
-    "girl",
-    "teenegers",
-    "adults",
-    "kids",
-    "babies",
-    "human",
-    "couple in love",
-    "toys",
-    "folk",
-    "dweller",
-    "town",
-    "health",
-    "wellness",
-    "yoga",
-    "travel",
-    "ride",
-    "journey",
-    "tour",
-    "vacation",
-    "get around",
-    "wander",
-    "trip",
-    "cruise",
-    "voyage",
-    "nature",
-    "world",
-    "wild",
-    "beach",
-    "desert",
-    "sylvan",
-    "forrest",
-    "oceans",
-    "lakes",
-    "rivers",
-    "streams",
-    "ecosystems",
-    "wilderness",
-    "film",
-    "actor",
-    "athletics",
-    "soccer",
-    "american football",
-    "wrestling",
-    "rugby",
-    "skier",
-    "tennis game",
-    "BMX",
-    "baseball game",
-    "boxing",
-    "basketball game",
-    "dancing",
-    "hockey game",
-    "horse racing",
-    "hiking",
-    "sumo",
-    "surfing",
-    "swimming",
-    "triathlon",
-    "volleyball game",
-    "music",
-    "making music",
-    "playing guitar",
-    "concert",
-    "singer",
-    "festival",
-    "party",
-    "birthday party",
-    "wedding",
-    "carnaval",
-    "fair",
-    "food",
-    "art",
-    "museum",
-    "art gallery",
-    "history",
-    "politics",
-    "religion",
-    "computers",
-    "cellphones",
-    "playing video games",
-    "weather",
-    "weather",
-    "rain",
-    "windy",
-    "thunderstorm",
-    "sunny",
-    "storm",
-    "winter storm",
-    "snowing",
-    "business",
-    "buldings",
-    "city night",
-    "teacher",
-    "school",
-    "university",
-    "playing",
-    "park",
-    "fashion",
-    "library",
-    "supermarket",
-    "market",
-    "sports",
-    "transportation",
-    "car",
-    "taxi",
-    "motorcycle",
-    "bycicle",
-    "roller skates",
-    "plane",
-    "rocket",
-    "astronaut",
-    "news",
-    "war",
-    "cooking",
-    "eating",
-    "dogs",
-    "pitbull",
-    "kats",
-    "kitten",
-    "statue of liberty",
-    "mexico",
-    "canada",
-    "japan",
-    "rome",
-    "summer",
-    "spring",
-    "winter",
-    "autumn",
-    "christmas",
-    "halloween",
-    "mothers day",
-    "mexicans",
-    "canadians",
-    "canada day",
-    "americans",
-    "africans",
-    "happy",
-    "angry",
-    "slepping",
-    "surprised",
-    "magician",
-    "engineer",
-    "police",
-    "doctor",
-    "firefighters",
-    "nurse",
-    "chef",
-    "business people",
-    "farmers",
-    "postman",
-    "clown",
-  ];
-  // function to get a random phrase
-  const getRandomTopic = () => {
-    const randomNumero = Math.floor(Math.random() * topics.length);
-    const randomTopic = topics[randomNumero];
-    setTopic(randomTopic);
-    restart();
-    topics = topics.filter((topic) => topic !== randomTopic);
-  };
+
+
+  const getImg = async () => {
+    // fetch to https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ
+    const response = await fetch("https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ")
+    const data = await response.json();
+    setUrlImg(`${data.urls.raw}&w=400`);
+    setAltImg(data.alt_description);
+    setImgUserLink(data.user.links.html);
+    setLinkImg(data.links.html);
+    setImgUser(data.user.name);
+
+
+
+  }
 
   // function to restart the form
   const restart = () => {
@@ -190,7 +46,7 @@ export default function ImageTestComp() {
 
   const next = () => {
     restart();
-    getRandomTopic();
+    getImg()
   };
 
   const onSubmit = (data) => {
@@ -208,13 +64,17 @@ export default function ImageTestComp() {
   };
 
   useEffect(() => {
-    getRandomTopic();
+    getImg()
   }, []);
+
+
+
+  
 
   return (
     <div className="App bg-[#404040] w-full min-h-[60vh] py-3 flex items-center justify-center px-3">
       {isStarted ? (
-        topic ? (
+        urlImg ? (
           <div className="px-10 lg:w-1/2">
             {/* Countdown */}
             <div className="w-full flex justify-end mt-3">
@@ -233,7 +93,8 @@ export default function ImageTestComp() {
                 Write a description of the image below for 1 minute.
               </h1>
               <div className="flex justify-around p-1 items-center flex-col md:flex-row  gap-6 md:gap-5">
-                <QuickImage width="350" height="250" find={topic} />
+                <img className="rounded" src={urlImg} width="400" height="400" alt="random" />
+               
                 {/* text area */}
                 <textarea
                   className="border-2 border-gray-700 text-black focus:border-orange-600 outline-none text-xl w-full md:w-96 h-64 p-1 rounded-md font-bold"
@@ -245,6 +106,7 @@ export default function ImageTestComp() {
                   })}
                 />
               </div>
+              <p className="text-white mr-3"> Photo by <a href={imgUserLink}>{imgUser}</a> on <a href="https://unsplash.com/es?utm_source=englishcertify&utm_medium=referral">Unsplash</a></p>
               {/* handle errors */}
               {errors.answereText && (
                 <p className=" text-red-500 text-lg text-center">
@@ -295,7 +157,8 @@ export default function ImageTestComp() {
                   {/* put a gif */}
                   <img
                     src="https://i.giphy.com/media/f9RzoxHizH72k15FKS/giphy.webp"
-                    alt="gif for good job"
+                    alt={altImg}
+                    href={linkImg}
                     className=" w-96 h-80 mt-3"
                   />
                 </div>
