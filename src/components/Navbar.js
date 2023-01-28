@@ -18,16 +18,16 @@ function Navbar() {
         </div>
 
         <div className="space-x-8 hidden md:block  text-white font-semibold">
-          <Link to="/fill-in-the-blanks">
+        <Link to="/real-words-test">
             <span
               className={
-                pathname === "/fill-in-the-blanks"
+                pathname === "/real-words-test"
                   ? ` text-orange-600 font-bold`
                   : `lg:hover:text-slate-400`
               }
             >
-              Fill in the blanks
-              {pathname === "/fill-in-the-blanks" && (
+              Real words
+              {pathname === "/real-words-test" && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -79,7 +79,7 @@ function Navbar() {
                   : `lg:hover:text-slate-400`
               }
             >
-              {"Listening Test"}
+              {"Listening"}
               {pathname === "/listening-test" && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,16 +97,16 @@ function Navbar() {
               )}
             </span>
           </Link>
-          <Link to="/real-words-test">
+          <Link to="/fill-in-the-blanks">
             <span
               className={
-                pathname === "/real-words-test"
+                pathname === "/fill-in-the-blanks"
                   ? ` text-orange-600 font-bold`
                   : `lg:hover:text-slate-400`
               }
             >
-              Real words test
-              {pathname === "/real-words-test" && (
+              Fill in the blanks
+              {pathname === "/fill-in-the-blanks" && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -123,6 +123,7 @@ function Navbar() {
               )}
             </span>
           </Link>
+          
         </div>
 
         <div className="space-x-4 flex flex-row items-center">
@@ -137,15 +138,15 @@ function Navbar() {
         </div>
       </div>
       <div className="flex gap-x-4 justify-center md:hidden mt-4 text-white font-semibold">
-        <Link to="/fill-in-the-blanks">
+      <Link to="/real-words-test">
           <span
             className={
-              pathname === "/fill-in-the-blanks"
+              pathname === "/real-words-test"
                 ? ` text-orange-600 font-bold`
                 : `lg:hover:text-slate-400`
             }
           >
-            {"Fill in the blanks"}
+            {"Real words"}
           </span>
         </Link>
         <Link to="/image-test">
@@ -167,20 +168,21 @@ function Navbar() {
                 : `lg:hover:text-slate-400`
             }
           >
-            {"Listening Test"}
+            {"Listening"}
           </span>
         </Link>
-        <Link to="/real-words-test">
+        <Link to="/fill-in-the-blanks">
           <span
             className={
-              pathname === "/real-words-test"
+              pathname === "/fill-in-the-blanks"
                 ? ` text-orange-600 font-bold`
                 : `lg:hover:text-slate-400`
             }
           >
-            {"Real words test"}
+            {"Fill in the blanks"}
           </span>
         </Link>
+        
       </div>
     </div>
   );
