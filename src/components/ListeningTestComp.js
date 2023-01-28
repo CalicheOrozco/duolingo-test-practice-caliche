@@ -217,7 +217,9 @@ function ListeningTestComp() {
               ) : null}
             </>
           </div>
-        ) : (
+        ) 
+        : audio === null ? ( <h1 className="text-3xl text-white">Loading...</h1> ) 
+        : (
           <h1 className="text-xl text-white">the audios are over 😢😢</h1>
         )
       ) : (

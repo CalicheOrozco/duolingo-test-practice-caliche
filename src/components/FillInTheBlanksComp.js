@@ -487,7 +487,8 @@ function FillInTheBlanksComp() {
               ) : null}
             </>
           </div>
-        ) : (
+        ) : frase === null ? ( <h1 className="text-3xl text-white">Loading...</h1> ) 
+        : (
           <h1 className="text-xl text-white">the sentences are over 😢😢</h1>
         )
       ) : (

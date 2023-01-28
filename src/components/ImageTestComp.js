@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 
 export default function ImageTestComp() {
   const {
@@ -15,7 +17,7 @@ export default function ImageTestComp() {
   const [isStarted, setIsStarted] = useState(false);
   const [isCorrect, setIsCorrect] = useState();
   const [answer, setAnswer] = useState("");
-  const [urlImg, setUrlImg] = useState("");
+  const [urlImg, setUrlImg] = useState(null);
   const [altImg, setAltImg] = useState("");
   const [linkImg, setLinkImg] = useState("");
   const [imgUser, setImgUser] = useState("");
@@ -27,7 +29,7 @@ export default function ImageTestComp() {
     // fetch to https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ
     const response = await fetch("https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ")
     const data = await response.json();
-    setUrlImg(`${data.urls.raw}&w=400`);
+    setUrlImg(`${data.urls.raw}&h=400&w=400`);
     setAltImg(data.alt_description);
     setImgUserLink(data.user.links.html);
     setLinkImg(data.links.html);
@@ -93,7 +95,7 @@ export default function ImageTestComp() {
                 Write a description of the image below for 1 minute.
               </h1>
               <div className="flex justify-around p-1 items-center flex-col md:flex-row  gap-6 md:gap-5">
-                <img className="rounded" src={urlImg} width="400" height="400" alt="random" />
+                <LazyLoadImage className="rounded" src={urlImg} width="400" height="400" alt={altImg ? altImg : "Loading..."} />
                
                 {/* text area */}
                 <textarea
@@ -165,7 +167,8 @@ export default function ImageTestComp() {
               ) : null}
             </>
           </div>
-        ) : (
+        ) : urlImg === null ? ( <h1 className="text-3xl text-white">Loading...</h1> ) 
+         : (
           <h1 className="text-xl text-white">The images are over 😢😢</h1>
         )
       ) : (

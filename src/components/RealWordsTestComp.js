@@ -117,7 +117,6 @@ function RealWordsTestComp() {
     if (wordLists.length > 0) {
       getRandomWordList();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wordLists]);
 
   const onSubmit = (data) => {
@@ -316,7 +315,8 @@ function RealWordsTestComp() {
               ) : null}
             </>
           </div>
-        ) : (
+        ) : wordList === null ? ( <h1 className="text-3xl text-white">Loading...</h1> ) 
+        : (
           <h1 className="text-xl text-white">the words are over 😢😢</h1>
         )
       ) : (
