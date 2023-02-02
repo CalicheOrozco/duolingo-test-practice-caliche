@@ -22,22 +22,31 @@ export default function ImageTestComp() {
   const [linkImg, setLinkImg] = useState("");
   const [imgUser, setImgUser] = useState("");
   const [imgUserLink, setImgUserLink] = useState("");
+  const [topic, setTopic] = useState("");
 
+  let topics = [  "abstract",  "animals",  "architecture",  "beaches",  "black and white",  "cityscapes",  "coffee",  "culinary",  "design",  "desktops",  "education",  "environment",  "fashion",  "flowers",  "food",  "forest",  "health",  "historical",  "holidays",  "industry",  "landscape",  "leisure",  "love",  "macro",  "music",  "nature",  "night",  "office",  "outdoor",  "people",  "portrait",  "puzzle",  "reflection",  "relaxation",  "science",  "sea",  "space",  "sports",  "street",  "sunset",  "technology",  "travelling",  "urban",  "vehicles",  "wildlife",  "art",  "autumn",  "beauty",  "birthday",  "buildings",  "business",  "cities",  "communication",  "conceptual",  "creative",  "daytime",  "designer",  "drinks",  "dusk",  "easy",  "emotion",  "family",  "fantasy",  "fitness",  "flora",  "foods",  "free",  "fun",  "gardening",  "geometric",  "guitar",  "happiness",  "healthcare",  "holiday",  "home",  "houses",  "image",  "innovation",  "inspiration",  "interior",  "internet",  "journey",  "joy",  "landscapes",  "life",  "light",  "lovely",  "luxury",  "makeup",  "marketing",  "music industry",  "nightlife",  "ocean",  "open space",  "painting",  "party",  "peace",  "people and culture",  "photography",  "plants",  "popular",  "pure",  "quality",  "quotes",  "rural",  "science and technology",  "seascape",  "simple",  "sky",  "summer",  "sunrise",  "sunset",  "technology",  "tranquility",  "urban life",  "vacation",  "vibrant",  "vintage",  "water",  "wedding"]
+ 
 
 
   const getImg = async () => {
     // fetch to https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ
-    const response = await fetch("https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ")
+    const response = await fetch(`https://api.unsplash.com//photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ&query=${topic}`)
     const data = await response.json();
-    setUrlImg(`${data.urls.raw}&h=400&w=400`);
+    setUrlImg(`${data.urls.small}&h=400&w=400`);
     setAltImg(data.alt_description);
     setImgUserLink(data.user.links.html);
     setLinkImg(data.links.html);
     setImgUser(data.user.name);
-
-
-
   }
+
+
+  const getTopic = () => {
+    const randomNumero = Math.floor(Math.random() * topics.length);
+    const randomTopic = topics[randomNumero];
+    setTopic(randomTopic);
+    restart();
+    topics = topics.filter((topic) => topic !== randomTopic);
+  };
 
   // function to restart the form
   const restart = () => {
@@ -47,6 +56,7 @@ export default function ImageTestComp() {
   };
 
   const next = () => {
+    getTopic()
     restart();
     getImg()
   };
@@ -67,6 +77,7 @@ export default function ImageTestComp() {
 
   useEffect(() => {
     getImg()
+    getTopic()
   }, []);
 
 
@@ -76,7 +87,7 @@ export default function ImageTestComp() {
   return (
     <div className="App bg-[#404040] w-full min-h-[60vh] py-3 flex items-center justify-center px-3">
       {isStarted ? (
-        urlImg ? (
+        topic ? (
           <div className="px-10 lg:w-1/2">
             {/* Countdown */}
             <div className="w-full flex justify-end mt-3">
