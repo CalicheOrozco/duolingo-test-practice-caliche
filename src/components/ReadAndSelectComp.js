@@ -122,7 +122,7 @@ function ReadAndSelectComp() {
             </div>
           </div>
         ) : current === undefined ? (
-          <div className="px-6 max-w-3xl">
+          <div className="px-6 w-full max-w-3xl">
             <h2 className="text-white text-3xl font-bold text-center">Results</h2>
             <div className="text-white text-center mt-2">Total: <span className="font-semibold">{totalQuestions}</span> · Correct: <span className="text-green-400 font-semibold">{totalCorrect}</span> · Incorrect: <span className="text-red-400 font-semibold">{totalIncorrect}</span></div>
             <div className="text-center mt-2 text-white">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
