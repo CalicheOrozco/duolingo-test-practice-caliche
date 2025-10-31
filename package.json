@@ -48,9 +48,13 @@
     "svgo": "^2.8.0",
     "sourcemap-codec": "npm:@jridgewell/sourcemap-codec@^1.4.15"
   },
+  "resolutions": {
+    "svgo": "^2.8.0"
+  },
   "engines": {
     "node": ">=18"
   },
+  "packageManager": "yarn@1.22.22",
   "devDependencies": {
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
