@@ -1,476 +1,602 @@
 [
     {
         "file": "1.mp3",
-        "answer": "The workshop will show you how to use the library"
+        "answer": "The workshop will show you how to use the library",
+        "difficulty": "medium"
     },
     {
         "file": "2.mp3",
-        "answer": "You may ask your teacher for further assistance"
+        "answer": "You may ask your teacher for further assistance",
+        "difficulty": "medium"
     },
     {
         "file": "3.mp3",
-        "answer": "In this presentation, I am going to talk about spart and society"
+        "answer": "In this presentation, I am going to talk about spart and society",
+        "difficulty": "medium"
     },
     {
         "file": "4.mp3",
-        "answer": "You can find all the information you need on the university's website"
+        "answer": "You can find all the information you need on the university's website",
+        "difficulty": "medium"
     },
     {
         "file": "5.mp3",
-        "answer": "I am not sure how university education will change in the future"
+        "answer": "I am not sure how university education will change in the future",
+        "difficulty": "advanced"
     },
     {
         "file": "6.mp3",
-        "answer": "If had known you were in the hospital, I would have visited you"
+        "answer": "If had known you were in the hospital, I would have visited you",
+        "difficulty": "advanced"
     },
     {
         "file": "7.mp3",
-        "answer": "If you are unable to complate the task on time, please notify me via email"
+        "answer": "If you are unable to complate the task on time, please notify me via email",
+        "difficulty": "advanced"
     },
     {
         "file": "8.mp3",
-        "answer": "Research shows only a slight difference in happiness between men and women"
+        "answer": "Research shows only a slight difference in happiness between men and women",
+        "difficulty": "medium"
     },
     {
-       "file": "9.mp3",
-         "answer": "Students who want to attend the conference must register before the end of the week" 
+        "file": "9.mp3",
+        "answer": "Students who want to attend the conference must register before the end of the week",
+        "difficulty": "advanced"
     },
     {
         "file": "10.mp3",
-        "answer": "The problem of global warming will get worse unless the government takes immediate action"
+        "answer": "The problem of global warming will get worse unless the government takes immediate action",
+        "difficulty": "advanced"
     },
     {
         "file": "11.mp3",
-        "answer": "English is the world language for diplomacy, commerce, and sport"
+        "answer": "English is the world language for diplomacy, commerce, and sport",
+        "difficulty": "medium"
     },
     {
         "file": "12.mp3",
-        "answer": "For a long time, people have known about the dangers of smoking"
+        "answer": "For a long time, people have known about the dangers of smoking",
+        "difficulty": "medium"
     },
     {
         "file": "13.mp3",
-        "answer": "The service should help new parents learn more about caring for their baby"
+        "answer": "The service should help new parents learn more about caring for their baby",
+        "difficulty": "advanced"
     },
     {
         "file": "14.mp3",
-        "answer": "It is over twenty-tive years since man's first flight into Space"
+        "answer": "It is over twenty-tive years since man's first flight into Space",
+        "difficulty": "medium"
     },
     {
         "file": "15.mp3",
-        "answer": "Many people find it difficult to admit that they need help"
+        "answer": "Many people find it difficult to admit that they need help",
+        "difficulty": "medium"
     },
     {
         "file": "16.mp3",
-        "answer": "Shortly before an earthquake, animals are known to act in unusual ways"
+        "answer": "Shortly before an earthquake, animals are known to act in unusual ways",
+        "difficulty": "medium"
     },
     {
         "file": "17.mp3",
-        "answer": "Shortly before an earthquake, animals are known to act in unusual ways"
+        "answer": "Shortly before an earthquake, animals are known to act in unusual ways",
+        "difficulty": "medium"
     },
     {
         "file": "18.mp3",
-        "answer": "Teachers are leaving their profession at an alarming rate"
+        "answer": "Teachers are leaving their profession at an alarming rate",
+        "difficulty": "medium"
     },
     {
         "file": "19.mp3",
-        "answer": "The wearing of school uniforms is a controversial matter in some countries"
+        "answer": "The wearing of school uniforms is a controversial matter in some countries",
+        "difficulty": "medium"
     },
     {
         "file": "20.mp3",
-        "answer": "An important relationship exists between food and comfort"
+        "answer": "An important relationship exists between food and comfort",
+        "difficulty": "medium"
     },
     {
         "file": "21.mp3",
-        "answer": "Middle children tend to feel neglected and insecure"
+        "answer": "Middle children tend to feel neglected and insecure",
+        "difficulty": "medium"
     },
     {
-       "file": "22.mp3",
-       "answer": "She has broken practically every record at the olympics" 
+        "file": "22.mp3",
+        "answer": "She has broken practically every record at the olympics",
+        "difficulty": "medium"
     },
     {
         "file": "23.mp3",
-        "answer": "stopped eating junk food because it was bad for my health"
+        "answer": "stopped eating junk food because it was bad for my health",
+        "difficulty": "medium"
     },
     {
         "file": "24.mp3",
-        "answer": "There are thousands of robots doing a wide variety of tasks in hospitals"
+        "answer": "There are thousands of robots doing a wide variety of tasks in hospitals",
+        "difficulty": "advanced"
     },
     {
         "file": "25.mp3",
-        "answer": "Educational methods include teaching, storytelling, discussions, and research"
+        "answer": "Educational methods include teaching, storytelling, discussions, and research",
+        "difficulty": "medium"
     },
     {
         "file": "26.mp3",
-        "answer": "Many large university institutions are now starting to offer free online courses"
+        "answer": "Many large university institutions are now starting to offer free online courses",
+        "difficulty": "advanced"
     },
     {
         "file": "27.mp3",
-        "answer": "would have bought you a present if I had known it was your birthday"
+        "answer": "would have bought you a present if I had known it was your birthday",
+        "difficulty": "advanced"
     },
     {
         "file": "28.mp3",
-        "answer":"Many believe that schools should concentrate more on the child and less on the exam"
+        "answer": "Many believe that schools should concentrate more on the child and less on the exam",
+        "difficulty": "advanced"
     },
     {
         "file": "29.mp3",
-        "answer": "The smart phone has made an enormous difference to the way we communicate"
+        "answer": "The smart phone has made an enormous difference to the way we communicate",
+        "difficulty": "advanced"
     },
     {
         "file": "30.mp3",
-        "answer": "Had I realised the severity of the situation, I would have informed the police"
+        "answer": "Had I realised the severity of the situation, I would have informed the police",
+        "difficulty": "advanced"
     },
     {
         "file": "31.mp3",
-        "answer": "The primary energy source of tropical storms is warm ocean waters"
+        "answer": "The primary energy source of tropical storms is warm ocean waters",
+        "difficulty": "medium"
     },
     {
         "file": "32.mp3",
-        "answer": "Once they had checked all my bags, I was allowed on the plane"
+        "answer": "Once they had checked all my bags, I was allowed on the plane",
+        "difficulty": "advanced"
     },
     {
         "file": "33.mp3",
-        "answer": "She became very sick because she had not been sleeping enough"
+        "answer": "She became very sick because she had not been sleeping enough",
+        "difficulty": "medium"
     },
     {
         "file": "34.mp3",
-        "answer": "The company has decided to integrate the sales and marketing departments"    
+        "answer": "The company has decided to integrate the sales and marketing departments",
+        "difficulty": "advanced"
     },
     {
         "file": "35.mp3",
-        "answer": "Obesity is connected to many different fatal diseases"
+        "answer": "Obesity is connected to many different fatal diseases",
+        "difficulty": "advanced"
     },
     {
         "file": "36.mp3",
-        "answer": "I don't think it's worth spending all that money on exploring the universe"
+        "answer": "I don't think it's worth spending all that money on exploring the universe",
+        "difficulty": "advanced"
     },
     {
         "file": "37.mp3",
-        "answer": "The olympic games is an important international event featuring summer and winter sports"
+        "answer": "The olympic games is an important international event featuring summer and winter sports",
+        "difficulty": "advanced"
     },
     {
         "file": "38.mp3",
-        "answer":"Ancient people used the positions of the stars to find the best time to plant crops"
+        "answer": "Ancient people used the positions of the stars to find the best time to plant crops",
+        "difficulty": "advanced"
     },
     {
         "file": "39.mp3",
-        "answer": "Most baseball uniforms include the names and numbers of the players who wear them"
+        "answer": "Most baseball uniforms include the names and numbers of the players who wear them",
+        "difficulty": "advanced"
     },
     {
         "file": "40.mp3",
-        "answer": "Large technology companies are often involved in scandals over privacy"
+        "answer": "Large technology companies are often involved in scandals over privacy",
+        "difficulty": "medium"
     },
     {
         "file": "41.mp3",
-        "answer": "Country music has its roots and beginnings in folk music"
+        "answer": "Country music has its roots and beginnings in folk music",
+        "difficulty": "medium"
     },
     {
         "file": "42.mp3",
-        "answer": "Online games are games on the internet that are designed to entertain players"
+        "answer": "Online games are games on the internet that are designed to entertain players",
+        "difficulty": "advanced"
     },
     {
         "file": "43.mp3",
-        "answer": "Most movies are made so that they can be shown on screen in cinemas and at home"
+        "answer": "Most movies are made so that they can be shown on screen in cinemas and at home",
+        "difficulty": "advanced"
     },
     {
         "file": "44.mp3",
-        "answer": "The earliest toys were made from rocks, sticks, and clay"
+        "answer": "The earliest toys were made from rocks, sticks, and clay",
+        "difficulty": "medium"
     },
     {
         "file": "45.mp3",
-        "answer": "The average American family uses more than one-thousand litres of water per day"
+        "answer": "The average American family uses more than one-thousand litres of water per day",
+        "difficulty": "advanced"
     },
     {
         "file": "46.mp3",
-        "answer": "He wrote a book about his journey, and it became very famous"
+        "answer": "He wrote a book about his journey, and it became very famous",
+        "difficulty": "medium"
     },
     {
         "file": "47.mp3",
-        "answer": "Millions of people around the world speak english"
+        "answer": "Millions of people around the world speak english",
+        "difficulty": "medium"
     },
     {
         "file": "48.mp3",
-        "answer": "l have been in this country for three years, and I really like being here"
+        "answer": "l have been in this country for three years, and I really like being here",
+        "difficulty": "advanced"
     },
     {
         "file": "49.mp3",
-        "answer": "I share a house with two other girls"
+        "answer": "I share a house with two other girls",
+        "difficulty": "medium"
     },
     {
         "file": "50.mp3",
-        "answer":"l am a student who enjoys learning English"
+        "answer": "l am a student who enjoys learning English",
+        "difficulty": "medium"
     },
     {
         "file": "51.mp3",
-        "answer": "did not write my book last week because I was busy"
+        "answer": "did not write my book last week because I was busy",
+        "difficulty": "medium"
     },
     {
         "file": "52.mp3",
-        "answer": "I started attending college last month"
+        "answer": "I started attending college last month",
+        "difficulty": "basic"
     },
     {
         "file": "53.mp3",
-        "answer": "School starts again next monday"
+        "answer": "School starts again next monday",
+        "difficulty": "basic"
     },
     {
         "file": "54.mp3",
-        "answer": "Many students from Asian countries go to australia to study"
+        "answer": "Many students from Asian countries go to australia to study",
+        "difficulty": "medium"
     },
     {
         "file": "55.mp3",
-        "answer": "An ambulance rushed the child to the hospital"
-    },{
+        "answer": "An ambulance rushed the child to the hospital",
+        "difficulty": "medium"
+    },
+    {
         "file": "56.mp3",
-        "answer": "Although they grew up in different environments, their school results were often remarkably similar"
-    },{
+        "answer": "Although they grew up in different environments, their school results were often remarkably similar",
+        "difficulty": "advanced"
+    },
+    {
         "file": "57.mp3",
-        "answer": "Freedom of speech is the most important feature of a democratic society"
-    },{
+        "answer": "Freedom of speech is the most important feature of a democratic society",
+        "difficulty": "medium"
+    },
+    {
         "file": "58.mp3",
-        "answer": "In some countries, if you criticize the government you can get fined or imprisoned"
-    },{
+        "answer": "In some countries, if you criticize the government you can get fined or imprisoned",
+        "difficulty": "advanced"
+    },
+    {
         "file": "59.mp3",
-        "answer": "Over the last twenty years, an enormous amount of money has been invested in Space exploration"
-    },{
+        "answer": "Over the last twenty years, an enormous amount of money has been invested in Space exploration",
+        "difficulty": "advanced"
+    },
+    {
         "file": "60.mp3",
-        "answer":"Supporters of school uniforms say that uniforms encourage students to focus on studying"
+        "answer": "Supporters of school uniforms say that uniforms encourage students to focus on studying",
+        "difficulty": "advanced"
     },
     {
         "file": "61.mp3",
-        "answer":"Will you be here on Sunday?"
+        "answer": "Will you be here on Sunday?",
+        "difficulty": "basic"
     },
     {
         "file": "62.mp3",
-        "answer":"How do I get to Union Station from here? "
+        "answer": "How do I get to Union Station from here?",
+        "difficulty": "medium"
     },
     {
         "file": "63.mp3",
-        "answer":"Is it always warm here at this time of year? "
+        "answer": "Is it always warm here at this time of year?",
+        "difficulty": "medium"
     },
     {
         "file": "64.mp3",
-        "answer":"You're going to the grocery store first, aren't you?"
+        "answer": "You're going to the grocery store first, aren't you?",
+        "difficulty": "medium"
     },
     {
         "file": "65.mp3",
-        "answer":"When is a good time to call? I don't want to wake your kids"
+        "answer": "When is a good time to call? I don't want to wake your kids",
+        "difficulty": "advanced"
     },
     {
         "file": "66.mp3",
-        "answer":"The phone number here is 4678876"
+        "answer": "The phone number here is 4678876",
+        "difficulty": "basic"
     },
     {
         "file": "67.mp3",
-        "answer":"Your total bill is fortynine dollars and twelve cents"
+        "answer": "Your total bill is fortynine dollars and twelve cents",
+        "difficulty": "medium"
     },
     {
         "file": "68.mp3",
-        "answer":"Sorry, did you say seventeen or seventy?"
-    },{
+        "answer": "Sorry, did you say seventeen or seventy?",
+        "difficulty": "basic"
+    },
+    {
         "file": "69.mp3",
-        "answer":"My son's date of birth is September 21st 2001"
+        "answer": "My son's date of birth is September 21st 2001",
+        "difficulty": "medium"
     },
     {
         "file": "70.mp3",
-        "answer":"Brian McDonald is now on the board of directors"
+        "answer": "Brian McDonald is now on the board of directors",
+        "difficulty": "medium"
     },
     {
         "file": "71.mp3",
-        "answer":"My neighbour is the one wearing the red leather jacket"
+        "answer": "My neighbour is the one wearing the red leather jacket",
+        "difficulty": "medium"
     },
     {
         "file": "72.mp3",
-        "answer":"Mrs Harrison is taking over as VP"
+        "answer": "Mrs Harrison is taking over as VP",
+        "difficulty": "basic"
     },
     {
         "file": "73.mp3",
-        "answer":"Why don't you ask your niece to babysit charlie?"
+        "answer": "Why don't you ask your niece to babysit charlie?",
+        "difficulty": "medium"
     },
     {
         "file": "74.mp3",
-        "answer":"I'd like to speak to a manager or supervisor please"
+        "answer": "I'd like to speak to a manager or supervisor please",
+        "difficulty": "medium"
     },
     {
         "file": "75.mp3",
-        "answer":"The mailbox is just behind the big water fountain"
+        "answer": "The mailbox is just behind the big water fountain",
+        "difficulty": "medium"
     },
     {
         "file": "76.mp3",
-        "answer":"Turn left on duncan avenue and you will see the bus station"
+        "answer": "Turn left on duncan avenue and you will see the bus station",
+        "difficulty": "medium"
     },
     {
         "file": "77.mp3",
-        "answer":"I can't wait to go back the scenery was breathtaking"
+        "answer": "I can't wait to go back the scenery was breathtaking",
+        "difficulty": "medium"
     },
     {
         "file": "78.mp3",
-        "answer":"Our offices have moved to the downtown core"
+        "answer": "Our offices have moved to the downtown core",
+        "difficulty": "medium"
     },
     {
         "file": "79.mp3",
-        "answer":"Don't forget to close the door when you leave"
+        "answer": "Don't forget to close the door when you leave",
+        "difficulty": "medium"
     },
     {
         "file": "80.mp3",
-        "answer":"Let these dry before you try moving them anywhere"
+        "answer": "Let these dry before you try moving them anywhere",
+        "difficulty": "medium"
     },
     {
         "file": "81.mp3",
-        "answer":"Call for assistance if you have any trouble whatsoever"
+        "answer": "Call for assistance if you have any trouble whatsoever",
+        "difficulty": "medium"
     },
     {
         "file": "82.mp3",
-        "answer":"Would you mind delivering this package for me?"
+        "answer": "Would you mind delivering this package for me?",
+        "difficulty": "medium"
     },
     {
         "file": "83.mp3",
-        "answer":"Please give us a call to let us know you've arrived safely"
+        "answer": "Please give us a call to let us know you've arrived safely",
+        "difficulty": "medium"
     },
     {
         "file": "84.mp3",
-        "answer":"It's been so long since I've seen you"
+        "answer": "It's been so long since I've seen you",
+        "difficulty": "medium"
     },
     {
         "file": "85.mp3",
-        "answer":"Nice day out, isn't it?"
+        "answer": "Nice day out, isn't it?",
+        "difficulty": "basic"
     },
     {
         "file": "86.mp3",
-        "answer":"What are you up to today?"
+        "answer": "What are you up to today?",
+        "difficulty": "basic"
     },
     {
         "file": "87.mp3",
-        "answer":"I'll talk to you again soon"
+        "answer": "I'll talk to you again soon",
+        "difficulty": "basic"
     },
     {
         "file": "88.mp3",
-        "answer":"Work has been so busy lately"
+        "answer": "Work has been so busy lately",
+        "difficulty": "basic"
     },
     {
         "file": "89.mp3",
-        "answer":"I need three stacks of regular printer paper and four boxes of blue pens"
+        "answer": "I need three stacks of regular printer paper and four boxes of blue pens",
+        "difficulty": "advanced"
     },
     {
         "file": "90.mp3",
-        "answer":"Let's order a few large pepperoni pizzas and at least one small vegetarian"
+        "answer": "Let's order a few large pepperoni pizzas and at least one small vegetarian",
+        "difficulty": "advanced"
     },
     {
         "file": "91.mp3",
-        "answer":"The recipe calls for a cup and a half of flour and two tablespoons of sugar"
+        "answer": "The recipe calls for a cup and a half of flour and two tablespoons of sugar",
+        "difficulty": "advanced"
     },
     {
         "file": "92.mp3",
-        "answer":"Gas prices are about 12% lower than they were two months ago"
+        "answer": "Gas prices are about 12% lower than they were two months ago",
+        "difficulty": "medium"
     },
     {
         "file": "93.mp3",
-        "answer":"In my opinion they should sell smaller portions at a reduced price"
+        "answer": "In my opinion they should sell smaller portions at a reduced price",
+        "difficulty": "medium"
     },
     {
         "file": "94.mp3",
-        "answer":"The total cost of the package is 38 and 50 cents taxes included"
+        "answer": "The total cost of the package is 38 and 50 cents taxes included",
+        "difficulty": "advanced"
     },
     {
         "file": "95.mp3",
-        "answer":"There was a loss of 2 million euros in this quarter alone"
+        "answer": "There was a loss of 2 million euros in this quarter alone",
+        "difficulty": "medium"
     },
     {
         "file": "96.mp3",
-        "answer":"The Canadian dollar is currently at 81 cents and is expected to fall further"
+        "answer": "The Canadian dollar is currently at 81 cents and is expected to fall further",
+        "difficulty": "advanced"
     },
     {
         "file": "97.mp3",
-        "answer":"Don't forget to do the conversion when you calculate your income"
+        "answer": "Don't forget to do the conversion when you calculate your income",
+        "difficulty": "medium"
     },
     {
         "file": "98.mp3",
-        "answer":"Hello may I speak with mr or mrs Davidson?"
+        "answer": "Hello may I speak with mr or mrs Davidson?",
+        "difficulty": "medium"
     },
     {
         "file": "99.mp3",
-        "answer":"I'm afraid Maria is out at the moment"
+        "answer": "I'm afraid Maria is out at the moment",
+        "difficulty": "medium"
     },
     {
         "file": "100.mp3",
-        "answer":"Would you like to leave a message?"
+        "answer": "Would you like to leave a message?",
+        "difficulty": "basic"
     },
     {
         "file": "101.mp3",
-        "answer":"I'll call back another time thank you"
+        "answer": "I'll call back another time thank you",
+        "difficulty": "basic"
     },
     {
         "file": "102.mp3",
-        "answer":"I'm going to have to let you go now"
+        "answer": "I'm going to have to let you go now",
+        "difficulty": "medium"
     },
     {
         "file": "103.mp3",
-        "answer":"Today is November 26th"	
+        "answer": "Today is November 26th",
+        "difficulty": "basic"
     },
     {
         "file": "104.mp3",
-        "answer":"It snowed all day today"
+        "answer": "It snowed all day today",
+        "difficulty": "basic"
     },
     {
         "file": "105.mp3",
-        "answer":"The snow is beautiful"
+        "answer": "The snow is beautiful",
+        "difficulty": "basic"
     },
     {
         "file": "106.mp3",
-        "answer":"The snow finally stopped"
+        "answer": "The snow finally stopped",
+        "difficulty": "basic"
     },
     {
         "file": "107.mp3",
-        "answer":"My sister and I are excited"
+        "answer": "My sister and I are excited",
+        "difficulty": "basic"
     },
     {
         "file": "108.mp3",
-        "answer":"My mom doesn't like the snow"
+        "answer": "My mom doesn't like the snow",
+        "difficulty": "basic"
     },
     {
         "file": "109.mp3",
-        "answer":"My mom has to shovel the driveway"   
+        "answer": "My mom has to shovel the driveway",
+        "difficulty": "basic"
     },
     {
         "file": "110.mp3",
-        "answer":"My sister and I get to play"
+        "answer": "My sister and I get to play",
+        "difficulty": "basic"
     },
     {
         "file": "111.mp3",
-        "answer":"I put on my hat and mittens"
+        "answer": "I put on my hat and mittens",
+        "difficulty": "basic"
     },
     {
         "file": "112.mp3",
-        "answer":"My mom puts on my scarf"
+        "answer": "My mom puts on my scarf",
+        "difficulty": "basic"
     },
     {
         "file": "113.mp3",
-        "answer":"My mom zippers my jacket"
+        "answer": "My mom zippers my jacket",
+        "difficulty": "basic"
     },
     {
         "file": "114.mp3",
-        "answer":"My sister puts on her hat and mittens"
+        "answer": "My sister puts on her hat and mittens",
+        "difficulty": "medium"
     },
     {
         "file": "115.mp3",
-        "answer":"My mom puts on her scarf"
+        "answer": "My mom puts on her scarf",
+        "difficulty": "basic"
     },
     {
         "file": "116.mp3",
-        "answer":"My mom zippers her jacket"
+        "answer": "My mom zippers her jacket",
+        "difficulty": "basic"
     },
     {
         "file": "117.mp3",
-        "answer": "My sister and I go outside"
+        "answer": "My sister and I go outside",
+        "difficulty": "basic"
     },
     {
         "file": "118.mp3",
-        "answer": "We begin to make a snowman"
+        "answer": "We begin to make a snowman",
+        "difficulty": "basic"
     },
     {
         "file": "119.mp3",
-        "answer": "My mom starts to shovel the snow"
+        "answer": "My mom starts to shovel the snow",
+        "difficulty": "basic"
     },
     {
         "file": "120.mp3",
-        "answer": "My sister and I make snow angels"
+        "answer": "My sister and I make snow angels",
+        "difficulty": "basic"
     }
 ]
