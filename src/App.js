@@ -5,6 +5,7 @@ import ReadAndComplete from "./pages/ReadAndComplete";
 import RealWordsTest from "./pages/RealWordsTest";
 import Index from "./pages/Index";
 import FillInTheBlanks from "./pages/FillInTheBlanks";
+import ReadAndSelect from "./pages/ReadAndSelect";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route path="/image-test" element={<ImageTest />} />
       <Route path="/read-and-complete" element={<ReadAndComplete />} />
       <Route path="/fill-in-the-blanks" element={<FillInTheBlanks />} />
+      <Route path="/read-and-select" element={<ReadAndSelect />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />
     </Routes>
 
