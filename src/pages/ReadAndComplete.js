@@ -1,18 +1,18 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import FillIntheBlanksComp from '../components/FillIntheBlanksComp'
+import ReadAndCompleteComp from '../components/ReadAndCompleteComp'
 import Footer from '../components/Footer'
 
-function FillIntheBlanks() {
+function ReadAndComplete() {
   return (
     <>
     <Navbar />
-    <FillIntheBlanksComp />
+    <ReadAndCompleteComp />
     <Footer />
     </>
   )
 }
 
-export default FillIntheBlanks
+export default ReadAndComplete
 
 

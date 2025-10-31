@@ -2,96 +2,96 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
 
-function FillIntheBlanksComp() {
+function ReadAndCompleteComp() {
   const { register, handleSubmit, setFocus, getValues, reset } = useForm();
 
+  // data and round state
   const [allItems, setAllItems] = useState([]);
-  const [frases, setFrases] = useState([]); // remaining questions in the round
+  const [frases, setFrases] = useState([]); // remaining in round
   const [frase, setFrase] = useState(null);
+
+  // per-question state
   const [formData, setFormData] = useState(null);
   const [submited, setSubmited] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [isCorrect, setIsCorrect] = useState();
-  const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
-  const [numCorrectAnswersReceived, setNumCorrectAnswersReceived] = useState(0);
 
-  // pre-start controls
-  const [selectedSeconds, setSelectedSeconds] = useState(20);
-  const [selectedDifficulty, setSelectedDifficulty] = useState("any");
+  // pre-start configuration
+  const [selectedSeconds, setSelectedSeconds] = useState(180); // 3:00
+  const [selectedDifficulty, setSelectedDifficulty] = useState("any"); // basic/medium/advanced/any
 
-  // round results and progress
+  // round progress + results
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [answeredCount, setAnsweredCount] = useState(0);
   const [totalCorrect, setTotalCorrect] = useState(0);
   const [totalIncorrect, setTotalIncorrect] = useState(0);
   const [correctList, setCorrectList] = useState([]);
   const [wrongList, setWrongList] = useState([]);
-  const [totalQuestions, setTotalQuestions] = useState(0);
-  const [answeredCount, setAnsweredCount] = useState(0);
 
-  const getFrases = async () => {
-    const response = await fetch("dataFillIntheBlanks.json");
+  // fetch all items
+  const loadAll = async () => {
+    const response = await fetch("dataReadAndComplete.json");
     const data = await response.json();
     setAllItems(data);
   };
 
+  // prepare a new round
   const startRound = () => {
-    // reset round state
+    setFormData(null);
+    setSubmited(false);
+    setAnsweredCount(0);
     setTotalCorrect(0);
     setTotalIncorrect(0);
     setCorrectList([]);
     setWrongList([]);
-    setFormData(null);
-    setSubmited(false);
-    setIsCorrect(undefined);
     setFrase(null);
-    setAnsweredCount(0);
 
-    // select pool by difficulty
     const pool = selectedDifficulty === "any"
       ? [...allItems]
-      : allItems.filter((item) => item.difficulty === selectedDifficulty);
+      : allItems.filter((it) => it.difficulty === selectedDifficulty);
 
-    // pick random round size between 6 and 9
-    const desired = 6 + Math.floor(Math.random() * 4); // 6–9
+    // random size 3–6
+    const desired = 3 + Math.floor(Math.random() * 4);
     const count = Math.min(desired, pool.length);
 
-    // random unique selection
     const indices = new Set();
     while (indices.size < count) {
       indices.add(Math.floor(Math.random() * pool.length));
     }
-    const roundQuestions = Array.from(indices).map((i) => pool[i]);
+    const round = Array.from(indices).map((i) => pool[i]);
 
-    setFrases(roundQuestions);
-    setTotalQuestions(roundQuestions.length);
+    setFrases(round);
+    setTotalQuestions(round.length);
     setIsStarted(true);
   };
 
+  // take a random next phrase from remaining
   const getRandomFrase = () => {
     if (frases.length === 0) {
       setFrase(undefined);
       return;
     }
     const randomNumero = Math.floor(Math.random() * frases.length);
-    const randomFrase = frases[randomNumero];
-    setFrase(randomFrase);
-    const newFrases = [...frases];
-    newFrases.splice(randomNumero, 1);
-    setFrases(newFrases);
+    const next = frases[randomNumero];
+    setFrase(next);
+    const copy = [...frases];
+    copy.splice(randomNumero, 1);
+    setFrases(copy);
     restart();
   };
 
+  // reset per-question UI
   const restart = () => {
-    setIsCorrect(null);
+    setFormData(null);
     setSubmited(false);
-    setNumCorrectAnswersReceived(0);
     reset();
   };
 
+  // initial load
   useEffect(() => {
-    getFrases();
+    loadAll();
   }, []);
 
-  // when round starts and there is no current question, pull one
+  // when round starts, pull first question
   useEffect(() => {
     if (isStarted && frase === null) {
       getRandomFrase();
@@ -99,6 +99,7 @@ function FillIntheBlanksComp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStarted]);
 
+  // keyboard nav (kept from original)
   useEffect(() => {
     const handleKeyDown = (e) => {
       const activeElementName = document.activeElement.name;
@@ -126,7 +127,6 @@ function FillIntheBlanksComp() {
           }
         }
       }
-
       if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
         let prevPath = frase?.correct_answers?.[finalNumbers[0] - 1];
         if (!prevPath) return;
@@ -156,7 +156,6 @@ function FillIntheBlanksComp() {
           }
         }
       }
-
       if (e.key === "Backspace") {
         const currentInputValue = document.activeElement.value;
         if (currentInputValue === "") {
@@ -194,6 +193,7 @@ function FillIntheBlanksComp() {
   }, [setFocus, getValues, frase]);
 
   const onSubmit = (data) => {
+    // join the answers
     let counter = 0;
     let newData = data;
     for (const [key] of Object.entries(newData)) {
@@ -224,21 +224,18 @@ function FillIntheBlanksComp() {
         counter++;
       }
     }
-    setNumCorrectAnswers(Object.keys(correct_answers).length);
-    setNumCorrectAnswersReceived(counter);
-    const isAllCorrect = JSON.stringify(data) === JSON.stringify(correct_answers);
+
     setAnsweredCount((v) => v + 1);
-    if (isAllCorrect) {
-      setIsCorrect(true);
+    const record = { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
+    if (counter === Object.keys(correct_answers).length) {
       setTotalCorrect((v) => v + 1);
-      setCorrectList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
+      setCorrectList((arr) => [...arr, record]);
     } else {
-      setIsCorrect(false);
       setTotalIncorrect((v) => v + 1);
-      setWrongList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
+      setWrongList((arr) => [...arr, record]);
     }
 
-    // auto-advance to next question after short delay, if there are more
+    // auto-advance after a short delay
     setTimeout(() => {
       if (frases.length > 0) {
         getRandomFrase();
@@ -260,8 +257,8 @@ function FillIntheBlanksComp() {
                 <span className="text-xl text-white"> {befores[index]} </span>
               )}
               {afters[index] !== undefined && (
-                <span className={`text-xl font-bold ${user ? (user[index] === afters[index] ? "text-green-600" : "text-red-600") : "text-green-600"}`}>
-                  {user ? user[index] ?? afters[index] : afters[index]}
+                <span className={`text-xl font-bold ${user ? (user[index] === afters[index] ? "text-green-600" : user[index] ? "text-red-600" : "text-yellow-400") : "text-green-600"}`}>
+                  {user ? (user[index] ? user[index] : afters[index]) : afters[index]}
                 </span>
               )}
             </div>
@@ -287,9 +284,10 @@ function FillIntheBlanksComp() {
                 onComplete={handleSubmit(onSubmit)}
               />
             </div>
+            {/* Form with white space */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <h1 className=" text-4xl font-bold  text-white text-center py-5">
-                Complete the sentence with the correct word.
+                Type the missing letters to complete the text below
               </h1>
               <div className="flex flex-wrap p-3">
                 {frase.sentence.map((item, index) => {
@@ -303,20 +301,21 @@ function FillIntheBlanksComp() {
                   }
                   return (
                     <div className="flex flex-wrap" key={`div-${index}`}>
-                      <span className="text-xl text-white mt-1" key={`sentence-${index}`}>
+                      <span
+                        className="text-xl text-white mt-1"
+                        key={`sentence-${index}`}
+                      >
                         {item}
                       </span>
                       <div
-                        className={
-                          frase.sentence[index + 1]?.charAt(0) === "." ||
-                          frase.sentence[index + 1]?.charAt(0) === ","
-                            ? `flex pl-1 mt-1`
-                            : "flex px-1 mt-1"
-                        }
+                        className={frase.sentence[index + 1]?.charAt(0) === "." || frase.sentence[index + 1]?.charAt(0) === "," ? `flex pl-1 mt-1` : "flex px-1 mt-1"}
                         key={`inputContainer-${index}`}
                       >
                         {frase.correct_answers[index] ? (
-                          <span className="text-xl text-white" key={`answerWord-${index}`}>
+                          <span
+                            className="text-xl text-white"
+                            key={`answerWord-${index}`}
+                          >
                             {" "}
                             {beforeAnswers[index]}{" "}
                           </span>
@@ -330,54 +329,75 @@ function FillIntheBlanksComp() {
                                   frase.correct_answers[index].start,
                               },
                               (v, i) => {
-                                return i > 0 ? (
-                                  <input
-                                    type="text"
-                                    key={`input-${index}-${i}`}
-                                    className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
-                                    {...register(`answer-${index}-${i}`, {
-                                      onChange: (e) => {
-                                        e.target.value.length >= 1
-                                          ? e.target.value.length >= 2
-                                            ? (e.target.value = e.target.value.slice(-1))
-                                            : getValues(`answer-${index}-${i + 1}`) !== undefined
-                                            ? setFocus(`answer-${index}-${i + 1}`)
-                                            : setFocus(`answer-${index + 1}`)
-                                          : setFocus(`answer-${index}-${i}`);
-                                      },
-                                    })}
-                                  />
-                                ) : (
-                                  <input
-                                    type="text"
-                                    key={`input-${index}`}
-                                    className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
-                                    {...register(`answer-${index}`, {
-                                      onChange: (e) => {
-                                        e.target.value.length >= 1
-                                          ? e.target.value.length >= 2
-                                            ? (e.target.value = e.target.value.slice(-1))
-                                            : getValues(`answer-${index}-${i + 1}`) !== undefined
-                                            ? setFocus(`answer-${index}-${i + 1}`)
-                                            : setFocus(`answer-${index + 1}`)
-                                          : setFocus(`answer-${index}`);
-                                      },
-                                    })}
-                                  />
+                                return (
+                                  i > 0 ? (
+                                    <input
+                                      type="text"
+                                      key={`input-${index}-${i}`}
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                      {...register(`answer-${index}-${i}`, {
+                                        onChange: (e) => {
+                                          e.target.value.length >= 1
+                                            ? e.target.value.length >= 2
+                                              ? (e.target.value =
+                                                  e.target.value.slice(-1))
+                                              : getValues(
+                                                  `answer-${index}-${i + 1}`
+                                                ) !== undefined
+                                              ? setFocus(
+                                                  `answer-${index}-${i + 1}`
+                                                )
+                                              : setFocus(`answer-${index + 1}`)
+                                            : setFocus(`answer-${index}-${i}`);
+                                        },
+                                      })}
+                                    />
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      key={`input-${index}`}
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                      {...register(`answer-${index}`, {
+                                        onChange: (e) => {
+                                          e.target.value.length >= 1
+                                            ? e.target.value.length >= 2
+                                              ? (e.target.value =
+                                                  e.target.value.slice(-1))
+                                              : getValues(
+                                                  `answer-${index}-${i + 1}`
+                                                ) !== undefined
+                                              ? setFocus(
+                                                  `answer-${index}-${i + 1}`
+                                                )
+                                              : setFocus(`answer-${index + 1}`)
+                                            : setFocus(`answer-${index}`);
+                                        },
+                                      })}
+                                    />
+                                  )
                                 );
                               }
                             )
                           )
-                        ) : formData[`answer-${index}`] === afterAnswers[index] ? (
-                          <span className="text-xl text-green-600 font-bold" key={`answer-${index}`}>
+                        ) : formData?.[`answer-${index}`] === afterAnswers[index] ? (
+                          <span
+                            className="text-xl text-green-600 font-bold"
+                            key={`answer-${index}`}
+                          >
                             {afterAnswers[index]}
                           </span>
-                        ) : formData[`answer-${index}`] ? (
-                          <span className="text-xl text-red-600 font-bold" key={`answer-${index}`}>
+                        ) : formData?.[`answer-${index}`] ? (
+                          <span
+                            className="text-xl text-red-600 font-bold"
+                            key={`answer-${index}`}
+                          >
                             {formData[`answer-${index}`]}
                           </span>
                         ) : (
-                          <span className="text-xl text-yellow-400 font-bold" key={`answer-${index}`}>
+                          <span
+                            className="text-xl text-yellow-400 font-bold"
+                            key={`answer-${index}`}
+                          >
                             {afterAnswers[index]}
                           </span>
                         )}
@@ -440,19 +460,20 @@ function FillIntheBlanksComp() {
           <h1 className="text-3xl text-white">Loading...</h1>
         )
       ) : (
+        // Pre-start configuration UI
         <div className="flex flex-col items-center text-center px-5 md:px-0">
-          <h1 className="text-4xl text-white font-bold mb-3 ">Fill in the blanks</h1>
+          <h1 className="text-4xl text-white font-bold mb-3 ">Welcome to the test</h1>
           <div className="flex flex-col items-center gap-3 text-white">
             <div>
-              <span className="mr-2">Seconds:</span>
+              <span className="mr-2">Time:</span>
               <select
                 className="text-black px-2 py-1 rounded"
                 value={selectedSeconds}
                 onChange={(e) => setSelectedSeconds(parseInt(e.target.value))}
               >
-                <option value={20}>20</option>
-                <option value={15}>15</option>
-                <option value={10}>10</option>
+                <option value={180}>3:00</option>
+                <option value={150}>2:30</option>
+                <option value={120}>2:00</option>
               </select>
             </div>
             <div>
@@ -463,9 +484,9 @@ function FillIntheBlanksComp() {
                 onChange={(e) => setSelectedDifficulty(e.target.value)}
               >
                 <option value="any">Any</option>
-                <option value="basic">Basic</option>
+                <option value="basic">basic</option>
                 <option value="medium">Medium</option>
-                <option value="advanced">Advanced</option>
+                <option value="advanced">advanced</option>
               </select>
             </div>
           </div>
@@ -483,6 +504,6 @@ function FillIntheBlanksComp() {
   );
 }
 
-export default FillIntheBlanksComp;
+export default ReadAndCompleteComp;
 
 

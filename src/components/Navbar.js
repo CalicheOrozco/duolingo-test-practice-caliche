@@ -97,6 +97,32 @@ function Navbar() {
               )}
             </span>
           </Link>
+          <Link to="/read-and-complete">
+            <span
+              className={
+                pathname === "/read-and-complete"
+                  ? ` text-orange-600 font-bold`
+                  : `lg:hover:text-slate-400`
+              }
+            >
+              Read and complete
+              {pathname === "/read-and-complete" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-arrow-down inline-block h-3 w-3"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"
+                  />
+                </svg>
+              )}
+            </span>
+          </Link>
           <Link to="/fill-in-the-blanks">
             <span
               className={
@@ -169,6 +195,17 @@ function Navbar() {
             }
           >
             {"Listening"}
+          </span>
+        </Link>
+        <Link to="/read-and-complete">
+          <span
+            className={
+              pathname === "/read-and-complete"
+                ? ` text-orange-600 font-bold`
+                : `lg:hover:text-slate-400`
+            }
+          >
+            {"Read and complete"}
           </span>
         </Link>
         <Link to="/fill-in-the-blanks">
