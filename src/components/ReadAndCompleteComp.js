@@ -485,7 +485,7 @@ function ReadAndCompleteComp() {
       ) : (
         // Pre-start configuration UI
         <div className="flex flex-col items-center text-center px-5 md:px-0">
-          <h1 className="text-4xl text-white font-bold mb-3 ">Welcome to the test</h1>
+          <h1 className="text-4xl text-white font-bold mb-3 ">Read and complete</h1>
           <div className="flex flex-col items-center gap-3 text-white">
             <div>
               <span className="mr-2">Time:</span>
