@@ -1,13 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import FillInTheBlanksComp from '../components/FillInTheBlanksComp'
 import Footer from '../components/Footer'
+import FillIntheBlanksComp from '../components/FillInTheBlanksComp'
 
 function FillInTheBlanks() {
   return (
     <>
     <Navbar />
-    <FillInTheBlanksComp />
+    <FillIntheBlanksComp />
     <Footer />
     </>
   )
