@@ -214,7 +214,20 @@ function ReadAndCompleteComp() {
     setSubmited(true);
 
     counter = 0;
-    const correct_answers = afterAnswers.reduce((acc, item, index) => {
+    // build before/after arrays from the current frase to ensure we capture the
+    // visible prefix (befores) and the missing part (afters) at submit time
+    const beforesLocal = [];
+    const aftersLocal = [];
+    if (frase?.correct_answers) {
+      frase.correct_answers.forEach((ca) => {
+        const word = ca.word || "";
+        const limit = ca.start || 0;
+        beforesLocal.push(word.slice(0, limit));
+        aftersLocal.push(word.slice(limit));
+      });
+    }
+
+    const correct_answers = aftersLocal.reduce((acc, item, index) => {
       acc[`answer-${index}`] = item;
       return acc;
     }, {});
@@ -226,7 +239,7 @@ function ReadAndCompleteComp() {
     }
 
     setAnsweredCount((v) => v + 1);
-    const record = { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
+  const record = { sentence: frase.sentence, befores: beforesLocal.slice(), expected: aftersLocal.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
     if (counter === Object.keys(correct_answers).length) {
       setTotalCorrect((v) => v + 1);
       setCorrectList((arr) => [...arr, record]);
@@ -434,7 +447,7 @@ function ReadAndCompleteComp() {
                     <div className="flex flex-col gap-3">
                       {correctList.length > 0 ? correctList.map((rec, idx) => (
                         <div key={`corr-${idx}`} className="p-3 rounded border border-green-700 bg-green-900/5">
-                          {renderSentenceWithAnswers(rec.sentence, [], rec.expected, rec.received)}
+                          {renderSentenceWithAnswers(rec.sentence, rec.befores || [], rec.expected, rec.received)}
                         </div>
                       )) : <div className="text-sm text-gray-300">No correct answers this round.</div>}
                     </div>
@@ -445,7 +458,7 @@ function ReadAndCompleteComp() {
                     <div className="flex flex-col gap-3">
                       {wrongList.length > 0 ? wrongList.map((rec, idx) => (
                         <div key={`wrong-${idx}`} className="p-3 rounded border border-red-700 bg-red-900/5">
-                          {renderSentenceWithAnswers(rec.sentence, [], rec.expected, rec.received)}
+                          {renderSentenceWithAnswers(rec.sentence, rec.befores || [], rec.expected, rec.received)}
                         </div>
                       )) : <div className="text-sm text-gray-300">No incorrect answers this round.</div>}
                     </div>

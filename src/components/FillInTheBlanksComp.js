@@ -220,12 +220,13 @@ function FillIntheBlanksComp() {
     }
     const isAllCorrect = JSON.stringify(data) === JSON.stringify(correct_answers);
     setAnsweredCount((v) => v + 1);
+    const record = { sentence: frase.sentence, befores: beforeAnswers.slice(), expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
     if (isAllCorrect) {
       setTotalCorrect((v) => v + 1);
-      setCorrectList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
+      setCorrectList((arr) => [...arr, record]);
     } else {
       setTotalIncorrect((v) => v + 1);
-      setWrongList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
+      setWrongList((arr) => [...arr, record]);
     }
 
     // auto-advance to next question after short delay, if there are more
@@ -389,32 +390,42 @@ function FillIntheBlanksComp() {
 
             {/* End of round summary when no more frases */}
             {submited && frases.length === 0 && (
-              <div className="mt-6">
-                <h2 className="text-white text-2xl font-bold text-center">Round summary</h2>
-                <p className="text-white text-center mt-2">Correct: {totalCorrect} · Incorrect: {totalIncorrect}</p>
-                <div className="mt-4">
-                  {correctList.length > 0 && (
-                    <>
-                      <h3 className="text-green-400 text-xl font-semibold">Correct</h3>
-                      {correctList.map((rec, idx) => (
-                        <div key={`corr-${idx}`}>{renderSentenceWithAnswers(rec.sentence, [], rec.expected, rec.received)}</div>
-                      ))}
-                    </>
-                  )}
+              <div className="mt-6 w-full max-w-4xl text-white p-4">
+                <h2 className="text-3xl font-bold text-center mb-3">Results</h2>
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="text-lg">Total: <span className="font-semibold">{totalQuestions}</span></div>
+                  <div className="text-lg text-green-400">Correct: <span className="font-semibold">{totalCorrect}</span></div>
+                  <div className="text-lg text-red-400">Incorrect: <span className="font-semibold">{totalIncorrect}</span></div>
+                  <div className="ml-auto text-lg">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
                 </div>
-                <div className="mt-4">
-                  {wrongList.length > 0 && (
-                    <>
-                      <h3 className="text-red-400 text-xl font-semibold">Incorrect</h3>
-                      {wrongList.map((rec, idx) => (
-                        <div key={`wrong-${idx}`}>{renderSentenceWithAnswers(rec.sentence, [], rec.expected, rec.received)}</div>
-                      ))}
-                    </>
-                  )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-green-400 text-xl font-semibold mb-2">Correct answers</h3>
+                    <div className="flex flex-col gap-3">
+                      {correctList.length > 0 ? correctList.map((rec, idx) => (
+                        <div key={`corr-${idx}`} className="p-3 rounded border border-green-700 bg-green-900/5">
+                          {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, rec.received)}
+                        </div>
+                      )) : <div className="text-sm text-gray-300">No correct answers this round.</div>}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect answers</h3>
+                    <div className="flex flex-col gap-3">
+                      {wrongList.length > 0 ? wrongList.map((rec, idx) => (
+                        <div key={`wrong-${idx}`} className="p-3 rounded border border-red-700 bg-red-900/5">
+                          {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, rec.received)}
+                        </div>
+                      )) : <div className="text-sm text-gray-300">No incorrect answers this round.</div>}
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full flex justify-center">
+
+                <div className="w-full flex justify-center mt-6">
                   <button
-                    className="mt-6 bg-blue-500  text-white p-2 px-6 cursor-pointer rounded-xl"
+                    className="mt-6 bg-blue-500 text-white p-2 px-6 cursor-pointer rounded-xl"
                     onClick={() => setIsStarted(false)}
                   >
                     Play again
