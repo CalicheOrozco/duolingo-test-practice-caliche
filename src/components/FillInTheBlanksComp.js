@@ -11,9 +11,6 @@ function FillIntheBlanksComp() {
   const [formData, setFormData] = useState(null);
   const [submited, setSubmited] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  const [isCorrect, setIsCorrect] = useState();
-  const [numCorrectAnswers, setNumCorrectAnswers] = useState(0);
-  const [numCorrectAnswersReceived, setNumCorrectAnswersReceived] = useState(0);
 
   // pre-start controls
   const [selectedSeconds, setSelectedSeconds] = useState(20);
@@ -41,7 +38,6 @@ function FillIntheBlanksComp() {
     setWrongList([]);
     setFormData(null);
     setSubmited(false);
-    setIsCorrect(undefined);
     setFrase(null);
     setAnsweredCount(0);
 
@@ -81,9 +77,7 @@ function FillIntheBlanksComp() {
   };
 
   const restart = () => {
-    setIsCorrect(null);
     setSubmited(false);
-    setNumCorrectAnswersReceived(0);
     reset();
   };
 
@@ -224,16 +218,12 @@ function FillIntheBlanksComp() {
         counter++;
       }
     }
-    setNumCorrectAnswers(Object.keys(correct_answers).length);
-    setNumCorrectAnswersReceived(counter);
     const isAllCorrect = JSON.stringify(data) === JSON.stringify(correct_answers);
     setAnsweredCount((v) => v + 1);
     if (isAllCorrect) {
-      setIsCorrect(true);
       setTotalCorrect((v) => v + 1);
       setCorrectList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
     } else {
-      setIsCorrect(false);
       setTotalIncorrect((v) => v + 1);
       setWrongList((arr) => [...arr, { sentence: frase.sentence, expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") }]);
     }

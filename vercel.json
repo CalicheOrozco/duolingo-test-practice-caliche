@@ -1,6 +1,6 @@
 {
-  "buildCommand": "yarn build",
-  "installCommand": "yarn install --prefer-offline",
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci || npm install",
   "outputDirectory": "build"
 }
 
