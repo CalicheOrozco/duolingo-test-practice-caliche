@@ -16,6 +16,7 @@ function ReadAndSelectComp() {
   const [totalIncorrect, setTotalIncorrect] = useState(0);
   const [correctList, setCorrectList] = useState([]);
   const [wrongList, setWrongList] = useState([]);
+  const [selectedChoice, setSelectedChoice] = useState(null); // true = yes, false = no, null = none
 
   useEffect(() => {
     const load = async () => {
@@ -69,6 +70,7 @@ function ReadAndSelectComp() {
   const answer = (choice) => {
     if (!current) return;
     setSubmited(true);
+    setSelectedChoice(choice);
     const correct = Boolean(current.is_real) === Boolean(choice);
     setAnsweredCount(v => v + 1);
     if (correct) {
@@ -79,6 +81,7 @@ function ReadAndSelectComp() {
       setWrongList(arr => [...arr, current]);
     }
     setTimeout(() => {
+      setSelectedChoice(null);
       nextItem();
     }, 500);
   };
@@ -103,41 +106,53 @@ function ReadAndSelectComp() {
               <h1 className="text-4xl md:text-5xl text-white font-extrabold">Is this a real English word?</h1>
               <div className="text-6xl md:text-7xl text-white font-extrabold my-10">{current.word}</div>
               <div className="flex gap-6 justify-center">
-                <button className="bg-white/10 border-2 border-white px-10 py-4 rounded-xl text-white text-2xl" onClick={() => answer(true)}>✓ Yes</button>
-                <button className="bg-white/10 border-2 border-white px-10 py-4 rounded-xl text-white text-2xl" onClick={() => answer(false)}>✕ No</button>
+                <button
+                  className={`px-10 py-4 rounded-xl text-2xl border-2 transition-colors duration-150 ${selectedChoice === true ? 'bg-green-600 border-green-600 text-white hover:bg-green-700' : 'bg-white/10 border-white text-white hover:bg-white/20'}`}
+                  onClick={() => answer(true)}
+                >
+                  ✓ Yes
+                </button>
+                <button
+                  className={`px-10 py-4 rounded-xl text-2xl border-2 transition-colors duration-150 ${selectedChoice === false ? 'bg-red-600 border-red-600 text-white hover:bg-red-700' : 'bg-white/10 border-white text-white hover:bg-white/20'}`}
+                  onClick={() => answer(false)}
+                >
+                  ✕ No
+                </button>
               </div>
             </div>
           </div>
         ) : current === undefined ? (
           <div className="px-6 max-w-3xl">
-            <h2 className="text-white text-2xl font-bold text-center">Round summary</h2>
-            <p className="text-white text-center mt-2">Correct: {totalCorrect} · Incorrect: {totalIncorrect}</p>
-            <div className="mt-4">
+            <h2 className="text-white text-3xl font-bold text-center">Results</h2>
+            <div className="text-white text-center mt-2">Total: <span className="font-semibold">{totalQuestions}</span> · Correct: <span className="text-green-400 font-semibold">{totalCorrect}</span> · Incorrect: <span className="text-red-400 font-semibold">{totalIncorrect}</span></div>
+            <div className="text-center mt-2 text-white">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               {correctList.length > 0 && (
-                <>
-                  <h3 className="text-green-400 text-xl font-semibold">Correct</h3>
+                <div>
+                  <h3 className="text-green-400 text-xl font-semibold mb-2">Correct</h3>
                   <div className="flex flex-wrap gap-2">
                     {correctList.map((w, i) => (
                       <span key={`c-${i}`} className="px-2 py-1 bg-green-700 text-white rounded">{w.word}</span>
                     ))}
                   </div>
-                </>
+                </div>
               )}
-            </div>
-            <div className="mt-4">
+
               {wrongList.length > 0 && (
-                <>
-                  <h3 className="text-red-400 text-xl font-semibold">Incorrect</h3>
+                <div>
+                  <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect</h3>
                   <div className="flex flex-wrap gap-2">
                     {wrongList.map((w, i) => (
                       <span key={`w-${i}`} className="px-2 py-1 bg-red-700 text-white rounded">{w.word}</span>
                     ))}
                   </div>
-                </>
+                </div>
               )}
             </div>
-            <div className="w-full flex justify-center">
-              <button className="mt-6 bg-blue-500  text-white p-2 px-6 cursor-pointer rounded-xl" onClick={() => setIsStarted(false)}>Play again</button>
+
+            <div className="w-full flex justify-center mt-6">
+              <button className="mt-6 bg-blue-500 text-white p-2 px-6 cursor-pointer rounded-xl" onClick={() => setIsStarted(false)}>Play again</button>
             </div>
           </div>
         ) : (
