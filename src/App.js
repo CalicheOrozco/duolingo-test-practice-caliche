@@ -4,7 +4,7 @@ import ImageTest from "./pages/Image-test";
 import ReadAndComplete from "./pages/ReadAndComplete";
 import RealWordsTest from "./pages/RealWordsTest";
 import Index from "./pages/Index";
-import FillIntheBlanks from "./pages/FillIntheBlanks";
+import FillInTheBlanks from "./pages/FillInTheBlanks";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Route path="/listening-test" element={<ListeningTest />} />
       <Route path="/image-test" element={<ImageTest />} />
       <Route path="/read-and-complete" element={<ReadAndComplete />} />
-      <Route path="/fill-in-the-blanks" element={<FillIntheBlanks />} />
+      <Route path="/fill-in-the-blanks" element={<FillInTheBlanks />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />
     </Routes>
 
