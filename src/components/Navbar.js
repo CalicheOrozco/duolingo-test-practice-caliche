@@ -217,8 +217,18 @@ function Navbar() {
             {"Image Test"}
           </span>
         </Link>
-        
-        <Link to="/fill-in-the-blanks">
+        <Link to="/read-and-select">
+          <span
+            className={
+              pathname === "/read-and-select"
+                ? ` text-orange-600 font-bold`
+                : `lg:hover:text-slate-400`
+            }
+          >
+            {"Read and select"}
+          </span>
+        </Link>
+        <Link to="/read-and-select">
           <span
             className={
               pathname === "/fill-in-the-blanks"
