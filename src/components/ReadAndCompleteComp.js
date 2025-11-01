@@ -261,21 +261,27 @@ function ReadAndCompleteComp() {
 
   const renderSentenceWithAnswers = (sent, befores, afters, user) => {
     return (
-      <div className="flex flex-wrap bg-[#737373] rounded-xl p-3 my-2">
+      <div className="bg-[#737373] rounded-xl p-3 my-2 text-lg">
         {sent.map((item, index) => (
-          <div className="flex flex-wrap" key={`sum-div-${index}`}>
-            <span className="text-xl text-white mt-1" key={`sum-sentence-${index}`}>{item}</span>
-            <div className={sent[index + 1]?.charAt(0) === "." || sent[index + 1]?.charAt(0) === "," ? `flex pl-1 mt-1` : "flex px-1 mt-1"}>
-              {befores[index] !== undefined && (
-                <span className="text-xl text-white"> {befores[index]} </span>
-              )}
-              {afters[index] !== undefined && (
-                <span className={`text-xl font-bold ${user ? (user[index] === afters[index] ? "text-green-600" : user[index] ? "text-red-600" : "text-yellow-400") : "text-green-600"}`}>
-                  {user ? (user[index] ? user[index] : afters[index]) : afters[index]}
-                </span>
-              )}
-            </div>
-          </div>
+          <span className="inline" key={`sum-div-${index}`}>
+            <span>{item}</span>
+            <span className="inline whitespace-nowrap break-normal ">
+              {befores[index] || ""}
+              {afters[index] !== undefined ? (
+                user ? (
+                  user[index] === afters[index] ? (
+                    <span className={`font-bold text-green-600`}>{afters[index]}</span>
+                  ) : user[index] ? (
+                    <span className="font-bold text-red-600">{user[index]}</span>
+                  ) : (
+                    <span className={`font-bold text-yellow-400`}>{afters[index]}</span>
+                  )
+                ) : (
+                  <span className={`font-bold text-green-600`}>{afters[index]}</span>
+                )
+              ) : null}
+            </span>
+          </span>
         ))}
       </div>
     );
@@ -315,7 +321,7 @@ function ReadAndCompleteComp() {
                   return (
                     <div className="flex flex-wrap" key={`div-${index}`}>
                       <span
-                        className="text-xl text-white mt-1"
+                        className="text-lg text-white mt-1"
                         key={`sentence-${index}`}
                       >
                         {item}
@@ -326,7 +332,7 @@ function ReadAndCompleteComp() {
                       >
                         {frase.correct_answers[index] ? (
                           <span
-                            className="text-xl text-white"
+                            className="text-lg text-white"
                             key={`answerWord-${index}`}
                           >
                             {" "}
@@ -347,7 +353,7 @@ function ReadAndCompleteComp() {
                                     <input
                                       type="text"
                                       key={`input-${index}-${i}`}
-                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-lg w-6 h-7 text-center rounded-t-md font-bold"
                                       {...register(`answer-${index}-${i}`, {
                                         onChange: (e) => {
                                           e.target.value.length >= 1
@@ -369,7 +375,7 @@ function ReadAndCompleteComp() {
                                     <input
                                       type="text"
                                       key={`input-${index}`}
-                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-lg w-6 h-7 text-center rounded-t-md font-bold"
                                       {...register(`answer-${index}`, {
                                         onChange: (e) => {
                                           e.target.value.length >= 1
@@ -394,21 +400,21 @@ function ReadAndCompleteComp() {
                           )
                         ) : formData?.[`answer-${index}`] === afterAnswers[index] ? (
                           <span
-                            className="text-xl text-green-600 font-bold"
+                            className="text-lg text-green-600 font-bold"
                             key={`answer-${index}`}
                           >
                             {afterAnswers[index]}
                           </span>
                         ) : formData?.[`answer-${index}`] ? (
                           <span
-                            className="text-xl text-red-600 font-bold"
+                            className="text-lg text-red-600 font-bold"
                             key={`answer-${index}`}
                           >
                             {formData[`answer-${index}`]}
                           </span>
                         ) : (
                           <span
-                            className="text-xl text-yellow-400 font-bold"
+                            className="text-lg text-yellow-400 font-bold"
                             key={`answer-${index}`}
                           >
                             {afterAnswers[index]}
@@ -443,7 +449,7 @@ function ReadAndCompleteComp() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="text-green-400 text-xl font-semibold mb-2">Correct answers</h3>
+                    <h3 className="text-green-400 text-lg font-semibold mb-2">Correct answers</h3>
                     <div className="flex flex-col gap-3">
                       {correctList.length > 0 ? correctList.map((rec, idx) => (
                         <div key={`corr-${idx}`} className="p-3 rounded border border-green-700 bg-green-900/5">
@@ -454,11 +460,17 @@ function ReadAndCompleteComp() {
                   </div>
 
                   <div>
-                    <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect answers</h3>
+                    <h3 className="text-red-400 text-lg font-semibold mb-2">Incorrect answers</h3>
                     <div className="flex flex-col gap-3">
                       {wrongList.length > 0 ? wrongList.map((rec, idx) => (
                         <div key={`wrong-${idx}`} className="p-3 rounded border border-red-700 bg-red-900/5">
+                          <div className="mb-2 text-sm text-red-300 font-semibold">Your answer</div>
                           {renderSentenceWithAnswers(rec.sentence, rec.befores || [], rec.expected, rec.received)}
+
+                          <div className="mt-4 p-3 rounded border border-green-700 bg-green-900/5">
+                            <div className="mb-2 text-sm text-green-300 font-semibold">Correct answers</div>
+                            {renderSentenceWithAnswers(rec.sentence, rec.befores || [], rec.expected, null)}
+                          </div>
                         </div>
                       )) : <div className="text-sm text-gray-300">No incorrect answers this round.</div>}
                     </div>
@@ -478,7 +490,7 @@ function ReadAndCompleteComp() {
 
           </div>
         ) : frase === undefined ? (
-          <h1 className="text-xl text-white">The round is over.</h1>
+          <h1 className="text-lg text-white">The round is over.</h1>
         ) : (
           <h1 className="text-3xl text-white">Loading...</h1>
         )
