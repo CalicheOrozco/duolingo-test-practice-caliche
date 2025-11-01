@@ -50,6 +50,171 @@
         "sentence": ["Steve Jobs was a Silicon Valley businessman most famous for his work with the company Apple. Together","Apple co-founder Steve Wozniak, Jobs","make the","of the","computer","in the","1970s. In the","1980s,","at Apple, Jobs was","of the","to see the","of using a mouse to","things on a computer",". Jobs is credited with revolutionizing personal computers."],
         "correct_answers": [{"word": "with", "start": 2}, {"word": "helped", "start": 3}, {"word": "idea", "start": 2}, {"word": "personal", "start": 4}, {"word": "popular", "start": 3}, {"word": "late", "start": 2}, {"word": "early", "start": 2}, {"word": "still", "start": 2}, {"word": "one", "start": 1}, {"word": "first", "start": 2}, {"word": "potential", "start": 4}, {"word": "control", "start": 3}, {"word": "screen", "start": 3}]
     },
+    {
+        "difficulty":"basic",
+        "sentence":[
+            "On Saturday morning, we walked to the neighborhood "," for breakfast. The place was "," but the staff were very ",". I ordered a bowl of "," oatmeal with "," and a cup of "," coffee. My friend chose a fresh "," sandwich and "," juice. We sat by the "," and watched people "," by with their dogs and ","."
+        ],
+        "correct_answers":[
+            {"word":"cafe","start":2}, {"word":"busy","start":2}, {"word":"friendly","start":3},
+            {"word":"warm","start":2}, {"word":"berries","start":3}, {"word":"hot","start":1},
+            {"word":"egg","start":1}, {"word":"orange","start":2}, {"word":"window","start":3},
+            {"word":"walk","start":2}, {"word":"strollers","start":3}
+        ]
+    },
+    {
+        "difficulty":"basic",
+        "sentence":[
+            "Before the storm arrived, we moved the plants from the "," to the living ",". We checked the "," forecast and packed an emergency "," with water, a small ",", and a phone ",". When the rain started, we lit a "," and read quietly until the "," passed."
+        ],
+        "correct_answers":[
+            {"word":"balcony","start":3}, {"word":"room","start":2}, {"word":"weather","start":3},
+            {"word":"kit","start":1}, {"word":"radio","start":2}, {"word":"charger","start":3},
+            {"word":"candle","start":2}, {"word":"storm","start":2}
+        ]
+    },
+    {
+        "difficulty":"basic",
+        "sentence":[
+            "At the library, I returned my "," and looked for a new "," to borrow. The librarian showed me the "," section and helped me "," a title about "," cooking. I also printed my travel "," and bought a bus "," at the kiosk near the ","."
+        ],
+        "correct_answers":[
+            {"word":"books","start":2}, {"word":"novel","start":2}, {"word":"history","start":3},
+            {"word":"choose","start":2}, {"word":"simple","start":3}, {"word":"tickets","start":3},
+            {"word":"pass","start":2}, {"word":"exit","start":2}
+        ]
+    },
+    {
+  "difficulty": "basic",
+  "sentence": [
+    "Weather happens because different parts of the Earth get different amounts of heat from the Sun. This makes ",
+    "climates. The tropics ",
+    "the most ",
+    "because the Sun ",
+    "straight down on them, ",
+    "the poles get the ",
+    "heat because the Sun shines on them from a low ",
+    ". Warmer air is ",
+    "than cooler air and rises ",
+    "in the ",
+    "by convection. The ways that the air moves around the Earth are called atmospheric circulation."
+  ],
+  "correct_answers": [
+    { "word": "different", "start": 4 },
+    { "word": "get", "start": 1 },
+    { "word": "heat", "start": 2 },
+    { "word": "shines", "start": 3 },
+    { "word": "while", "start": 2 },
+    { "word": "less", "start": 2 },
+    { "word": "angle", "start": 2 },
+    { "word": "lighter", "start": 3 },
+    { "word": "higher", "start": 3 },
+    { "word": "sky", "start": 1 }
+  ]
+},
+{
+  "difficulty": "basic",
+  "sentence": [
+    "A mountain is a large natural rise of the Earth's surface. A mountain ",
+    "has a 'summit' (the name for a mountain's top, which can also be called a ",
+    "). It is usually ",
+    "and taller than a hill. By definition, mountains are often ",
+    "of as being a hill which is ",
+    "than 600 meters. Mountains can be ",
+    "and barren. Some have trees ",
+    "on their ",
+    "and very ",
+    "mountains have ",
+    "on their peaks. However, some definitions say a mountain is a hill higher than 300 meters."
+  ],
+  "correct_answers": [
+    { "word": "usually", "start": 3 },
+    { "word": "peak", "start": 2 },
+    { "word": "steep", "start": 3 },
+    { "word": "thought", "start": 3 },
+    { "word": "higher", "start": 3 },
+    { "word": "rocky", "start": 2 },
+    { "word": "growing", "start": 3 },
+    { "word": "slopes", "start": 3 },
+    { "word": "high", "start": 2 },
+    { "word": "snow", "start": 2 }
+  ]
+},
+{
+  "difficulty": "basic",
+  "sentence": [
+    "Money, also sometimes called currency, can be defined as anything that people use to buy goods and services. Whenever ",
+    "pay for ",
+    "or services, they use some ",
+    "of money. Money can be almost ",
+    ", as ",
+    "as everyone agrees on its ",
+    ". One of the ",
+    "forms of money was ",
+    ", such as gold or silver. In North America, Native Americans used beads ",
+    "of shell as a form of ",
+    ". Today, the paper money and coins that people use are called currency."
+  ],
+  "correct_answers": [
+    { "word": "people", "start": 3 },
+    { "word": "goods", "start": 2 },
+    { "word": "form", "start": 2 },
+    { "word": "anything", "start": 4 },
+    { "word": "long", "start": 2 },
+    { "word": "value", "start": 2 },
+    { "word": "earliest", "start": 4 },
+    { "word": "metal", "start": 2 },
+    { "word": "made", "start": 2 },
+    { "word": "money", "start": 2 }
+  ]
+},
+{
+  "difficulty": "basic",
+  "sentence": [
+    "The ocean is a large ",
+    " of salt",
+    " that covers ",
+    " of the Earth. It is home to many animals and ",
+    ". Whales, ",
+    ", and dolphins are just a few examples of the animals that live in the ocean."
+  ],
+  "correct_answers": [
+    { "word": "body", "start": 2 },
+    { "word": "water", "start": 4 },
+    { "word": "most", "start": 2 },
+    { "word": "the", "start": 1 },
+    { "word": "plants", "start": 3 },
+    { "word": "sharks", "start": 3 },
+    { "word": "few", "start": 2 },
+    { "word": "that", "start": 2 },
+    { "word": "the", "start": 2 }
+  ]
+},
+{
+  "difficulty": "basic",
+  "sentence": [
+    "The Eiffel Tower, ",
+    " in Paris, ",
+    ", is ",
+    " of the most ",
+    " landmarks in the ",
+    ". It ",
+    " built in 1889 and was originally designed as a ",
+    " structure for the World’s Fair."
+  ],
+  "correct_answers": [
+    { "word": "located", "start": 3 },
+    { "word": "France", "start": 4 },
+    { "word": "one", "start": 1 },
+    { "word": "recognizable", "start": 4 },
+    { "word": "world", "start": 3 },
+    { "word": "was", "start": 2 },
+    { "word": "temporary", "start": 4 },
+    { "word": "structure", "start": 5 }
+  ]
+},
+
+
 
 
     {
@@ -176,6 +341,306 @@
         "sentence": ["The global computer network called the internetis part of our everyday lives at home. It is","up of millions of","all over the","that are","connected to each other","cable, fibre","wireless links. You can","the internet to","websites,","with people,","pictures and videos, listen to music, or do lots of","amazing things."],
         "correct_answers": [{"word": "made", "start": 21}, {"word": "computers", "start": 4}, {"word": "world", "start": 2}, {"word": "digitally", "start": 4}, {"word": "by", "start": 1}, {"word": "or", "start": 1}, {"word": "use", "start": 1}, {"word": "browse", "start": 3}, {"word": "communicate", "start": 5}, {"word": "download", "start": 4}, {"word": "other", "start": 2}]
     },
+    {
+        "difficulty":"medium",
+        "sentence":[
+            "The field study examined how urban "," influence local "," behavior. Researchers deployed "," sensors and conducted "," interviews over "," weeks. Data were "," to identify "," patterns and to "," whether shade and "," availability changed walking ","."
+        ],
+        "correct_answers":[
+            {"word":"design","start":2}, {"word":"pedestrian","start":3}, {"word":"environmental","start":4},
+            {"word":"structured","start":3}, {"word":"six","start":1}, {"word":"analyzed","start":3},
+            {"word":"daily","start":2}, {"word":"estimate","start":3}, {"word":"water","start":2},
+            {"word":"choices","start":3}
+        ]
+    },
+    {
+        "difficulty":"medium",
+        "sentence":[
+            "In the lab, the team "," a low-cost air "," device using open-source ",". After calibration, the instrument "," particulate levels with "," accuracy. Results were "," against a ","-grade monitor to "," the method's ","."
+        ],
+        "correct_answers":[
+            {"word":"assembled","start":3}, {"word":"quality","start":3}, {"word":"components","start":3},
+            {"word":"reported","start":3}, {"word":"reasonable","start":3}, {"word":"compared","start":3},
+            {"word":"research","start":3}, {"word":"verify","start":3}, {"word":"reliability","start":3}
+        ]
+    },
+    {
+        "difficulty":"medium",
+        "sentence":[
+            "The article reviews "," approaches to early "," education. It argues that ","-centered curricula and "," assessment can improve "," outcomes, especially in "," communities with limited ","."
+        ],
+        "correct_answers":[
+            {"word":"contemporary","start":4}, {"word":"childhood","start":3}, {"word":"learner","start":3},
+            {"word":"formative","start":3}, {"word":"literacy","start":3}, {"word":"rural","start":2},
+            {"word":"resources","start":3}
+        ]
+    },
+
+    {
+  "difficulty": "medium",
+  "sentence": [
+    "Earthquakes are a natural occurrence and they happen all over the world. Although ",
+    "may seem to ",
+    "randomly, it is ",
+    "to ",
+    "that there are certain ",
+    "that can ",
+    "the likelihood of an earthquake ",
+    ". An earthquake ",
+    "when two ",
+    "of Earth's crust ",
+    "relative t",
+    "each ",
+    ". This movement causes stresses within the crust which cause it to fracture and break along existing fault lines."
+  ],
+  "correct_answers": [
+    { "word": "earthquakes", "start": 5 },
+    { "word": "happen", "start": 3 },
+    { "word": "important", "start": 4 },
+    { "word": "understand", "start": 5 },
+    { "word": "factors", "start": 3 },
+    { "word": "increase", "start": 4 },
+    { "word": "happening", "start": 4 },
+    { "word": "occurs", "start": 3 },
+    { "word": "plates", "start": 2 },
+    { "word": "shift", "start": 2 },
+    { "word": "to", "start": 1 },
+    { "word": "other", "start": 2 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "Meditation is a powerful self-improvement tool. Practicing meditation ",
+    "to cultivate mindfulness, ",
+    "mental clarity and ",
+    "stress. It ",
+    "enhance our ",
+    "skills ",
+    "improve emotional ",
+    ". Meditation ",
+    "fosters self-awareness, ",
+    "us to better ",
+    "our ",
+    "and thought ",
+    ". By practicing regular meditation, we can achieve a more balanced and tranquil state of mind."
+  ],
+  "correct_answers": [
+    { "word": "helps", "start": 2 },
+    { "word": "promotes", "start": 4 },
+    { "word": "reduces", "start": 4 },
+    { "word": "can", "start": 1 },
+    { "word": "concentration", "start": 5 },
+    { "word": "and", "start": 1 },
+    { "word": "health", "start": 3 },
+    { "word": "also", "start": 2 },
+    { "word": "allows", "start": 4 },
+    { "word": "understand", "start": 5 },
+    { "word": "emotions", "start": 4 },
+    { "word": "patterns", "start": 4 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "Economics is the scientific study of how societies manage resources. Picture it as a ",
+    "resource allocation game. Suppose you have five ",
+    "of candy to ",
+    "among your friends. You ",
+    "give all the candies to ",
+    "closest friend, ",
+    "distribute them ",
+    "among ",
+    ". This decision-making process, ",
+    "scaled up to ",
+    "things like ",
+    ", food, and cars, ",
+    "the basis of ",
+    ". In a market economy, these decisions are made by individuals based on supply and demand."
+  ],
+  "correct_answers": [
+    { "word": "vast", "start": 2 },
+    { "word": "pieces", "start": 3 },
+    { "word": "distribute", "start": 5 },
+    { "word": "could", "start": 2 },
+    { "word": "your", "start": 2 },
+    { "word": "or", "start": 1 },
+    { "word": "equally", "start": 3 },
+    { "word": "everyone", "start": 4 },
+    { "word": "which", "start": 2 },
+    { "word": "includes", "start": 3 },
+    { "word": "houses", "start": 3 },
+    { "word": "form", "start": 2 },
+    { "word": "economics", "start": 4 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "TikTok is a popular social media company. It is ",
+    "in some respects to ",
+    "visual platforms like Instagram. It ",
+    "on short, snappy videos. There are effects you can ",
+    "as well as songs and ",
+    ", and these make a lot of the videos perfect for ",
+    ". There are TikTok ",
+    "in the same way that ",
+    "are YouTube celebrities as the ",
+    "generation ",
+    "infatuated with the platform. TikTok is the most up and coming social media platform."
+  ],
+  "correct_answers": [
+    { "word": "similar", "start": 3 },
+    { "word": "other", "start": 2 },
+    { "word": "focuses", "start": 3 },
+    { "word": "add", "start": 1 },
+    { "word": "soundtracks", "start": 5 },
+    { "word": "sharing", "start": 3 },
+    { "word": "celebrities", "start": 5 },
+    { "word": "there", "start": 2 },
+    { "word": "younger", "start": 3 },
+    { "word": "became", "start": 3 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "A model is a person who has the job of using their body to pose for art or to show fashion items. A supermodel is a ",
+    "paid model who usually ",
+    "a worldwide ",
+    ". The ",
+    "supermodel began being ",
+    "in the 1980s. Supermodels usually work for ",
+    "fashion designers and ",
+    "clothing brands. They have multimillion-dollar ",
+    "with these ",
+    ". Supermodels have branded themselves as household names and are recognized worldwide."
+  ],
+  "correct_answers": [
+    { "word": "highly", "start": 3 },
+    { "word": "has", "start": 1 },
+    { "word": "reputation", "start": 5 },
+    { "word": "term", "start": 2 },
+    { "word": "used", "start": 2 },
+    { "word": "top", "start": 1 },
+    { "word": "famous", "start": 3 },
+    { "word": "contracts", "start": 4 },
+    { "word": "brands", "start": 3 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "Icebergs break off from larger structures made of ice, like glaciers or ice shelves. These are ",
+    "by snowfall in very cold ",
+    "where it will not ",
+    "in the summer. The snow ",
+    "up and ",
+    "into ice. This is ",
+    "pulled downhill ",
+    "gravity and ",
+    "ends up in the sea. The ",
+    "then falls off and makes ",
+    ". The icebergs can drift in the sea for years before they have melted completely."
+  ],
+  "correct_answers": [
+    { "word": "formed", "start": 3 },
+    { "word": "places", "start": 3 },
+    { "word": "melt", "start": 2 },
+    { "word": "builds", "start": 4 },
+    { "word": "compresses", "start": 4 },
+    { "word": "gradually", "start": 4 },
+    { "word": "by", "start": 1 },
+    { "word": "eventually", "start": 5 },
+    { "word": "ice", "start": 1 },
+    { "word": "icebergs", "start": 4 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "K-Pop refers to pop music from South Korea. It is a ",
+    "genre and industry using a ",
+    "of electronic, hip hop, pop, and other musical ",
+    ". As well as music, K-pop has ",
+    "into a popular ",
+    "among ",
+    "and young adults ",
+    "Asia and the ",
+    "world. There is a lot of ",
+    "in the fashions and styles of Korean idol groups and ",
+    ". K-pop can now reach a much larger audience through the use of the Internet."
+  ],
+  "correct_answers": [
+    { "word": "musical", "start": 3 },
+    { "word": "mix", "start": 1 },
+    { "word": "styles", "start": 3 },
+    { "word": "grown", "start": 2 },
+    { "word": "subculture", "start": 5 },
+    { "word": "teenagers", "start": 4 },
+    { "word": "throughout", "start": 5 },
+    { "word": "whole", "start": 2 },
+    { "word": "interest", "start": 4 },
+    { "word": "singers", "start": 3 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "Politics is the way that people living in groups make decisions. Politics is ",
+    "making ",
+    "between people so that they can live ",
+    "in groups such as cities or ",
+    ". In ",
+    "groups, such as countries, some people may ",
+    "a lot of their ",
+    "making such agreements. These people are ",
+    "politicians. Politicians, and ",
+    "other people, may get ",
+    "to ",
+    "a government. The study of politics in universities is called political science, political studies, or public administration."
+  ],
+  "correct_answers": [
+    { "word": "about", "start": 2 },
+    { "word": "agreements", "start": 5 },
+    { "word": "together", "start": 4 },
+    { "word": "countries", "start": 4 },
+    { "word": "large", "start": 2 },
+    { "word": "spend", "start": 2 },
+    { "word": "time", "start": 2 },
+    { "word": "called", "start": 3 },
+    { "word": "someone", "start": 4 },
+    { "word": "together", "start": 4 },
+    { "word": "form", "start": 2 }
+  ]
+},
+{
+  "difficulty": "medium",
+  "sentence": [
+    "Archaeologists do not all study the same topics. They have ",
+    ". Some ",
+    "of interest include Ancient Egypt, Ancient China, or the Vikings. Archaeologists study every ",
+    "that is known, especially the ones where there is no ",
+    "history. They ",
+    "study any time ",
+    ". For example, one ",
+    "study the ",
+    "of human life in Africa, or study World War II. Marine archaeologists study things that are now ",
+    ". They search for sunken ships or cities that have been lost under the sea."
+  ],
+  "correct_answers": [
+    { "word": "specializations", "start": 5 },
+    { "word": "fields", "start": 3 },
+    { "word": "civilization", "start": 5 },
+    { "word": "written", "start": 3 },
+    { "word": "can", "start": 1 },
+    { "word": "period", "start": 3 },
+    { "word": "might", "start": 2 },
+    { "word": "beginning", "start": 4 },
+    { "word": "underwater", "start": 5 }
+  ]
+},
+
 
 
 
@@ -258,79 +723,7 @@
         "difficulty": "advanced",
         "sentence": ["English is the current lingua franca of internationa business, science, and technology. The","of English in","began in 1919,","World War One,","the Treaty of Versailles was","in English as","as in French. The","of English","from the important","role of English-speaking","after World War ll,","in the","and","of the United Nations. English is one of the six official languages of the United Nations."],
         "correct_answers": [{"word": "rise", "start": 2}, {"word": "diplomacy", "start": 4}, {"word": "after", "start": 2}, {"word": "when", "start": 2}, {"word": "written", "start": 3}, {"word": "well", "start": 2}, {"word": "use", "start": 1}, {"word": "profited", "start": 2}, {"word": "international", "start": 5}, {"word": "nations", "start": 3}, {"word": "particularly", "start": 5}, {"word": "establishment", "start": 5}, {"word": "organization", "start": 5}]
-    }
-
-,
-    {
-        "difficulty":"basic",
-        "sentence":[
-            "On Saturday morning, we walked to the neighborhood "," for breakfast. The place was "," but the staff were very ",". I ordered a bowl of "," oatmeal with "," and a cup of "," coffee. My friend chose a fresh "," sandwich and "," juice. We sat by the "," and watched people "," by with their dogs and ","."
-        ],
-        "correct_answers":[
-            {"word":"cafe","start":2}, {"word":"busy","start":2}, {"word":"friendly","start":3},
-            {"word":"warm","start":2}, {"word":"berries","start":3}, {"word":"hot","start":1},
-            {"word":"egg","start":1}, {"word":"orange","start":2}, {"word":"window","start":3},
-            {"word":"walk","start":2}, {"word":"strollers","start":3}
-        ]
     },
-    {
-        "difficulty":"basic",
-        "sentence":[
-            "Before the storm arrived, we moved the plants from the "," to the living ",". We checked the "," forecast and packed an emergency "," with water, a small ",", and a phone ",". When the rain started, we lit a "," and read quietly until the "," passed."
-        ],
-        "correct_answers":[
-            {"word":"balcony","start":3}, {"word":"room","start":2}, {"word":"weather","start":3},
-            {"word":"kit","start":1}, {"word":"radio","start":2}, {"word":"charger","start":3},
-            {"word":"candle","start":2}, {"word":"storm","start":2}
-        ]
-    },
-    {
-        "difficulty":"basic",
-        "sentence":[
-            "At the library, I returned my "," and looked for a new "," to borrow. The librarian showed me the "," section and helped me "," a title about "," cooking. I also printed my travel "," and bought a bus "," at the kiosk near the ","."
-        ],
-        "correct_answers":[
-            {"word":"books","start":2}, {"word":"novel","start":2}, {"word":"history","start":3},
-            {"word":"choose","start":2}, {"word":"simple","start":3}, {"word":"tickets","start":3},
-            {"word":"pass","start":2}, {"word":"exit","start":2}
-        ]
-    },
-
-    {
-        "difficulty":"medium",
-        "sentence":[
-            "The field study examined how urban "," influence local "," behavior. Researchers deployed "," sensors and conducted "," interviews over "," weeks. Data were "," to identify "," patterns and to "," whether shade and "," availability changed walking ","."
-        ],
-        "correct_answers":[
-            {"word":"design","start":2}, {"word":"pedestrian","start":3}, {"word":"environmental","start":4},
-            {"word":"structured","start":3}, {"word":"six","start":1}, {"word":"analyzed","start":3},
-            {"word":"daily","start":2}, {"word":"estimate","start":3}, {"word":"water","start":2},
-            {"word":"choices","start":3}
-        ]
-    },
-    {
-        "difficulty":"medium",
-        "sentence":[
-            "In the lab, the team "," a low-cost air "," device using open-source ",". After calibration, the instrument "," particulate levels with "," accuracy. Results were "," against a ","-grade monitor to "," the method's ","."
-        ],
-        "correct_answers":[
-            {"word":"assembled","start":3}, {"word":"quality","start":3}, {"word":"components","start":3},
-            {"word":"reported","start":3}, {"word":"reasonable","start":3}, {"word":"compared","start":3},
-            {"word":"research","start":3}, {"word":"verify","start":3}, {"word":"reliability","start":3}
-        ]
-    },
-    {
-        "difficulty":"medium",
-        "sentence":[
-            "The article reviews "," approaches to early "," education. It argues that ","-centered curricula and "," assessment can improve "," outcomes, especially in "," communities with limited ","."
-        ],
-        "correct_answers":[
-            {"word":"contemporary","start":4}, {"word":"childhood","start":3}, {"word":"learner","start":3},
-            {"word":"formative","start":3}, {"word":"literacy","start":3}, {"word":"rural","start":2},
-            {"word":"resources","start":3}
-        ]
-    },
-
     {
         "difficulty":"advanced",
         "sentence":[
@@ -365,33 +758,379 @@
         ]
     }
 ,
-    {"difficulty":"basic","sentence":["On the first day of spring, neighbors gathered in the "," to plant "," and repaint the old ",". We brought "," and a portable "," so we could play soft "," while we worked. By noon, the "," looked cleaner and the benches felt ","."],"correct_answers":[{"word":"park","start":1},{"word":"flowers","start":2},{"word":"fence","start":2},{"word":"tools","start":2},{"word":"speaker","start":2},{"word":"music","start":2},{"word":"paths","start":2},{"word":"new","start":1}]},
-    {"difficulty":"basic","sentence":["During our trip, the small "," near the lake served fresh "," and warm "," every morning. We sat on the wooden "," and watched the "," rise over the ","."],"correct_answers":[{"word":"bakery","start":2},{"word":"pastries","start":2},{"word":"bread","start":2},{"word":"porch","start":2},{"word":"sun","start":1},{"word":"water","start":2}]},
-    {"difficulty":"basic","sentence":["At the community center, volunteers sorted donated "," by size and ",". Others folded "," and labeled "," boxes for delivery to the ","."],"correct_answers":[{"word":"clothes","start":2},{"word":"season","start":2},{"word":"blankets","start":2},{"word":"cardboard","start":3},{"word":"shelter","start":2}]},
-    {"difficulty":"basic","sentence":["When the bus was delayed, we checked the "," board, used the station "," to call home, and bought "," from a vending ","."],"correct_answers":[{"word":"departure","start":3},{"word":"phone","start":1},{"word":"water","start":2},{"word":"machine","start":2}]},
-    {"difficulty":"basic","sentence":["Before the picnic, I packed "," sandwiches, sliced ",", and filled a large "," with ice. We spread a "," under the "," and played "," until the sun set."],"correct_answers":[{"word":"simple","start":2},{"word":"apples","start":2},{"word":"cooler","start":2},{"word":"blanket","start":2},{"word":"trees","start":2},{"word":"cards","start":1}]},
-    {"difficulty":"basic","sentence":["Inside the museum, a friendly "," gave us a map and pointed to the "," gallery. We took the "," to the third floor and joined a guided ","."],"correct_answers":[{"word":"guard","start":2},{"word":"photography","start":4},{"word":"elevator","start":2},{"word":"tour","start":1}]},
-    {"difficulty":"basic","sentence":["After a long drive, we stopped at a roadside "," to stretch, refill our ",", and check the car's ","."],"correct_answers":[{"word":"park","start":1},{"word":"bottles","start":2},{"word":"tires","start":1}]},
-    {"difficulty":"basic","sentence":["The farmer's market sold local ",", jars of ",", and fresh ",". A musician played "," near the fountain as children "," around."],"correct_answers":[{"word":"honey","start":1},{"word":"jam","start":1},{"word":"spinach","start":2},{"word":"guitar","start":2},{"word":"ran","start":1}]},
-    {"difficulty":"basic","sentence":["On Sunday evening we prepared "," for the week, set the coffee "," on a timer, and placed our "," by the door so we wouldn't forget them."],"correct_answers":[{"word":"meals","start":1},{"word":"maker","start":2},{"word":"bags","start":1}]},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Practicing spoken English is crucial for improvement. Speaking English in ",
+    "situations ",
+    "increase ",
+    "and confidence. One ",
+    "practice ",
+    "English with ",
+    ", at ",
+    ", or even use ",
+    "exchange platforms. Engaging in English ",
+    "helps to ",
+    "the ",
+    "and grammar rules ",
+    ", making ",
+    "language second nature. Ultimately, consistent practice in varied real-world contexts is the key to mastering spoken English."
+  ],
+  "correct_answers": [
+    { "word": "everyday", "start": 4 },
+    { "word": "helps", "start": 2 },
+    { "word": "fluency", "start": 3 },
+    { "word": "can", "start": 1 },
+    { "word": "speaking", "start": 4 },
+    { "word": "friends", "start": 3 },
+    { "word": "work", "start": 2 },
+    { "word": "language", "start": 4 },
+    { "word": "conversations", "start": 5 },
+    { "word": "apply", "start": 2 },
+    { "word": "vocabulary", "start": 5 },
+    { "word": "learning", "start": 3 },
+    { "word": "the", "start": 1 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Literature serves as a lens through which we can explore diverse human experiences across different time periods and cultures. For ",
+    ", reading a ",
+    "by Charles Dickens ",
+    "us to 19th-century England, ",
+    "insights ",
+    "the social and ",
+    "realities of that ",
+    ". We can ",
+    "about societal hierarchies, ",
+    "patterns, moral perspectives, and ",
+    ". Thus, literature allows us to traverse boundaries of time and space, providing a rich understanding of different societies and historical periods."
+  ],
+  "correct_answers": [
+    { "word": "instance", "start": 4 },
+    { "word": "novel", "start": 2 },
+    { "word": "transports", "start": 5 },
+    { "word": "provides", "start": 4 },
+    { "word": "into", "start": 2 },
+    { "word": "economic", "start": 4 },
+    { "word": "era", "start": 1 },
+    { "word": "learn", "start": 2 },
+    { "word": "employment", "start": 5 },
+    { "word": "morality", "start": 2 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Physical fitness refers to good body health. It is ",
+    "on genetic determinators and also on social, ",
+    "and ecological factors. That means, one's genes are ",
+    "responsible for one's physical ",
+    ", but also other ",
+    ": where you live, how clean or polluted your ",
+    "and the air ",
+    "you is, and also ",
+    "good your ",
+    "and medical ",
+    "is. It is also the result of regular exercise, proper diet and nutrition, and proper rest for physical recovery."
+  ],
+  "correct_answers": [
+    { "word": "dependent", "start": 4 },
+    { "word": "economic", "start": 4 },
+    { "word": "partly", "start": 3 },
+    { "word": "health", "start": 4 },
+    { "word": "circumstances", "start": 5 },
+    { "word": "water", "start": 2 },
+    { "word": "around", "start": 3 },
+    { "word": "how", "start": 1 },
+    { "word": "social", "start": 3 },
+    { "word": "system", "start": 3 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Practicing pronunciation is essential for mastering spoken English. Understanding the ",
+    "of English and ",
+    "them ",
+    "can significantly ",
+    "one's ",
+    "and make ",
+    "clearer. Listening to ",
+    "speakers, ",
+    "words and ",
+    ", and s",
+    "pronunciation guides or apps ",
+    "greatly ",
+    "in refining English pronunciation. Over time, ",
+    "practice can ",
+    "one's English ",
+    "more ",
+    "and ",
+    "to others. This improvement not only enhances communication but also boosts confidence in speaking English in various social and professional settings."
+  ],
+  "correct_answers": [
+    { "word": "sounds", "start": 3 },
+    { "word": "practicing", "start": 5 },
+    { "word": "regularly", "start": 4 },
+    { "word": "improve", "start": 3 },
+    { "word": "accent", "start": 3 },
+    { "word": "speech", "start": 3 },
+    { "word": "native", "start": 3 },
+    { "word": "repeating", "start": 4 },
+    { "word": "sentences", "start": 4 },
+    { "word": "using", "start": 2 },
+    { "word": "can", "start": 1 },
+    { "word": "assist", "start": 3 },
+    { "word": "consistent", "start": 5 },
+    { "word": "make", "start": 2 },
+    { "word": "sound", "start": 2 },
+    { "word": "natural", "start": 3 },
+    { "word": "understandable", "start": 5 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Remote work has transformed significantly in recent years. Advances ",
+    "communication ",
+    "and ",
+    "tools ",
+    "made working ",
+    "home ",
+    "feasible. A ",
+    "shift is ",
+    "increased ",
+    "in wo",
+    "hours and ",
+    "offered ",
+    "companies. Ongoing ",
+    "to imp",
+    "virtual te",
+    "management and ",
+    "mental health ",
+    "are ",
+    "the ",
+    "work experience. These changes are making remote work more accessible and sustainable for employees across various industries."
+  ],
+  "correct_answers": [
+    { "word": "in", "start": 1 },
+    { "word": "technology", "start": 5 },
+    { "word": "collaboration", "start": 4 },
+    { "word": "have", "start": 2 },
+    { "word": "from", "start": 2 },
+    { "word": "more", "start": 2 },
+    { "word": "major", "start": 2 },
+    { "word": "the", "start": 1 },
+    { "word": "flexibility", "start": 5 },
+    { "word": "work", "start": 2 },
+    { "word": "locations", "start": 4 },
+    { "word": "by", "start": 1 },
+    { "word": "efforts", "start": 3 },
+    { "word": "improve", "start": 3 },
+    { "word": "team", "start": 2 },
+    { "word": "promoting", "start": 3 },
+    { "word": "support", "start": 3 },
+    { "word": "enhancing", "start": 4 },
+    { "word": "remote", "start": 3 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "The Earth's formation is a dynamic, ongoing process that first began around 4.55 billion years ago. Geologists ",
+    "the Earth's ",
+    "into ",
+    "major ",
+    ", starting ",
+    "the ",
+    "of ",
+    "planet ",
+    "ending ",
+    "today's modern Earth. Each ",
+    "contains ",
+    "geologic ",
+    ", which ",
+    "segments ",
+    "time ",
+    "names, ",
+    ", and ",
+    "can ",
+    "easily ",
+    ". All of these events occurred due to changes in the Earth's speed of rotation and its rotational axis, as well as its position in relation to the sun."
+  ],
+  "correct_answers": [
+    { "word": "divide", "start": 3 },
+    { "word": "history", "start": 3 },
+    { "word": "four", "start": 2 },
+    { "word": "stages", "start": 3 },
+    { "word": "with", "start": 2 },
+    { "word": "formation", "start": 4 },
+    { "word": "the", "start": 1 },
+    { "word": "and", "start": 1 },
+    { "word": "with", "start": 2 },
+    { "word": "stage", "start": 2 },
+    { "word": "several", "start": 3 },
+    { "word": "periods", "start": 3 },
+    { "word": "are", "start": 1 },
+    { "word": "of", "start": 1 },
+    { "word": "which", "start": 2 },
+    { "word": "characteristics", "start": 7 },
+    { "word": "events", "start": 3 },
+    { "word": "be", "start": 1 },
+    { "word": "identified", "start": 5 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Contracts management is an ongoing process of supervising and managing the contract. It ",
+    " all ",
+    " that must be ",
+    " in ",
+    " a business ",
+    " from ",
+    "inception, ",
+    " through ",
+    "the contract's ",
+    ". Essentially, ",
+    " management ",
+    " divided ",
+    " two ",
+    " areas: contract ",
+    " and ",
+    " execution. Managers use business case templates as well as other templates and models to keep track of all the important aspects of their business contracts."
+  ],
+  "correct_answers": [
+    { "word": "involves", "start": 4 },
+    { "word": "actions", "start": 3 },
+    { "word": "taken", "start": 2 },
+    { "word": "managing", "start": 4 },
+    { "word": "contract", "start": 4 },
+    { "word": "its", "start": 1 },
+    { "word": "right", "start": 2 },
+    { "word": "until", "start": 2 },
+    { "word": "expiration", "start": 5 },
+    { "word": "contracts", "start": 4 },
+    { "word": "is", "start": 1 },
+    { "word": "into", "start": 2 },
+    { "word": "major", "start": 2 },
+    { "word": "negotiating", "start": 5 },
+    { "word": "contract", "start": 4 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Artificial intelligence (AI) is more than just hype, according to Felicia Burgan, Chief Executive Officer of Solgard Industries. \"It ",
+    " everything. It's a ",
+    " opportunity,\" ",
+    " said. In ",
+    " near ",
+    ", AI will ",
+    " up ",
+    " collection, ",
+    " the ",
+    " of ",
+    " it ",
+    " to ",
+    " loan approvals, and ",
+    " the ",
+    " process.\" AI ",
+    " how ",
+    " organize ",
+    " companyy,\" Burgan ",
+    ". \"Managers start to think about using data in a far different way than they ever did before.\""
+  ],
+  "correct_answers": [
+    { "word": "changes", "start": 3 },
+    { "word": "huge", "start": 2 },
+    { "word": "she", "start": 1 },
+    { "word": "the", "start": 1 },
+    { "word": "term", "start":2 },
+    { "word": "speed", "start": 2 },
+    { "word": "data", "start": 2 },
+    { "word": "reduce", "start": 3 },
+    { "word": "amount", "start": 3 },
+    { "word": "time", "start": 2 },
+    { "word": "make", "start": 2 },
+    { "word": "streamline", "start": 5 },
+    { "word": "hiring", "start": 3 },
+    { "word": "changes", "start": 3 },
+    { "word": "you", "start": 1 },
+    { "word": "your", "start": 1 },
+    { "word": "explained", "start": 4 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "The funding situation in the sciences is somewhat unstable. Scientists ",
+    " on ",
+    " funding ",
+    " support ",
+    " of ",
+    " research. Lately, political ",
+    " over ",
+    " federal ",
+    " mean ",
+    " money ",
+    " usually ",
+    " to ",
+    " may",
+    " up in ",
+    " avenues. Even when it has been allocated, its distribution has sometimes been delayed."
+  ],
+  "correct_answers": [
+    { "word": "depend", "start": 3 },
+    { "word": "federal", "start": 3 },
+    { "word": "to", "start": 1 },
+    { "word": "much", "start": 2 },
+    { "word": "their", "start": 2 },
+    { "word": "battles", "start": 3 },
+    { "word": "the", "start": 1 },
+    { "word": "budget", "start": 3 },
+    { "word": "that", "start": 2 },
+    { "word": "that", "start": 2 },
+    { "word": "goes", "start": 2 },
+    { "word": "researching", "start": 5 },
+    { "word": "be", "start": 1 },
+    { "word": "up", "start": 1 },
+    { "word": "other", "start": 2 }
+  ]
+},
+{
+  "difficulty": "advanced",
+  "sentence": [
+    "Quantum mechanics is a ",
+    " theory in ",
+    " that explains the behavior of particles on the ",
+    " scale. It ",
+    " many counter ",
+    " phenomena such as superposition and ",
+    ". Despite its ",
+    " nature, quantum mechanics is essential to the ",
+    " of modern ",
+    "."
+  ],
+  "correct_answers": [
+    { "word": "fundamental", "start": 5 },
+    { "word": "physics", "start": 3 },
+    { "word": "atomic", "start": 3 },
+    { "word": "predicts", "start": 4 },
+    { "word": "intuitive", "start": 6 },
+    { "word": "entanglement", "start": 5 },
+    { "word": "complex", "start": 3 },
+    { "word": "development", "start": 5 },
+    { "word": "technology", "start": 4 }
+  ]
+}
 
-    {"difficulty":"medium","sentence":["The workshop introduced teachers to "," assessment strategies that provide "," feedback and guide "," instruction across diverse ","."],"correct_answers":[{"word":"formative","start":3},{"word":"timely","start":2},{"word":"subsequent","start":3},{"word":"classrooms","start":3}]},
-    {"difficulty":"medium","sentence":["Ecologists compared "," plots before and after a "," reforestation effort, noting "," increases in pollinator ","."],"correct_answers":[{"word":"adjacent","start":3},{"word":"community","start":3},{"word":"meaningful","start":3},{"word":"abundance","start":3}]},
-    {"difficulty":"medium","sentence":["The city released a "," plan to expand "," lanes, calm ",", and redesign "," to improve safety."],"correct_answers":[{"word":"comprehensive","start":4},{"word":"bicycle","start":2},{"word":"traffic","start":2},{"word":"intersections","start":4}]},
-    {"difficulty":"medium","sentence":["In the archive, scholars digitized fragile "," using high-"," scanners and created "," metadata for ","."],"correct_answers":[{"word":"manuscripts","start":3},{"word":"resolution","start":3},{"word":"descriptive","start":3},{"word":"retrieval","start":2}]},
-    {"difficulty":"medium","sentence":["Nutrition researchers analyzed "," diaries and "," biomarkers to examine "," intake patterns across "," groups."],"correct_answers":[{"word":"dietary","start":2},{"word":"blood","start":1},{"word":"nutrient","start":2},{"word":"age","start":1}]},
-    {"difficulty":"medium","sentence":["The study adopted a ","-methods design, combining "," surveys with "," interviews to capture nuanced ","."],"correct_answers":[{"word":"mixed","start":1},{"word":"structured","start":3},{"word":"semi-structured","start":3},{"word":"experiences","start":3}]},
-    {"difficulty":"medium","sentence":["Engineers prototyped a ","-powered sensor for "," monitoring and validated its "," under field ","."],"correct_answers":[{"word":"solar","start":2},{"word":"soil","start":1},{"word":"accuracy","start":3},{"word":"conditions","start":3}]},
-    {"difficulty":"medium","sentence":["The linguistics course explored "," change, loanword ",", and "," shifts in multilingual ","."],"correct_answers":[{"word":"sound","start":1},{"word":"adaptation","start":3},{"word":"register","start":2},{"word":"communities","start":3}]},
-    {"difficulty":"medium","sentence":["Historians mapped trade "," along river "," to understand "," connections across early "," settlements."],"correct_answers":[{"word":"networks","start":3},{"word":"routes","start":2},{"word":"economic","start":3},{"word":"urban","start":2}]},
 
-    {"difficulty":"advanced","sentence":["The paper advances a "," model in which "," frictions and "," constraints jointly determine "," dynamics over the business cycle."],"correct_answers":[{"word":"heterogeneous-agent","start":6},{"word":"search","start":2},{"word":"borrowing","start":3},{"word":"consumption","start":3}]},
-    {"difficulty":"advanced","sentence":["Using "," inference and "," priors, the analysis "," posterior distributions for key "," parameters."],"correct_answers":[{"word":"Bayesian","start":3},{"word":"informative","start":3},{"word":"samples","start":2},{"word":"structural","start":3}]},
-    {"difficulty":"advanced","sentence":["The ethnography situates "," practices within "," modernities, highlighting "," tensions and contested ","."],"correct_answers":[{"word":"ritual","start":2},{"word":"multiple","start":2},{"word":"intra-community","start":4},{"word":"meanings","start":2}]},
-    {"difficulty":"advanced","sentence":["A "," estimator mitigates "," bias in short "," panels with endogenous ","."],"correct_answers":[{"word":"system-GMM","start":3},{"word":"finite-sample","start":3},{"word":"time","start":1},{"word":"regressors","start":3}]},
-    {"difficulty":"advanced","sentence":["The commentary engages "," hermeneutics to "," doctrinal developments across "," traditions."],"correct_answers":[{"word":"critical","start":2},{"word":"reconcile","start":3},{"word":"juridical","start":3}]},
-    {"difficulty":"advanced","sentence":["Materials scientists reported "," strengthening via "," boundary engineering under "," deformation."],"correct_answers":[{"word":"significant","start":3},{"word":"grain","start":1},{"word":"severe","start":2}]},
-    {"difficulty":"advanced","sentence":["The randomized evaluation estimated "," effects that "," over time, indicating "," heterogeneity by baseline ","."],"correct_answers":[{"word":"treatment","start":2},{"word":"attenuated","start":3},{"word":"substantial","start":3},{"word":"characteristics","start":3}]},
-    {"difficulty":"advanced","sentence":["The proof relies on "," convergence and "," boundedness to establish "," of the operator."],"correct_answers":[{"word":"uniform","start":2},{"word":"compact","start":2},{"word":"continuity","start":3}]},
-    {"difficulty":"advanced","sentence":["Comparative jurisprudence reveals "," divergences in "," proportionality across constitutional ","."],"correct_answers":[{"word":"doctrinal","start":3},{"word":"applying","start":2},{"word":"courts","start":1}]}
+
+
+
+
+
 ]
