@@ -1,0 +1,99 @@
+[
+  {
+    "difficulty": "basic",
+    "title": "Magnet fishing (example)",
+    "passage": [
+      "Some people live near a body of freshwater of some [1], such as a lake or river. Unfortunately, these areas can become polluted, [2] human trash. Trash made of metal, such as bicycles or tools, [3] to the bottom, [4] it can remain for years or decades. As the [5] degrades, it [6] detrimental to aquatic plants and animals living in the ecosystem. One [7] solution to this problem is a relatively new hobby known as magnet fishing."
+    ],
+    "questions": [
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "1",
+        "choices": ["time", "place", "season", "region"],
+        "correct": 0
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "2",
+        "choices": ["containing", "producing", "discarding", "consuming"],
+        "correct": 2
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "3",
+        "choices": ["sink", "float", "explode", "melt"],
+        "correct": 0
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "4",
+        "choices": ["and", "but", "so", "because"],
+        "correct": 1
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "5",
+        "choices": ["trash", "water", "metal", "material"],
+        "correct": 0
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "6",
+        "choices": ["becomes", "was", "remain", "is"],
+        "correct": 0
+      },
+      {
+        "type": "CompleteTheSentence",
+        "prompt": "7",
+        "choices": ["possible", "common", "effective", "simple"],
+        "correct": 2
+      },
+      {
+        "type": "SelectTheBestSentence",
+        "prompt": "Choose the best sentence to complete the passage",
+        "choices": [
+          "Occasionally, magnet fishers have discovered truly valuable antiques, though typically such objects are badly damaged after being submerged for many years.",
+          "Generally, the low cost of powerful magnets and strong rope makes magnet fishing a popular hobby among people from different economic backgrounds.",
+          "Sometimes, magnet fishing can be a life-long hobby, becoming a family tradition and lasting into a person's old age as the younger generation gets involved."
+        ],
+        "correct": 0
+        ,
+        "beforeSelectTheBestSentence": "Magnet fishing uses powerful magnets, plus a strong rope, to catch on to pieces of metal, such as iron, nickel, or steel submerged in water. Magnet fishers often work from a bridge or boat to see what they can discover. The thrill is the surprise factor. Usually, it's hard to know just what might be lying down below, especially if the water is deep or murky.",
+        "afterSelectTheBestSentence": "Still, most magnet fishers can collect some metal to sell as scrap. This is because old pieces of scrap metal can be sold to recyclers to convert into new products. But perhaps the best part is knowing magnet fishing helps people connect with nature in a different way."
+      }
+      ,
+      {
+        "type": "HighlightTheAnswer",
+        "prompt": "What happens as a result of metal degradation?",
+        "correct": "such as bicycles or tools, sink to the bottom, but it can remain for years or decades. As the trash degrades, it becomes detrimental to aquatic plants and animals living in the ecosystem. One effective solution to this problem is a relatively new hobby known as magnet fishing."
+      }
+      ,
+      {
+        "type": "IdentifyTheIdea",
+        "prompt": "Select the idea",
+        "choices": [
+          "Metal trash can be removed from water with powerful magnets.",
+          "The primary type of trash found in bodies of freshwater is metal.",
+          "Thousands of magnets are dumped in freshwater as trash every year.",
+          "Most personal hobbies tend to have an environmental benefit."
+        ],
+        "correct": 0
+      }
+      ,
+      {
+        "type": "TitleThePassage",
+        "prompt": "Select the best title for the passage",
+        "choices": [
+          "A hobby with an environmental upside",
+          "How to make money selling magnets",
+          "The pros and cons of magnet fishing",
+          "Magnet fishing versus traditional fishing",
+          "The preservation of oceans and seas"
+        ],
+        "correct": 0
+      }
+    ]
+  }
+
+  
+]
