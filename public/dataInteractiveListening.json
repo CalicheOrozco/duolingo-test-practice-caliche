@@ -1,0 +1,91 @@
+{
+  "id": "interactive01",
+  "file": "Interactive01-1.mp3",
+  "title": "Listen to the scenario and then answer questions",
+  "difficulty": "basic",
+  "questions": [
+
+    {
+        "id": 1,
+        "type": "ListenAndComplete",
+        "prompt": "1",
+        "question": "What job are you doing as a graduate student?",
+        "prefix": "I am a ",
+        "answer": "research assistant"
+    },
+    {
+        "id": 2,
+        "type": "ListenAndComplete",
+        "prompt": "2",
+        "question": "Who are you talking to?",
+        "prefix": "I am talking to ",
+        "answer": "my profesor"
+    },
+    {
+      "id": 3,
+      "type": "ListenAndComplete",
+      "prompt": "3",
+      "question": "What is the purpose of your meeting?",
+      "prefix": "We are meeting to talk about tasks and ",
+      "answer": "my contribution to the project"
+    },
+    {
+      "id": 4,
+      "type": "ListenAndComplete",
+      "prompt": "4",
+      "question": "What will you be working on?",
+      "prefix": "I will work on a ",
+      "answer": "grant proposal"
+    },
+    {
+      "id": 5,
+      "type": "ListenAndRespond",
+      "prompt": "5",
+      "audio": "Audios/Interactive01-2.mp3",
+      "audioText": "Hi, thanks for coming to meet with me. I'm working on a grant proposal for a project on the hystory of the Ottoman Empire and I could use some help",
+      "choices": ["Okay, what's the date?", "Okay, I'll do the same.", "Sure, what can I do?", "I don't know what to do?" ],
+      "correct": 2
+    },
+    {
+      "id": 6,
+      "type": "ListenAndRespond",
+      "prompt": "6",
+      "audio": "Audios/Interactive01-3.mp3",
+      "audioText": "Well, I need someone to help me with the research and writing. Do you have any experience with writing grant proposals?",
+      "choices": ["No, but I'm a quick learner and I'm willing to do whatever it takes to help out", "Okay, I'll try my best to get it done as soon as posible then", "No problem, I can definitely do that. When do you need it by?", "That shouldn't be a problem. Do you have any specific instructions or anything you want me to focus on?","Okay, I'll start working on it and let you know when I have something" ],
+      "correct": 0
+    },
+    {
+      "id": 7,
+      "type": "ListenAndRespond",
+      "prompt": "7",
+      "audio": "Audios/Interactive01-4.mp3",
+      "audioText": "Then this will be a good research opportunity for you. The first thing you can do is look through some of the existing literature on the Ottoman Empire and see what other scholars have said about it. Then we can start brainstorming ideas for the project.",
+      "choices": ["Okay, that sounds like a good place to start. How long do you think the project will take?", "Okay, that sounds like a good plan. How long is the presentation?", "Okay, that shouldn't be a problem. Do you want to start coming up with solutions?" ],
+      "correct": 0
+    },
+    {
+      "id": 8,
+      "type": "ListenAndRespond",
+      "prompt": "8",
+      "audio": "Audios/Interactive01-5.mp3",
+      "audioText": "If we get started soon, I think it would be feasible to finish within a few months. The grant proposal is due at the end of the year.",
+      "choices": ["Okay, that sounds like something I can do. Do you have any specific schools in mind that you want me to compare our department to?","* Two weeks isn't a lot of time but I think we can manage it if we work together on it and divide up the sections.","That shouldn't be a problem. I can work on it full-time during summer break and then part-time during the fall semester.","Okay, I'll work on making some changes to the budget and then" ],
+      "correct": 2
+    },
+    {
+      "id": 9,
+      "type": "ListenAndRespond",
+      "prompt": "9",
+      "audio": "Audios/Interactive01-6.mp3",
+      "audioText": "Perfect! Let's aim to have most of the research done by summer so that we can focus on writing the proposal in the fall semester. Does that sound like a plan?",
+      "choices": ["Yeah, that sounds good to me!","Okay, that sounds fair. My apologies!","Yeah, that's definitely a plus!","Yeah, me too. It should be fun."],
+      "correct": 0
+    },
+    {
+        "id": 10,
+        "type": "Summary",
+        "SummaryExample": "I met with the professor to discuss my duties as a research assistant for their project. I will be helping them write a grant proposal for a research study on the Ottoman Empire, especially with surveying the existing literature. We worked out the schedule so that I would get most of the research done during the summer as a full-time and we could focus on the actual writing part during the fall semester."
+    }
+  ]
+}
