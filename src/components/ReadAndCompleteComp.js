@@ -288,7 +288,7 @@ function ReadAndCompleteComp() {
   };
 
   return (
-    <div className="App bg-[#404040] w-full min-h-[60vh] flex items-center py-3 justify-center">
+    <div className="App bg-gray-900 w-full min-h-[60vh] flex items-center py-3 justify-center">
       {isStarted ? (
         frase ? (
           <div className="px-10">

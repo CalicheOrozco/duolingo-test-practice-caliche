@@ -174,7 +174,7 @@ function ListeningTestComp() {
     else setTestFinished(true);
   };
   return (
-    <div className="App bg-[#404040] w-full min-h-[60vh] py-3 flex items-center justify-center">
+    <div className="App bg-gray-900 w-full min-h-[60vh] py-3 flex items-center justify-center">
       {/* Main page (when not started) */}
       {!isStarted && !testFinished && (
         <div className="flex flex-col items-center text-center px-5 gap-4">

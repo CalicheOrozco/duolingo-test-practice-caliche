@@ -154,7 +154,7 @@ function InteractiveReadingComp() {
   
 
   return (
-    <div className="bg-[#404040] min-h-[60vh] py-8 flex justify-center items-center text-white">
+    <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-center text-white">
       <div className="max-w-6xl mx-auto px-4">
         <h1 className="text-3xl text-center font-bold mb-4">Interactive Reading</h1>
 
@@ -222,7 +222,7 @@ function InteractiveReadingComp() {
                               const sel = answers[num - 1];
                               const display = sel !== undefined && qObj ? qObj.choices[sel] : '';
                               const blankClasses = sel === undefined
-                                ? 'inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-800 text-gray-200 border border-gray-600'
+                                ? 'inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-900 text-gray-200 border border-gray-600'
                                 : 'inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-700 text-gray-100 border border-gray-600';
                               return (
                                 <span key={k} className={blankClasses}>
@@ -240,7 +240,7 @@ function InteractiveReadingComp() {
                     {selectBestQs.map(({ q, idx }) => {
                       const sel = answers[idx];
                       if (sel === undefined) return null;
-                      const cardClasses = `p-3 rounded border ${'border-blue-400 bg-gray-800 text-gray-200'}`;
+                      const cardClasses = `p-3 rounded border ${'border-blue-400 bg-gray-900 text-gray-200'}`;
                       return (
                         <div key={`mc-preview-${idx}`} className={`${cardClasses} mt-4`}>
                           <div className="text-sm">{q.choices[sel]}</div>
@@ -262,7 +262,7 @@ function InteractiveReadingComp() {
                       {completeQs.map(({ q, idx }) => (
                         <div key={idx} className="bg-[#0f0f0f] border border-gray-700 rounded p-3">
                           <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-8 flex items-center justify-center bg-gray-800 text-gray-200 rounded">{idx + 1}</div>
+                            <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">{idx + 1}</div>
                             <div className="text-sm text-gray-300">Select a word</div>
                           </div>
                           <select
@@ -327,7 +327,7 @@ function InteractiveReadingComp() {
                       if (displayText) {
                         if (passageStage === 1 && selectedText) {
                           middleArea = (
-                            <div className="p-3 rounded border border-blue-400 bg-gray-800 text-gray-200 mt-2">
+                            <div className="p-3 rounded border border-blue-400 bg-gray-900 text-gray-200 mt-2">
                               <div className="text-sm">{displayText}</div>
                             </div>
                           );
@@ -363,14 +363,14 @@ function InteractiveReadingComp() {
                             selectBestQs.map(({ q, idx }) => (
                               <div key={idx} className="bg-[#0f0f0f] border border-gray-700 rounded p-3">
                                 <div className="flex items-center gap-3 mb-2">
-                                  <div className="w-8 h-8 flex items-center justify-center bg-gray-800 text-gray-200 rounded">{idx + 1}</div>
+                                  <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">{idx + 1}</div>
                                   <div className="text-sm text-gray-300">Select a sentence</div>
                                 </div>
                                 <div className="space-y-3">
                                   {q.choices.map((c, ci) => {
                                     const selected = answers[idx] === ci;
                                     const isCorrect = showResults && q.correct === ci;
-                                    const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-800' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
+                                    const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-900' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
                                     return (
                                       <div key={ci} className={cardClasses} onClick={() => choose(idx, ci)} style={{cursor: 'pointer'}}>
                                         <div className="text-gray-200 text-sm">{c}</div>
@@ -413,14 +413,14 @@ function InteractiveReadingComp() {
                           {identifyQs.length === 0 ? <div className="text-gray-400">No idea-identification questions for this exercise.</div> : identifyQs.map(({ q, idx }) => (
                             <div key={`idea-${idx}`} className="bg-[#0f0f0f] border border-gray-700 rounded p-3">
                               <div className="flex items-center gap-3 mb-2">
-                                <div className="w-8 h-8 flex items-center justify-center bg-gray-800 text-gray-200 rounded">{idx + 1}</div>
+                                <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">{idx + 1}</div>
                                 <div className="text-sm text-gray-300">{q.prompt || 'Select the idea'}</div>
                               </div>
                               <div className="space-y-3">
                                 {q.choices.map((c, ci) => {
                                   const selected = answers[idx] === ci;
                                   const isCorrect = showResults && q.correct === ci;
-                                  const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-800' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
+                                  const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-900' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
                                   return (
                                     <div key={ci} className={cardClasses} onClick={() => choose(idx, ci)} style={{cursor: 'pointer'}}>
                                       <div className="text-gray-200 text-sm">{c}</div>
@@ -441,14 +441,14 @@ function InteractiveReadingComp() {
                           {titleQs.length === 0 ? <div className="text-gray-400">No title questions for this exercise.</div> : titleQs.map(({ q, idx }) => (
                             <div key={`title-${idx}`} className="bg-[#0f0f0f] border border-gray-700 rounded p-3">
                               <div className="flex items-center gap-3 mb-2">
-                                <div className="w-8 h-8 flex items-center justify-center bg-gray-800 text-gray-200 rounded">{idx + 1}</div>
+                                <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">{idx + 1}</div>
                                 <div className="text-sm text-gray-300">{q.prompt || 'Select the title'}</div>
                               </div>
                               <div className="space-y-3">
                                 {q.choices.map((c, ci) => {
                                   const selected = answers[idx] === ci;
                                   const isCorrect = showResults && q.correct === ci;
-                                  const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-800' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
+                                  const cardClasses = `p-3 rounded border ${selected ? 'border-blue-400 bg-gray-900' : 'border-gray-700 bg-[#0b0b0b]'} ${showResults ? (isCorrect ? 'border-green-500 bg-green-900/10' : (selected ? 'border-red-500 bg-red-900/10' : '')) : ''}`;
                                   return (
                                     <div key={ci} className={cardClasses} onClick={() => choose(idx, ci)} style={{cursor: 'pointer'}}>
                                       <div className="text-gray-200 text-sm">{c}</div>
@@ -465,7 +465,7 @@ function InteractiveReadingComp() {
                     <div className="mt-4 flex justify-end items-center">
                       {passageStage < lastStage && (
                         <button
-                          className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded mr-3"
+                          className="bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded mr-3"
                           onClick={() => setPassageStage(passageStage + 1)}
                         >
                           Next
@@ -497,7 +497,7 @@ function InteractiveReadingComp() {
 
                 <div className="flex gap-2">
                   <button onClick={tryAgain} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded">Try again</button>
-                  <button onClick={resetToMenu} className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded">Back to menu</button>
+                  <button onClick={resetToMenu} className="bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded">Back to menu</button>
                 </div>
               </div>
 
@@ -505,7 +505,7 @@ function InteractiveReadingComp() {
                 {exercise.questions.map((q, i) => (
                   <div key={i} className={`p-3 rounded border ${answers[i] === q.correct ? "border-green-600 bg-green-900/10" : "border-red-600 bg-red-900/10"}`}>
                     <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 flex items-center justify-center bg-gray-800 text-gray-200 rounded">{i + 1}</div>
+                      <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">{i + 1}</div>
                       <div>
                         <div className="text-sm text-gray-200">Your answer: <span className={answers[i] === q.correct ? "text-green-300 font-bold" : "text-red-300 font-bold"}>{answers[i] !== undefined ? (q.type === 'HighlightTheAnswer' ? answers[i] : q.choices[answers[i]]) : "(no answer)"}</span></div>
                         <div className="text-sm text-gray-300">Correct: <span className="text-green-300 font-bold">{q.type === 'HighlightTheAnswer' ? q.correct : q.choices[q.correct]}</span></div>
