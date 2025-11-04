@@ -49,9 +49,8 @@
     "sourcemap-codec": "npm:@jridgewell/sourcemap-codec@^1.4.15"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
-  
   "devDependencies": {
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.21",
