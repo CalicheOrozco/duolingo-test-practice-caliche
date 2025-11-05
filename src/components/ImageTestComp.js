@@ -4,6 +4,94 @@ import ReactCountdownClock from "react-countdown-clock";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
+const initialTopics = [
+  "daily life",
+  "education",
+  "university",
+  "campus life",
+  "lectures",
+  "presentations",
+  "research",
+  "academic writing",
+  "studies",
+  "career",
+  "job interview",
+  "workplace",
+  "meetings",
+  "business",
+  "startups",
+  "marketing",
+  "customer service",
+  "technology",
+  "internet",
+  "social media",
+  "innovation",
+  "science",
+  "research methods",
+  "health",
+  "healthcare",
+  "medicine",
+  "mental health",
+  "environment",
+  "climate change",
+  "sustainability",
+  "transportation",
+  "travel",
+  "tourism",
+  "accommodation",
+  "food",
+  "restaurants",
+  "shopping",
+  "finance",
+  "banking",
+  "economy",
+  "news",
+  "politics",
+  "law",
+  "culture",
+  "traditions",
+  "art",
+  "music",
+  "films",
+  "literature",
+  "history",
+  "architecture",
+  "science and technology",
+  "education policy",
+  "family",
+  "relationships",
+  "friends",
+  "hobbies",
+  "sports",
+  "fitness",
+  "photography",
+  "nature",
+  "animals",
+  "cities",
+  "urban life",
+  "rural life",
+  "weather",
+  "gardening",
+  "design",
+  "fashion",
+  "business travel",
+  "presentations",
+  "telecommuting",
+  "education online",
+  "study abroad",
+  "campus housing",
+  "social issues",
+  "public health",
+  "technology and society",
+  "work-life balance",
+  "career development",
+  "interviews",
+  "customer experience",
+  "product design",
+  "transport",
+  "sustainability initiatives",
+];
+
 export default function ImageTestComp() {
   const {
     register,
@@ -27,97 +115,15 @@ export default function ImageTestComp() {
   const [spellErrors, setSpellErrors] = useState([]);
   const [suggestedText, setSuggestedText] = useState("");
   const [grammarScore, setGrammarScore] = useState(null);
+  const [isChecking, setIsChecking] = useState(false);
+  const [topicsPool, setTopicsPool] = useState(initialTopics);
+  const [currentRound, setCurrentRound] = useState(0);
+  const totalRounds = 3;
+  const [results, setResults] = useState([]);
+  const [timerKey, setTimerKey] = useState(0);
+  const [showResults, setShowResults] = useState(false);
 
-  let topics = [
-    // Topics suited for Duolingo English Test practice
-    "daily life",
-    "education",
-    "university",
-    "campus life",
-    "lectures",
-    "presentations",
-    "research",
-    "academic writing",
-    "studies",
-    "career",
-    "job interview",
-    "workplace",
-    "meetings",
-    "business",
-    "startups",
-    "marketing",
-    "customer service",
-    "technology",
-    "internet",
-    "social media",
-    "innovation",
-    "science",
-    "research methods",
-    "health",
-    "healthcare",
-    "medicine",
-    "mental health",
-    "environment",
-    "climate change",
-    "sustainability",
-    "transportation",
-    "travel",
-    "tourism",
-    "accommodation",
-    "food",
-    "restaurants",
-    "shopping",
-    "finance",
-    "banking",
-    "economy",
-    "news",
-    "politics",
-    "law",
-    "culture",
-    "traditions",
-    "art",
-    "music",
-    "films",
-    "literature",
-    "history",
-    "architecture",
-    "science and technology",
-    "education policy",
-    "family",
-    "relationships",
-    "friends",
-    "hobbies",
-    "sports",
-    "fitness",
-    "photography",
-    "nature",
-    "animals",
-    "cities",
-    "urban life",
-    "rural life",
-    "weather",
-    "gardening",
-    "design",
-    "fashion",
-    "business travel",
-    "presentations",
-    "telecommuting",
-    "education online",
-    "study abroad",
-    "campus housing",
-    "social issues",
-    "public health",
-    "technology and society",
-    "work-life balance",
-    "career development",
-    "interviews",
-    "customer experience",
-    "product design",
-    "transport",
-    "sustainability initiatives",
-  ];
- 
-
+  // topics are taken from initialTopics stored in state (topicsPool)
 
   const getImg = async (forTopic) => {
     // require a topic
@@ -157,17 +163,51 @@ export default function ImageTestComp() {
 
 
   const getTopic = async () => {
-    if (!topics || topics.length === 0) return;
-    const randomNumero = Math.floor(Math.random() * topics.length);
-    const randomTopic = topics[randomNumero];
+    if (!topicsPool || topicsPool.length === 0) return;
+    const randomNumero = Math.floor(Math.random() * topicsPool.length);
+    const randomTopic = topicsPool[randomNumero];
     setTopic(randomTopic);
-    restart();
     // remove used topic from pool
-    topics = topics.filter((t) => t !== randomTopic);
+    setTopicsPool((prev) => prev.filter((t) => t !== randomTopic));
+    restart();
     // fetch image for the chosen topic and preload it
     await getImg(randomTopic);
   };
 
+  // Move to next round (called when user clicks Next or when finishing last round)
+  const handleNext = (entryOverride) => {
+    // save current round result (use override when available to avoid state race)
+    const entry = entryOverride || {
+      image: urlImg,
+      imgUser,
+      userAnswer: answer,
+      suggested: suggestedText,
+      issues: spellErrors,
+      score: grammarScore,
+      topic,
+    };
+    setResults((prev) => [...prev, entry]);
+
+    if (currentRound + 1 < totalRounds) {
+      // prepare next round
+      setCurrentRound((r) => r + 1);
+      // reset UI
+      setSubmited(false);
+      setIsCorrect(null);
+      setAnswer("");
+      reset();
+      setSpellErrors([]);
+      setSuggestedText("");
+      setGrammarScore(null);
+      // bump timer key to remount the countdown clock and restart
+      setTimerKey((k) => k + 1);
+      // fetch a new topic/image
+      getTopic();
+    } else {
+      // finished all rounds
+      setShowResults(true);
+    }
+  };
   // function to restart the form
   const restart = () => {
     setIsCorrect(null);
@@ -175,7 +215,20 @@ export default function ImageTestComp() {
     reset();
   };
 
-  const next = () => {
+  // reset the whole session to initial state
+  const resetSession = () => {
+    setTopicsPool(initialTopics.slice());
+    setCurrentRound(0);
+    setResults([]);
+    setShowResults(false);
+    setTimerKey((k) => k + 1);
+    setSubmited(false);
+    setIsStarted(false);
+    setSpellErrors([]);
+    setSuggestedText("");
+    setGrammarScore(null);
+    setAnswer("");
+    // fetch a fresh topic when starting again
     getTopic();
   };
 
@@ -192,7 +245,8 @@ export default function ImageTestComp() {
 
     // Run spellcheck and build suggested corrected text
     (async () => {
-      const result = await checkSpelling(null, setSpellErrors, null, original);
+      // pass setIsChecking so UI can show spinner / disable Next while we wait
+      const result = await checkSpelling(null, setSpellErrors, setIsChecking, original);
       // result shape: { issues: [...], corrected: string|null, score: number|null }
       const foundMatches = result && result.issues ? result.issues : [];
       const corrected = result && result.corrected ? result.corrected : null;
@@ -219,6 +273,20 @@ export default function ImageTestComp() {
       }
       setSubmited(true);
       setIsCorrect(true);
+      // build entry from returned result to avoid state race
+      const entry = {
+        image: urlImg,
+        imgUser,
+        userAnswer: original,
+        suggested: corrected || (foundMatches.length ? applyReplacements(foundMatches, original) : ""),
+        issues: foundMatches,
+        score: score,
+        topic,
+      };
+      if (currentRound + 1 >= totalRounds) {
+        // final round: push final entry and show results modal
+        handleNext(entry);
+      }
     })();
   };
 
@@ -257,8 +325,9 @@ export default function ImageTestComp() {
             {/* Countdown */}
             <div className="w-full flex justify-end mt-3">
               <ReactCountdownClock
+                key={timerKey}
                 weight={10}
-                seconds={!submited ? selectedTime : 0}
+                seconds={selectedTime}
                 color="#fff"
                 size={80}
                 paused={submited}
@@ -276,6 +345,50 @@ export default function ImageTestComp() {
                   src={urlImg}
                   alt={altImg ? altImg : "Loading..."}
                 />
+            {/* Final results modal */}
+            {showResults ? (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black opacity-70" onClick={() => setShowResults(false)} />
+                <div className="relative bg-gray-800 text-white rounded-lg max-w-4xl w-full p-6 z-50">
+                  <h2 className="text-2xl font-bold mb-4 text-white">Resultados — Resumen de la sesión</h2>
+                  <div className="space-y-4 max-h-[60vh] overflow-auto">
+                    {results.map((r, i) => (
+                      <div key={i} className="flex gap-4 p-3 border border-gray-700 rounded bg-gray-900">
+                        <img src={r.image} alt={`round-${i}-img`} className="w-36 h-24 object-cover rounded" />
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-300">Topic: {r.topic}</p>
+                          <p className="font-semibold text-white">Your answer:</p>
+                          <p className="text-sm mb-2 text-gray-100">{r.userAnswer}</p>
+                          {r.suggested ? (
+                            <>
+                              <p className="font-semibold text-white">ChatGPT suggested:</p>
+                              <p className="text-sm mb-2 text-gray-100">{r.suggested}</p>
+                            </>
+                          ) : null}
+                          {r.issues && r.issues.length > 0 ? (
+                            <div className="mt-1">
+                              <p className="font-semibold text-white">Issues:</p>
+                              <ul className="list-disc list-inside text-sm text-gray-200">
+                                {r.issues.map((it, idx) => (
+                                  <li key={idx} className="text-gray-200">{it.word} — {it.replacements && it.replacements.length > 0 ? it.replacements.join(', ') : '(no replacement)'}{it.message ? ` — ${it.message}` : ''}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
+                          {typeof r.score === 'number' ? (
+                            <p className="text-xs text-gray-400 mt-2">DET score: {r.score}/100</p>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex justify-end gap-2">
+                    <button className="px-4 py-2 bg-gray-700 text-white rounded" onClick={() => setShowResults(false)}>Close</button>
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => resetSession()}>Restart session</button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
                
                 {/* text area */}
                 <div className="w-full md:w-1/2">
@@ -283,6 +396,7 @@ export default function ImageTestComp() {
                     className="border-2 border-gray-700 text-black focus:border-orange-600 outline-none text-xl w-full h-64 p-1 rounded-md font-bold"
                     placeholder="Your response"
                     spellCheck={true}
+                    readOnly={submited}
                     {...register("answereText", {
                       required: true,
                       maxLength: 1000,
@@ -298,8 +412,8 @@ export default function ImageTestComp() {
                     </div>
                   </div>
 
-                  {/* Spelling result list */}
-                  {submited && spellErrors.length > 0 && (
+                  {/* Spelling result list - ONLY shown in final results modal; hide per-round detailed suggestions */}
+                  {submited && showResults && spellErrors.length > 0 && (
                     <div className="mt-2 p-2 bg-gray-800 rounded">
                       <h4 className="text-white font-semibold">Spelling suggestions</h4>
                       <ul className="mt-2 space-y-2">
@@ -344,11 +458,19 @@ export default function ImageTestComp() {
 
               {!submited ? (
                 <div className="w-full flex justify-end ">
-                  <input
+                  <button
                     type="submit"
-                    value="Submit"
-                    className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
-                  />
+                    disabled={isChecking}
+                    className={`mt-6 text-white p-2 w-32 cursor-pointer rounded-xl ${isChecking ? 'bg-gray-600 opacity-80 cursor-wait' : 'bg-green-500'}`}
+                  >
+                    {isChecking ? (
+                      <span className="flex items-center justify-center">
+                        <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      </span>
+                    ) : (
+                      'Submit'
+                    )}
+                  </button>
                 </div>
               ) : null}
             </form>
@@ -357,36 +479,32 @@ export default function ImageTestComp() {
               {submited ? (
                 <>
                   <div className="text-center">
-                    <p className="text-xl text-center text-green-600 font-bold">Your response:</p>
-                    <p className="text-lg text-white">{answer}</p>
-                    {grammarScore !== null ? (
-                      <p className="text-sm text-gray-300 mt-2">Score (DET practice): {grammarScore}/100</p>
-                    ) : null}
-                    {suggestedText ? (
-                      <>
-                        <p className="text-xl text-center text-yellow-400 font-bold mt-3">Suggested correction:</p>
-                        <p className="text-lg text-white">{suggestedText}</p>
-                      </>
-                    ) : null}
-                  </div>
-
-                  <div className="w-full flex justify-between">
-                    <input
-                      type="submit"
-                      value="Repeat"
-                      onClick={() => {
-                        restart();
-                      }}
-                      className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
-                    />
-                    <input
-                      type="submit"
-                      value="Next"
-                      onClick={() => {
-                        next();
-                      }}
-                      className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
-                    />
+                    <p className="text-xl text-center text-green-600 font-bold">Round submitted</p>
+                    <p className="text-lg text-white">Press Next to continue to the next image.</p>
+                    <div className="w-full flex justify-between mt-4">
+                      <button
+                        type="button"
+                        onClick={() => restart()}
+                        className="mt-6 bg-blue-500 text-white p-2 w-24 cursor-pointer rounded-xl"
+                      >
+                        Repeat
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleNext()}
+                        disabled={isChecking}
+                        className={`mt-6 text-white p-2 w-24 cursor-pointer rounded-xl ${isChecking ? 'bg-gray-600 opacity-70 cursor-wait' : 'bg-green-500'}`}
+                      >
+                        {isChecking ? (
+                          <span className="flex items-center justify-center">
+                            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                            Processing...
+                          </span>
+                        ) : (
+                          'Next'
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </>
               ) : null}
@@ -454,7 +572,7 @@ function WordCounter({ watch }) {
   );
 }
 
-// New grammar check using our serverless ChatGPT proxy
+// New grammar check using ChatGPT directly from the client (fetch key from secret proxy)
 async function checkSpelling(watchFn, setSpellErrorsFn, setSpellCheckingFn, explicitText) {
   const text = (explicitText !== undefined && explicitText !== null)
     ? explicitText
@@ -464,23 +582,71 @@ async function checkSpelling(watchFn, setSpellErrorsFn, setSpellCheckingFn, expl
   }
   setSpellCheckingFn && setSpellCheckingFn(true);
   try {
-    const resp = await fetch('/api/checkGrammar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
-    });
-    if (!resp.ok) {
-      console.error('checkGrammar failed', await resp.text());
+    // get api key from your secret proxy
+    const keyResp = await fetch('https://api-secret.vercel.app/api/get-api-key', { method: 'POST' });
+    if (!keyResp.ok) {
+      console.error('get-api-key failed', await keyResp.text());
       return { issues: [], corrected: null, score: null };
     }
-    const data = await resp.json();
-    // data shape expected: { corrected: string, score: number, issues: [{ original, replacement, explanation }] }
-    const corrected = data.corrected || null;
-    const score = typeof data.score === 'number' ? data.score : null;
+    const keyData = await keyResp.json();
+    const OPENAI_KEY = keyData?.apiKey;
+    if (!OPENAI_KEY) {
+      console.error('No API key returned from proxy');
+      return { issues: [], corrected: null, score: null };
+    }
 
-    const issues = (data.issues || []).map((it) => {
+      const system = `You are an assistant that evaluates short written responses for the Duolingo English Test (DET) "Write about the photo" task. For the input text, return ONLY a JSON object with shape: { "corrected": string, "score": number, "issues": [ { "original": string, "replacement": string, "explanation": string }, ... ] }. Score must be 0-100 and reflect grammar/fluency/vocabulary for DET practice. Be concise. Do not add any other text.`;
+    const user = `Text: """${text.replace(/"""/g, '"')}"""`;
+
+    const payload = {
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user }
+      ],
+      max_tokens: 800,
+      temperature: 0.2,
+    };
+
+    const openaiResp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${OPENAI_KEY}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!openaiResp.ok) {
+      console.error('OpenAI call failed', await openaiResp.text());
+      return { issues: [], corrected: null, score: null };
+    }
+
+    const openaiData = await openaiResp.json();
+    const content = openaiData.choices?.[0]?.message?.content || '';
+
+    // parse JSON (tolerant)
+    let parsed = null;
+    try {
+      parsed = JSON.parse(content);
+    } catch (e) {
+      const m = content.match(/\{[\s\S]*\}/);
+      if (m) {
+        try { parsed = JSON.parse(m[0]); } catch (e2) { parsed = null; }
+      }
+    }
+
+    if (!parsed) {
+      console.error('Failed to parse model JSON', content);
+      return { issues: [], corrected: null, score: null };
+    }
+
+    const corrected = parsed.corrected || null;
+    const score = typeof parsed.score === 'number' ? parsed.score : null;
+    const issuesRaw = Array.isArray(parsed.issues) ? parsed.issues : [];
+
+    const issues = issuesRaw.map((it) => {
       const original = it.original || '';
-      // try to find offset of original substring in text
       const offset = original ? text.indexOf(original) : -1;
       return {
         offset: offset >= 0 ? offset : 0,
@@ -493,7 +659,7 @@ async function checkSpelling(watchFn, setSpellErrorsFn, setSpellCheckingFn, expl
 
     return { issues, corrected, score };
   } catch (err) {
-    console.error('checkSpelling (ChatGPT) failed', err);
+    console.error('checkSpelling (client -> OpenAI) failed', err);
     return { issues: [], corrected: null, score: null };
   } finally {
     setSpellCheckingFn && setSpellCheckingFn(false);
