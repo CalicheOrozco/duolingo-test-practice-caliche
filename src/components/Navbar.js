@@ -27,7 +27,7 @@ function Navbar() {
           >
             <div className="px-3 py-2 rounded hover:bg-gray-800">Duolingo ▾</div>
             {showMenu && (
-              <div className="absolute left-0 top-full mt-2 bg-gray-800 rounded shadow-lg p-4 z-50 w-64">
+              <div className="absolute left-0 top-full mt-0 bg-gray-800 rounded shadow-lg p-4 z-50 w-64">
                 {/* replicate the links inside the dropdown */}
                 <div className="flex flex-col gap-2">
                   <Link to="/real-words-test"><span className={pathname === "/real-words-test" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Real words</span></Link>
