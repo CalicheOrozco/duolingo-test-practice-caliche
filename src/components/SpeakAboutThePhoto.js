@@ -114,11 +114,15 @@ export default function SpeakAboutThePhoto() {
 
   // timer state
   const [selectedTime, setSelectedTime] = useState(90);
+  const [prepareTime, setPrepareTime] = useState(20);
   const [timerKey, setTimerKey] = useState(0);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [canSubmit, setCanSubmit] = useState(false);
   const [volume, setVolume] = useState(0);
   const audioRef = useRef(null);
+
+  // preparation (prepare) state: user sees the image and can read/prepare for `prepareTime` seconds
+  const [isPreparing, setIsPreparing] = useState(false);
 
   // UI flags
   const [isStarted, setIsStarted] = useState(false);
@@ -325,6 +329,18 @@ export default function SpeakAboutThePhoto() {
   // use selectedTime as countdown length
   const totalSeconds = selectedTime;
 
+  const handleStartFromMenu = () => {
+    setIsStarted(true);
+    setIsPreparing(true);
+    setTimerKey(k => k + 1);
+  };
+
+  const onPrepareComplete = () => {
+    setIsPreparing(false);
+    // automatically start recording when prepare time ends
+    startRecording();
+  };
+
   if (!isStarted) {
     return (
       <div className="App bg-gray-900 w-full min-h-[60vh] flex flex-col items-center justify-center px-5 gap-4">
@@ -332,19 +348,32 @@ export default function SpeakAboutThePhoto() {
         <p className="text-lg text-white">Choose how long you want to speak and then press Start.</p>
 
         <div className="flex flex-col md:flex-row items-center gap-4 mt-3">
-          <label className="text-white">Timer:</label>
-          <select value={selectedTime} onChange={(e) => setSelectedTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
-            <option value={90}>90 seconds</option>
-            <option value={75}>75 seconds</option>
-            <option value={60}>60 seconds</option>
-            <option value={45}>45 seconds</option>
-          </select>
+          <div className="flex items-center gap-3">
+            <label className="text-white">Prepare time:</label>
+            <select value={prepareTime} onChange={(e) => setPrepareTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
+              <option value={10}>10 seconds</option>
+              <option value={15}>15 seconds</option>
+              <option value={20}>20 seconds</option>
+              <option value={30}>30 seconds</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="text-white">Timer:</label>
+            <select value={selectedTime} onChange={(e) => setSelectedTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
+              <option value={90}>90 seconds</option>
+              <option value={75}>75 seconds</option>
+              <option value={60}>60 seconds</option>
+              <option value={45}>45 seconds</option>
+            </select>
+          </div>
+
         </div>
 
         <div className="flex mt-4">
           <button
             className="mt-6 bg-green-500 text-white p-2 w-32 rounded-xl"
-            onClick={() => setIsStarted(true)}
+            onClick={handleStartFromMenu}
           >
             Start
           </button>
@@ -369,7 +398,34 @@ export default function SpeakAboutThePhoto() {
 
         <div className="flex items-center justify-between mb-4">
           <div>
-            {!isRecording ? (
+            {isPreparing ? (
+              <div className="inline-flex flex-col items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 bg-yellow-400 rounded-full" />
+                  <span>Preparing...</span>
+                </div>
+                <ReactCountdownClock
+                  key={`prep-${timerKey}`}
+                  seconds={prepareTime}
+                  color="#fff"
+                  size={50}
+                  paused={false}
+                  onComplete={onPrepareComplete}
+                />
+                <div className="mt-2">
+                  <button
+                    className="mt-1 bg-blue-500 text-white px-3 py-1 rounded"
+                    onClick={() => {
+                      // start recording immediately, cancel preparing
+                      setIsPreparing(false);
+                      startRecording();
+                    }}
+                  >
+                    Start recording now
+                  </button>
+                </div>
+              </div>
+            ) : !isRecording ? (
               <button
                 className={`px-4 py-2 rounded ${isSubmitted ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-500'}`}
                 onClick={startRecording}
