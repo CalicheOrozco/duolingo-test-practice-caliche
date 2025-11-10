@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "prompt": "Do you believe it's important for university students to engage with and show interest in their local community? Explain how this involvement might impact both the students and the community positively or negatively.",
+    "followUpPrompt": "How might community engagement during university impact a student's personal and professional development?",
+    "sample": "Engaging with the local community offers students opportunities to develop practical skills, build networks, and apply classroom knowledge to real-world problems. It can enhance cultural awareness and empathy, while communities benefit from fresh ideas and volunteer support. However, if not managed properly, student involvement can be short-term and cause dependency or unmet expectations. Overall, structured engagement tends to be mutually beneficial.",
+    "followUpSample": "Community engagement helps students gain teamwork and leadership experience, improves communication skills, and often results in professional contacts or references that benefit future careers."
+  },
+  {
+    "id": 2,
+    "prompt": "Some people think technology has made communication easier, while others believe it has made communication more impersonal. Discuss both views and give your opinion.",
+    "followUpPrompt": "What are some ways people can use technology to keep communication personal and meaningful?",
+    "sample": "Technology allows instant, global communication which helps people stay connected across distances and enables fast information exchange. However, digital interactions can lack nuance and personal connection compared to face-to-face conversation. In my opinion, technology is a powerful tool that complements rather than replaces personal communication when used thoughtfully.",
+    "followUpSample": "Simple habits—like using video calls for important conversations, adding personal details, and scheduling regular check-ins—help technology feel more personal and meaningful."
+  },
+  {
+    "id": 3,
+    "prompt": "Describe the advantages and disadvantages of studying abroad for undergraduate students.",
+    "followUpPrompt": "How can students make the most of an international study experience to improve their future career prospects?",
+    "sample": "Studying abroad broadens students' perspectives, improves language skills, and offers exposure to different educational systems. It can increase employability and cultural competence. On the downside, it may be expensive and emotionally challenging; students can feel homesick or struggle to adapt. With proper planning, the benefits often outweigh the difficulties.",
+    "followUpSample": "Students can network locally, seek internships, document achievements clearly on their CV, and reflect on cross-cultural skills to highlight during job applications."
+  },
+  {
+    "id": 4,
+    "prompt": "Some people argue that governments should invest more in public transportation than in building new roads. Do you agree or disagree? Explain your reasons.",
+    "followUpPrompt": "What policy measures can governments adopt to encourage public transportation use over private cars?",
+    "sample": "Investing in public transportation can reduce congestion, lower emissions, and provide affordable mobility for many citizens. While new roads may improve access temporarily, they often encourage more car use. Therefore, prioritizing efficient public transit systems promotes sustainable urban development and broader social benefits.",
+    "followUpSample": "Measures like reduced fares, improved frequency, dedicated lanes, and park-and-ride facilities make public transit more convenient and attractive than driving."
+  },
+  {
+    "id": 5,
+    "prompt": "What role should employers play in supporting employees' mental health? Provide examples of effective support.",
+    "followUpPrompt": "How can small companies with limited resources still provide meaningful mental health support to staff?",
+    "sample": "Employers should foster a supportive workplace through flexible policies, access to counseling, and training for managers to recognize mental health issues. Simple measures like reasonable workloads, clear communication, and mental health days can reduce stress and increase productivity. Proactive support creates a healthier, more resilient workforce.",
+    "followUpSample": "Small companies can offer peer-support programs, flexible schedules, partnerships with local counseling services, and manager training to create a supportive environment without large budgets."
+  }
+]

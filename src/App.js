@@ -8,6 +8,7 @@ import FillInTheBlanks from "./pages/FillInTheBlanks";
 import ReadAndSelect from "./pages/ReadAndSelect";
 import InteractiveReading from "./pages/InteractiveReading";
 import InteractiveListening from "./pages/InteractiveListening";
+import InteractiveWriting from "./pages/InteractiveWriting";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path="/read-and-select" element={<ReadAndSelect />} />
       <Route path="/interactive-reading" element={<InteractiveReading />} />
   <Route path="/interactive-listening" element={<InteractiveListening />} />
+    <Route path="/interactive-writing" element={<InteractiveWriting />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />
     </Routes>
 
