@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "prompt": "Describe a time you worked with other people on something.",
+    "bullets": [
+      "What did you collaborate on?",
+      "Who did you collaborate with?",
+      "Do you enjoy collaborating with others?",
+      "Why or why not?"
+    ]
+  },
+  {
+    "id": 2,
+    "prompt": "Describe a memorable trip you took.",
+    "bullets": [
+      "Where did you go?",
+      "Who did you go with?",
+      "What made it memorable?",
+      "Would you go again?"
+    ]
+  },
+  {
+    "id": 3,
+    "prompt": "Talk about a hobby you enjoy.",
+    "bullets": [
+      "How did you start this hobby?",
+      "How often do you do it?",
+      "What do you like most about it?",
+      "Has it changed you in any way?"
+    ]
+  },
+  {
+    "id": 4,
+    "prompt": "Describe a challenge you overcame.",
+    "bullets": [
+      "What was the challenge?",
+      "How did you approach it?",
+      "Who helped you, if anyone?",
+      "What did you learn from it?"
+    ]
+  },
+  {
+    "id": 5,
+    "prompt": "Describe your favourite meal and why you like it.",
+    "bullets": [
+      "What is it made of?",
+      "When do you usually eat it?",
+      "Who prepares it?",
+      "What memories does it bring?"
+    ]
+  }
+]
