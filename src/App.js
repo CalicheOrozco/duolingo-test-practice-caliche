@@ -9,6 +9,7 @@ import ReadAndSelect from "./pages/ReadAndSelect";
 import InteractiveReading from "./pages/InteractiveReading";
 import InteractiveListening from "./pages/InteractiveListening";
 import InteractiveWriting from "./pages/InteractiveWriting";
+import SpeakAboutThePhoto from "./pages/SpeakAboutThePhoto";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/interactive-reading" element={<InteractiveReading />} />
   <Route path="/interactive-listening" element={<InteractiveListening />} />
     <Route path="/interactive-writing" element={<InteractiveWriting />} />
+    <Route path="/speak-about-photo" element={<SpeakAboutThePhoto />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />
     </Routes>
 
