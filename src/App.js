@@ -8,6 +8,7 @@ import FillInTheBlanks from "./pages/FillInTheBlanks";
 import ReadAndSelect from "./pages/ReadAndSelect";
 import InteractiveReading from "./pages/InteractiveReading";
 import InteractiveListening from "./pages/InteractiveListening";
+import InteractiveSpeaking from "./pages/InteractiveSpeaking";
 import InteractiveWriting from "./pages/InteractiveWriting";
 import SpeakAboutThePhoto from "./pages/SpeakAboutThePhoto";
 import ReadThenSpeak from "./pages/ReadThenSpeak";
@@ -23,7 +24,8 @@ function App() {
       <Route path="/read-and-select" element={<ReadAndSelect />} />
       <Route path="/interactive-reading" element={<InteractiveReading />} />
   <Route path="/interactive-listening" element={<InteractiveListening />} />
-    <Route path="/interactive-writing" element={<InteractiveWriting />} />
+  <Route path="/interactive-writing" element={<InteractiveWriting />} />
+  <Route path="/interactive-speaking" element={<InteractiveSpeaking />} />
     <Route path="/speak-about-photo" element={<SpeakAboutThePhoto />} />
       <Route path="/read-then-speak" element={<ReadThenSpeak />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />

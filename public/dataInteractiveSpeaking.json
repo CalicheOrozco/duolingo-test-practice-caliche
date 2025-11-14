@@ -1,0 +1,31 @@
+[{
+  "id": "interactive01",
+  "difficulty": "basic",
+  "questions": [
+    {
+        "id": 1,
+        "type": "ListenAndSpeak",
+        "prompt": "1",
+        "audio": "Speaking01-1.mp3"
+    },
+    {
+        "id": 2,
+        "type": "ListenAndSpeak",
+        "prompt": "2",
+        "audio": "Speaking01-2.mp3"
+    },
+    {
+        "id": 3,
+        "type": "ListenAndSpeak",
+        "prompt": "3",
+        "audio": "Speaking01-3.mp3"
+    },
+    {
+        "id": 4,
+        "type": "ListenAndSpeak",
+        "prompt": "4",
+        "audio": "Speaking01-4.mp3"
+    }
+  ]
+}
+]

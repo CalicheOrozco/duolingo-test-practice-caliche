@@ -41,6 +41,7 @@ function Navbar() {
                   <Link to="/interactive-writing"><span className={pathname === "/interactive-writing" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Writing</span></Link>
                   <Link to="/speak-about-photo"><span className={pathname === "/speak-about-photo" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speak about photo</span></Link>
                   <Link to="/read-then-speak"><span className={pathname === "/read-then-speak" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Read then speak</span></Link>
+                  <Link to="/interactive-speaking" onClick={() => setShowMenu(false)}><span className={pathname === "/interactive-speaking" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Speaking</span></Link>
                 </div>
               </div>
             )}
@@ -82,6 +83,7 @@ function Navbar() {
             <Link to="/interactive-writing"><span className={pathname === "/interactive-writing" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Writing</span></Link>
             <Link to="/speak-about-photo"><span className={pathname === "/speak-about-photo" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speak about photo</span></Link>
             <Link to="/read-then-speak"><span className={pathname === "/read-then-speak" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Read then speak</span></Link>
+            <Link to="/interactive-speaking" onClick={() => setShowMenu(false)}><span className={pathname === "/interactive-speaking" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Speaking</span></Link>
           </div>
         )}
       </div>
