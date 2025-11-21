@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactCountdownClock from "react-countdown-clock";
 
 function ReadAndSelectComp() {
@@ -17,6 +17,7 @@ function ReadAndSelectComp() {
   const [correctList, setCorrectList] = useState([]);
   const [wrongList, setWrongList] = useState([]);
   const [selectedChoice, setSelectedChoice] = useState(null); // true = yes, false = no, null = none
+  const answeringRef = useRef(false);
 
   useEffect(() => {
     const load = async () => {
@@ -69,6 +70,9 @@ function ReadAndSelectComp() {
 
   const answer = (choice) => {
     if (!current) return;
+    // prevent double-answering due to rapid clicks or countdown+click race
+    if (answeringRef.current) return;
+    answeringRef.current = true;
     setSubmited(true);
     setSelectedChoice(choice);
     const correct = Boolean(current.is_real) === Boolean(choice);
@@ -83,6 +87,8 @@ function ReadAndSelectComp() {
     setTimeout(() => {
       setSelectedChoice(null);
       nextItem();
+      // allow answering again on the next question
+      answeringRef.current = false;
     }, 500);
   };
 
