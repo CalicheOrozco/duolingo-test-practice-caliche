@@ -12,6 +12,7 @@ const waveCache = new Map();
 
 export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', title, onPlay, onPause, onEnded }) {
   const audioRef = useRef(null);
+  const containerRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -27,6 +28,8 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
     }
     return out;
   });
+
+  const [visibleBars, setVisibleBars] = useState(bars);
 
   // When audioSrc changes, try to decode and compute real waveform bars
   useEffect(() => {
@@ -89,7 +92,36 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
       mounted = false;
     };
   }, [audioSrc, bars]);
-  const playedBars = duration > 0 ? Math.max(0, Math.min(barsArray.length, (currentTime / duration) * barsArray.length)) : 0;
+
+  // make waveform responsive: adjust number of visible bars and bar width based on container width
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return undefined;
+
+    const resize = () => {
+      const width = el.clientWidth || el.getBoundingClientRect().width || 0;
+      // minimal pixel per bar (including gap) — keep it readable on small screens
+      const minPerBar = 6; // px
+      const maxBarsThatFit = Math.max(4, Math.floor(width / minPerBar));
+      const newVisible = Math.min(bars, maxBarsThatFit);
+      setVisibleBars(newVisible);
+    };
+
+    resize();
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(resize);
+      ro.observe(el);
+    } else {
+      window.addEventListener('resize', resize);
+    }
+
+    return () => {
+      if (ro) ro.disconnect();
+      else window.removeEventListener('resize', resize);
+    };
+  }, [bars]);
+  const playedBars = duration > 0 ? Math.max(0, Math.min(visibleBars, (currentTime / duration) * visibleBars)) : 0;
 
   const toggle = () => {
     const a = audioRef.current;
@@ -147,7 +179,9 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
         <div className="flex-1 ml-4">
           <div className="bg-gray-800 rounded-lg p-3">
             <div
-              className="flex items-end gap-1 h-20 overflow-hidden cursor-pointer"
+              ref={containerRef}
+              className="grid items-end h-20 overflow-hidden cursor-pointer" 
+              style={{ gridTemplateColumns: `repeat(${visibleBars}, minmax(0, 1fr))`, gap: '4px' }}
               onClick={onSeek}
               role="button"
               tabIndex={0}
@@ -155,19 +189,19 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
                 if (e.key === 'Enter' || e.key === ' ') onSeek(e);
               }}
             >
-              {barsArray.map((h, i) => (
-                <div
-                  key={i}
-                  style={{
-                    height: `${h}px`,
-                    width: 3,
-                    background: i < playedBars ? '#10B981' : '#6B7280',
-                    marginRight: 4,
-                    borderRadius: 2,
-                    transition: 'background-color 120ms linear'
-                  }}
-                />
-              ))}
+              {barsArray.slice(0, visibleBars).map((h, i) => {
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      height: `${h}px`,
+                      background: i < playedBars ? '#10B981' : '#6B7280',
+                      borderRadius: 2,
+                      transition: 'background-color 120ms linear'
+                    }}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
