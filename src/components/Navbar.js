@@ -43,6 +43,7 @@ function Navbar() {
                   <Link to="/read-then-speak"><span className={pathname === "/read-then-speak" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Read then speak</span></Link>
                   <Link to="/interactive-speaking" onClick={() => setShowMenu(false)}><span className={pathname === "/interactive-speaking" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Speaking</span></Link>
                   <Link to="/speaking-sample" onClick={() => setShowMenu(false)}><span className={pathname === "/speaking-sample" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speaking sample</span></Link>
+                  <Link to="/writing-sample"><span className={pathname === "/writing-sample" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Writing sample</span></Link>
                 </div>
               </div>
             )}
@@ -82,6 +83,7 @@ function Navbar() {
             <Link to="/interactive-listening"><span className={pathname === "/interactive-listening" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Listening</span></Link>
             <Link to="/image-test"><span className={pathname === "/image-test" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Image Test</span></Link>
             <Link to="/interactive-writing"><span className={pathname === "/interactive-writing" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Writing</span></Link>
+            <Link to="/writing-sample"><span className={pathname === "/writing-sample" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Writing sample</span></Link>
             <Link to="/speak-about-photo"><span className={pathname === "/speak-about-photo" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speak about photo</span></Link>
             <Link to="/read-then-speak"><span className={pathname === "/read-then-speak" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Read then speak</span></Link>
             <Link to="/interactive-speaking" onClick={() => setShowMenu(false)}><span className={pathname === "/interactive-speaking" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Speaking</span></Link>
