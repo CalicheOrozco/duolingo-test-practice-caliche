@@ -42,6 +42,7 @@ function Navbar() {
                   <Link to="/speak-about-photo"><span className={pathname === "/speak-about-photo" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speak about photo</span></Link>
                   <Link to="/read-then-speak"><span className={pathname === "/read-then-speak" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Read then speak</span></Link>
                   <Link to="/interactive-speaking" onClick={() => setShowMenu(false)}><span className={pathname === "/interactive-speaking" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Interactive Speaking</span></Link>
+                  <Link to="/speaking-sample" onClick={() => setShowMenu(false)}><span className={pathname === "/speaking-sample" ? ` text-orange-600 font-bold` : `lg:hover:text-slate-400`}>Speaking sample</span></Link>
                 </div>
               </div>
             )}

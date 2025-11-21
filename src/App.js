@@ -12,6 +12,7 @@ import InteractiveSpeaking from "./pages/InteractiveSpeaking";
 import InteractiveWriting from "./pages/InteractiveWriting";
 import SpeakAboutThePhoto from "./pages/SpeakAboutThePhoto";
 import ReadThenSpeak from "./pages/ReadThenSpeak";
+import SpeakingSample from "./pages/SpeakingSample";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
   <Route path="/interactive-speaking" element={<InteractiveSpeaking />} />
     <Route path="/speak-about-photo" element={<SpeakAboutThePhoto />} />
       <Route path="/read-then-speak" element={<ReadThenSpeak />} />
+      <Route path="/speaking-sample" element={<SpeakingSample />} />
       <Route path="/real-words-test" element={<RealWordsTest />} />
     </Routes>
 
