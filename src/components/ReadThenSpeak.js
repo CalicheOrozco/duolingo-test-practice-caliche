@@ -32,6 +32,7 @@ export default function ReadThenSpeak() {
 
   // UI flags
   const [isStarted, setIsStarted] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   useEffect(() => {
     fetch('dataReadThenSpeak.json')
@@ -43,6 +44,20 @@ export default function ReadThenSpeak() {
         try { streamRef.current.getTracks().forEach(t => t.stop()); } catch (e) {}
       }
     };
+  }, []);
+
+  // responsive detection for small screens (mobile)
+  useEffect(() => {
+    const onResize = () => {
+      try {
+        setIsSmallScreen(window.innerWidth < 640);
+      } catch (e) {
+        setIsSmallScreen(false);
+      }
+    };
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   // choose initial prompt when exercises load
@@ -280,7 +295,7 @@ export default function ReadThenSpeak() {
   }
 
   return (
-    <div className="App bg-gray-900 w-full min-h-[60vh] py-6 flex flex-col items-center justify-start text-white">
+    <div className="App bg-gray-900 w-full min-h-[60vh] py-6 flex flex-col items-center justify-start text-white px-4 sm:px-6">
       <h2 className="text-3xl font-bold mb-2">Read then speak</h2>
       <p className="text-gray-300 mb-4">Read the prompt below, then press Start to record. Minimum 30 seconds required to submit.</p>
 
@@ -298,10 +313,10 @@ export default function ReadThenSpeak() {
           )}
         </div>
 
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
+          <div className="w-full md:w-auto">
             {isPreparing ? (
-              <div className="inline-flex flex-col items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white">
+              <div className="inline-flex flex-col items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white w-full">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-yellow-400 rounded-full" />
                   <span>Reading...</span>
@@ -310,13 +325,13 @@ export default function ReadThenSpeak() {
                   key={`read-${timerKey}`}
                   seconds={readTime}
                   color="#fff"
-                  size={50}
+                  size={isSmallScreen ? 36 : 50}
                   paused={false}
                   onComplete={onReadComplete}
                 />
-                <div className="mt-2">
+                <div className="mt-2 w-full">
                   <button
-                    className="mt-1 bg-blue-500 text-white px-3 py-1 rounded"
+                    className={`mt-1 bg-blue-500 text-white px-3 py-1 rounded ${isSmallScreen ? 'w-full text-center' : ''}`}
                     onClick={() => {
                       // user chooses to start recording immediately, cancel preparing
                       setIsPreparing(false);
@@ -330,36 +345,36 @@ export default function ReadThenSpeak() {
               </div>
             ) : !isRecording ? (
               <button
-                className={`px-4 py-2 rounded ${isSubmitted ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-500'}`}
+                className={`px-4 py-2 rounded ${isSubmitted ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-500'} ${isSmallScreen ? 'w-full text-center' : ''}`}
                 onClick={startRecording}
                 disabled={isSubmitted}
               >
                 Start recording
               </button>
             ) : (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white">
+              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white ${isSmallScreen ? 'w-full justify-center' : ''}`}>
                 <span className="w-2 h-2 bg-red-500 rounded-full" />
                 Recording...
               </div>
             )}
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="text-sm text-gray-300">Recorded: {secondsElapsed}s</div>
-              <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+            <div className="flex items-center gap-2 min-w-0 flex-1 md:flex-none">
+              <div className="text-sm text-gray-300 truncate">Recorded: {secondsElapsed}s</div>
+              <div className="flex items-center gap-2 min-w-0 flex-1">
                 <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500' : 'bg-gray-600'}`} />
-                <div className="w-24 h-2 bg-gray-700 rounded overflow-hidden">
+                <div className="flex-1 h-2 bg-gray-700 rounded overflow-hidden min-w-0">
                   <div style={{ width: `${Math.min(100, Math.round(volume * 300))}%` }} className="h-2 bg-green-400" />
                 </div>
               </div>
             </div>
-            <div>
+            <div className="ml-2">
               <ReactCountdownClock
                 key={timerKey}
                 seconds={selectedTime}
                 color="#fff"
-                size={60}
+                size={isSmallScreen ? 48 : 60}
                 paused={!isRecording}
                 onComplete={onCountdownComplete}
               />
@@ -382,9 +397,9 @@ export default function ReadThenSpeak() {
         </div>
 
         {isSubmitted && audioUrl ? (
-          <div className="fixed left-0 right-0 bottom-0 bg-green-700 text-white p-4 shadow-inner">
-            <div className="max-w-6xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-4">
+          <div className="md:fixed left-0 right-0 md:bottom-0 bottom-auto bg-green-700 text-white p-4 shadow-inner">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-4 w-full md:w-auto">
                 <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-green-700 font-bold">✓</div>
                 <div>
                   <div className="font-semibold">Review sample answer:</div>
@@ -400,16 +415,16 @@ export default function ReadThenSpeak() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 w-full md:w-auto">
                 <button
-                  className="px-4 py-2 rounded bg-gray-900 text-white"
+                  className="px-4 py-2 rounded bg-gray-900 text-white w-full md:w-auto"
                   onClick={() => navigate('/')}
                 >
                   Back to the main
                 </button>
 
                 <button
-                  className="px-4 py-2 rounded bg-white text-green-700 font-bold"
+                  className="px-4 py-2 rounded bg-white text-green-700 font-bold w-full md:w-auto"
                   onClick={handleNextExercise}
                 >
                   Next exercises
