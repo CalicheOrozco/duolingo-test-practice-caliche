@@ -160,7 +160,7 @@ export default function InteractiveWriting() {
         <div className="relative">
           {/* Top inline bar with timer (inside component, below navbar) */}
           <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="flex items-center gap-3 text-gray-200">
                 <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center flex-shrink-0">
                   <ReactCountdownClock
@@ -178,8 +178,8 @@ export default function InteractiveWriting() {
           </div>
 
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+              <div className="md:col-span-8 col-span-1">
                 <div className="flex items-start gap-4 mb-4">
                   <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-semibold ring-1 ring-gray-700 shadow-sm leading-none flex-shrink-0">1</div>
                   <div>
@@ -193,7 +193,7 @@ export default function InteractiveWriting() {
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     readOnly={writeStage !== 'main'}
-                    className={`w-full h-96 bg-gray-900 text-gray-200 p-4 rounded-lg border border-gray-700 placeholder-gray-500 resize-none ${writeStage !== 'main' ? 'opacity-70' : ''}`}
+                    className={`w-full h-64 md:h-96 bg-gray-900 text-gray-200 p-4 rounded-lg border border-gray-700 placeholder-gray-500 resize-none ${writeStage !== 'main' ? 'opacity-70' : ''}`}
                     placeholder="Your response"
                   />
 
@@ -214,7 +214,7 @@ export default function InteractiveWriting() {
                 <div className="text-gray-300 text-center mt-3">Words: {wordCount(answer)}</div>
               </div>
 
-              <div className="col-span-4">
+              <div className="md:col-span-4 col-span-1">
                 <div className="flex items-start gap-4 mb-4">
                   <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-semibold ring-1 ring-gray-700 shadow-sm leading-none flex-shrink-0">2</div>
                   <div>
@@ -229,7 +229,7 @@ export default function InteractiveWriting() {
                   value={followUpAnswer}
                   onChange={(e) => setFollowUpAnswer(e.target.value)}
                   readOnly={writeStage !== 'followup'}
-                  className={`w-full h-80 bg-gray-800 text-gray-200 p-4 rounded-lg border border-gray-700 placeholder-gray-500 resize-none ${writeStage !== 'followup' ? 'opacity-70' : ''}`}
+                  className={`w-full h-48 md:h-80 bg-gray-800 text-gray-200 p-4 rounded-lg border border-gray-700 placeholder-gray-500 resize-none ${writeStage !== 'followup' ? 'opacity-70' : ''}`}
                   placeholder="Your response"
                 />
 
