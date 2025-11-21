@@ -153,16 +153,16 @@ function InteractiveListeningComp() {
                 <div key={q.id} className="w-full">
                   <div className="text-gray-200 mb-2 font-medium">{q.question}</div>
 
-                  <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4">
-                    <span className="text-white text-sm md:text-base whitespace-nowrap">{q.prefix}</span>
+                  <div className="bg-gray-800 rounded-lg p-4 flex items-center gap-4 flex-wrap">
+                    <span className="text-white text-sm md:text-base whitespace-nowrap flex-shrink-0">{q.prefix}</span>
 
                     <input
-                      className="bg-transparent text-white placeholder-gray-500 border-b border-gray-600 focus:border-gray-400 outline-none text-lg py-1 w-40 md:w-64"
+                      className="flex-1 min-w-0 bg-transparent text-white placeholder-gray-500 border-b border-gray-600 focus:border-gray-400 outline-none text-lg py-1"
                       value={answers[q.id] || ''}
                       onChange={(e) => handleChange(q.id, e.target.value)}
                       placeholder="Write here"
                     />
-                    <span className="text-white text-sm md:text-base whitespace-nowrap">{q.suffix}</span>
+                    <span className="text-white text-sm md:text-base whitespace-nowrap flex-shrink-0">{q.suffix}</span>
                   </div>
                 </div>
               ))}
