@@ -124,14 +124,22 @@ export default function SpeakAboutThePhoto() {
   // preparation (prepare) state: user sees the image and can read/prepare for `prepareTime` seconds
   const [isPreparing, setIsPreparing] = useState(false);
 
+  // responsive flag for small screens
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
   // UI flags
   const [isStarted, setIsStarted] = useState(false);
 
   useEffect(() => {
     // fetch a random image on mount
     fetchRandomImage();
+    // responsive watcher
+    const onResize = () => setIsSmallScreen(window.innerWidth < 640);
+    onResize();
+    window.addEventListener('resize', onResize);
     // cleanup on unmount
     return () => {
+      window.removeEventListener('resize', onResize);
       if (streamRef.current) {
         try { streamRef.current.getTracks().forEach(t => t.stop()); } catch (e) {}
       }
@@ -372,7 +380,7 @@ export default function SpeakAboutThePhoto() {
 
         <div className="flex mt-4">
           <button
-            className="mt-6 bg-green-500 text-white p-2 w-32 rounded-xl"
+            className="mt-6 bg-green-500 text-white px-6 py-2 rounded-xl"
             onClick={handleStartFromMenu}
           >
             Start
@@ -383,20 +391,20 @@ export default function SpeakAboutThePhoto() {
   }
 
   return (
-    <div className="App bg-gray-900 w-full min-h-[60vh] py-6 flex flex-col items-center justify-start text-white">
+    <div className="App bg-gray-900 w-full min-h-[60vh] py-6 px-4 sm:px-6 flex flex-col items-center justify-start text-white">
       <h2 className="text-3xl font-bold mb-2">Speak about the image below</h2>
       <p className="text-gray-300 mb-4">You have {totalSeconds} seconds to speak. Minimum 30 seconds required to submit.</p>
 
       <div className="bg-gray-800 p-4 rounded-md shadow-md w-full max-w-3xl">
         <div className="flex justify-center mb-4">
           {urlImg ? (
-            <LazyLoadImage src={urlImg} alt={altImg} className="w-80 h-auto rounded-md object-cover" />
+            <LazyLoadImage src={urlImg} alt={altImg} className="w-full max-w-md md:w-80 h-auto rounded-md object-cover" />
           ) : (
-            <div className="w-80 h-48 bg-gray-700 rounded flex items-center justify-center">Loading image...</div>
+            <div className="w-full max-w-md md:w-80 h-48 bg-gray-700 rounded flex items-center justify-center">Loading image...</div>
           )}
         </div>
 
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-4">
           <div>
             {isPreparing ? (
               <div className="inline-flex flex-col items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white">
@@ -408,7 +416,7 @@ export default function SpeakAboutThePhoto() {
                   key={`prep-${timerKey}`}
                   seconds={prepareTime}
                   color="#fff"
-                  size={50}
+                  size={isSmallScreen ? 40 : 50}
                   paused={false}
                   onComplete={onPrepareComplete}
                 />
@@ -441,7 +449,7 @@ export default function SpeakAboutThePhoto() {
             )}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="text-sm text-gray-300">Recorded: {secondsElapsed}s</div>
               {/* mic status indicator */}
@@ -458,7 +466,7 @@ export default function SpeakAboutThePhoto() {
                 key={timerKey}
                 seconds={totalSeconds}
                 color="#fff"
-                size={60}
+                size={isSmallScreen ? 44 : 60}
                 paused={!isRecording}
                 onComplete={onCountdownComplete}
               />
@@ -482,7 +490,7 @@ export default function SpeakAboutThePhoto() {
 
         {/* final bottom bar similar to capture: full width green area with review and navigation */}
         {isSubmitted && audioUrl ? (
-          <div className="fixed left-0 right-0 bottom-0 bg-green-700 text-white p-4 shadow-inner">
+          <div className="md:fixed left-0 right-0 bottom-0 bg-green-700 text-white p-4 shadow-inner">
             <div className="max-w-6xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-green-700 font-bold">✓</div>
