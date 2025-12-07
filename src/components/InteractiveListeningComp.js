@@ -142,7 +142,7 @@ function InteractiveListeningComp() {
         </div>
 
         {!started && (
-          <div className="mb-4 flex flex-col items-center gap-4">
+          <div className="mb-4 flex flex-col items-center gap-3">
             <div>
               <label className="mr-2">Difficulty:</label>
               <select
@@ -173,12 +173,14 @@ function InteractiveListeningComp() {
               </select>
             </div>
 
+            <div className="text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? (scenarios ? scenarios.length : 0) : (scenarios ? scenarios.filter(s => s.difficulty === selectedDifficulty).length : 0)}</div>
+
             <div>
               {/* 🔹 ANTES: onClick={() => setStarted(true)} */}
               {/* 🔹 AHORA: usamos handleBegin para elegir escenario del array */}
               <button
                 onClick={handleBegin}
-                className="ml-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow"
+                className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
               >
                 Start
               </button>

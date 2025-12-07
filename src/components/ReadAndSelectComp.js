@@ -186,6 +186,7 @@ function ReadAndSelectComp() {
               </select>
             </div>
           </div>
+          <div className="mt-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? allItems.length : allItems.filter(i => i.difficulty === selectedDifficulty).length}</div>
           <input
             type="submit"
             value="Start"
