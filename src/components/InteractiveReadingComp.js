@@ -241,10 +241,12 @@ function InteractiveReadingComp() {
               </select>
             </div>
 
+            <div className=" text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? allItems.length : allItems.filter(i => i.difficulty === selectedDifficulty).length}</div>
+
             <div>
               <button
                 onClick={start}
-                className="ml-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded shadow"
+                className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
               >
                 Start
               </button>
@@ -782,7 +784,7 @@ function InteractiveReadingComp() {
             ) : (
               <div className="mt-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
                     <div className="bg-gradient-to-r from-green-500 to-green-700 text-white rounded p-4 text-center">
                       <div className="text-4xl font-extrabold">{score}</div>
                       <div className="text-sm">Correct</div>

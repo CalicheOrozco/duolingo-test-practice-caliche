@@ -212,11 +212,13 @@ function ListeningTestComp() {
             </select>
           </div>
 
-          <div className="flex gap-4 mt-4">
+          <div className="mt-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'all' ? (pool ? pool.length : 0) : (pool ? pool.filter(i => i.difficulty === selectedDifficulty).length : 0)}</div>
+
+          <div className="flex">
             <input
               type="button"
               value="Start"
-              className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+              className=" bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
               onClick={() => {
                 startTest();
               }}

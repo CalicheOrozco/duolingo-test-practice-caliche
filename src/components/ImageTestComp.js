@@ -548,7 +548,7 @@ export default function ImageTestComp() {
 
           <div className="flex mt-4">
             <button
-              className="mt-6 bg-green-500 text-white p-2 w-32 rounded-xl"
+              className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
               onClick={() => {
                 setIsStarted(true);
               }}
