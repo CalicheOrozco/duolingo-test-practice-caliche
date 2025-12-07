@@ -7,6 +7,7 @@ export default function WritingSample() {
   const [phase, setPhase] = useState('menu'); // menu | prepare | writing | sample
   const [prepareSeconds, setPrepareSeconds] = useState(10);
   const [writeSeconds, setWriteSeconds] = useState(300);
+  const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [timerKey, setTimerKey] = useState(0);
   const [answer, setAnswer] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -20,13 +21,19 @@ export default function WritingSample() {
 
   useEffect(() => {
     if (!current && topics && topics.length) {
-      // prefer the first prompt if present (user said JSON already has the exact exercise)
-      setCurrent(topics[0]);
+      // choose a random prompt respecting selected difficulty when available
+      const pool = selectedDifficulty === 'any' ? topics : topics.filter(t => t.difficulty === selectedDifficulty);
+      const pick = pool && pool.length ? pool[Math.floor(Math.random() * pool.length)] : topics[0];
+      setCurrent(pick);
     }
-  }, [topics, current]);
+  }, [topics, current, selectedDifficulty]);
 
   const start = () => {
     if (!topics || topics.length === 0) return;
+    // pick a random prompt respecting difficulty when possible
+    const pool = selectedDifficulty === 'any' ? topics : topics.filter(t => t.difficulty === selectedDifficulty);
+    const chosen = (pool && pool.length) ? pool[Math.floor(Math.random() * pool.length)] : topics[0];
+    setCurrent(chosen);
     setPhase('prepare');
     setTimerKey((k) => k + 1);
     setAnswer('');
@@ -59,16 +66,18 @@ export default function WritingSample() {
 
   const pickNext = () => {
     if (!topics || topics.length === 0) return;
-    if (topics.length === 1) {
-      setCurrent(topics[0]);
+    const pool = selectedDifficulty === 'any' ? topics : topics.filter(t => t.difficulty === selectedDifficulty);
+    if (!pool || pool.length === 0) return;
+    if (pool.length === 1) {
+      setCurrent(pool[0]);
     } else {
-      let nextIdx = Math.floor(Math.random() * topics.length);
+      let next = Math.floor(Math.random() * pool.length);
       let tries = 0;
-      while (topics[nextIdx].id === (current && current.id) && tries < 10) {
-        nextIdx = Math.floor(Math.random() * topics.length);
+      while (pool[next].id === (current && current.id) && tries < 10) {
+        next = Math.floor(Math.random() * pool.length);
         tries++;
       }
-      setCurrent(topics[nextIdx]);
+      setCurrent(pool[next]);
     }
     setAnswer('');
     setPhase('prepare');
@@ -100,7 +109,16 @@ export default function WritingSample() {
               <option value={240}>4:00</option>
               <option value={300}>5:00</option>
             </select>
+              <label className="text-sm">Difficulty</label>
+              <select value={selectedDifficulty} onChange={(e) => setSelectedDifficulty(e.target.value)} className="bg-gray-800 p-2 rounded">
+                <option value="any">Any</option>
+                <option value="basic">Basic</option>
+                <option value="medium">Medium</option>
+                <option value="advanced">Advanced</option>
+              </select>
           </div>
+
+            <div className="my-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? (topics ? topics.length : 0) : (topics ? topics.filter(t => t.difficulty === selectedDifficulty).length : 0)}</div>
 
           <div className="flex justify-center">
             <button onClick={start} className="bg-green-500 px-6 py-2 rounded font-semibold">Start</button>
