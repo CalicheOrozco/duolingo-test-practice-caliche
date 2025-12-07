@@ -1,9 +1,73 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactCountdownClock from 'react-countdown-clock';
 
+// --- Detección de Safari ---
+const isSafari = /^((?!chrome|android).)*safari/i.test(
+  navigator.userAgent || ''
+);
+
+// --- Helper: elegir mimeType para navegadores que sí usan MediaRecorder ---
+function getSupportedMimeType() {
+  if (isSafari) {
+    return 'audio/mp4';
+  }
+
+  const types = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+    'audio/mpeg',
+  ];
+
+  for (const type of types) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+  return '';
+}
+
+// --- Helper: convertir Float32 -> WAV (16-bit PCM mono) para Safari ---
+function encodeWav(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+
+  const writeString = (offset, str) => {
+    for (let i = 0; i < str.length; i++) {
+      view.setUint8(offset + i, str.charCodeAt(i));
+    }
+  };
+
+  let offset = 0;
+
+  writeString(offset, 'RIFF'); offset += 4;
+  view.setUint32(offset, 36 + samples.length * 2, true); offset += 4;
+  writeString(offset, 'WAVE'); offset += 4;
+  writeString(offset, 'fmt '); offset += 4;
+  view.setUint32(offset, 16, true); offset += 4;
+  view.setUint16(offset, 1, true); offset += 2;   // PCM
+  view.setUint16(offset, 1, true); offset += 2;   // mono
+  view.setUint32(offset, sampleRate, true); offset += 4;
+  view.setUint32(offset, sampleRate * 2, true); offset += 4; // byte rate
+  view.setUint16(offset, 2, true); offset += 2;   // block align
+  view.setUint16(offset, 16, true); offset += 2;  // bits per sample
+  writeString(offset, 'data'); offset += 4;
+  view.setUint32(offset, samples.length * 2, true); offset += 4;
+
+  let index = 44;
+  for (let i = 0; i < samples.length; i++, index += 2) {
+    let s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(index, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+
+  return new Blob([view], { type: 'audio/wav' });
+}
+
 export default function SpeakingSample() {
   const [exercises, setExercises] = useState([]);
   const [current, setCurrent] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState('any');
 
   // recording state
   const [isRecording, setIsRecording] = useState(false);
@@ -19,6 +83,11 @@ export default function SpeakingSample() {
   const animationRef = useRef(null);
   const intervalRef = useRef(null);
 
+  // refs extra para Safari (WAV)
+  const safariProcessorRef = useRef(null);
+  const safariSamplesRef = useRef([]);
+  const safariSampleRateRef = useRef(44100);
+
   // timers / UI
   const [selectedTime, setSelectedTime] = useState(180); // 3 minutes default like screenshot
   const [readTime, setReadTime] = useState(30);
@@ -30,39 +99,61 @@ export default function SpeakingSample() {
   const [isStarted, setIsStarted] = useState(false);
   const [isPreparing, setIsPreparing] = useState(false);
 
+  // para contador basado en tiempo real
+  const startTimeRef = useRef(null);
+
   useEffect(() => {
     fetch('/dataSpeakingSample.json')
       .then(r => r.json())
       .then(d => {
-        setExercises(d || []);
+        // ensure each exercise has a difficulty field (default to 'basic')
+        const list = Array.isArray(d) ? d.map(item => ({ ...item, difficulty: item.difficulty || 'basic' })) : [];
+        setExercises(list);
       })
       .catch(e => { console.error(e); setExercises([]); });
 
     return () => {
       try { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); } catch(e){}
+      if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
+      if (audioContextRef.current) { try { audioContextRef.current.close(); } catch(e){} }
+      if (intervalRef.current) { clearInterval(intervalRef.current); }
     };
   }, []);
 
   useEffect(() => {
     if (!current && exercises && exercises.length) {
-      setCurrent(exercises[0]);
+      // choose first exercise matching selected difficulty (or first overall)
+      const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
+      setCurrent(pool && pool.length ? pool[0] : exercises[0]);
     }
-  }, [exercises, current]);
+  }, [exercises, current, selectedDifficulty]);
 
   const startElapsedTicker = () => {
+    startTimeRef.current = Date.now();
     setSecondsElapsed(0);
-    let t = 0;
     if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
     intervalRef.current = setInterval(() => {
-      t += 1;
-      setSecondsElapsed(t);
-      if (t >= 30) setCanSubmit(true);
-      if (t >= selectedTime) {
+      if (!startTimeRef.current) return;
+      const diffMs = Date.now() - startTimeRef.current;
+      const diffSec = Math.floor(diffMs / 1000);
+      setSecondsElapsed(diffSec);
+      if (diffSec >= 30) setCanSubmit(true);
+      if (diffSec >= selectedTime) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
         stopRecording();
       }
-    }, 1000);
+    }, 250);
+  };
+
+  // Fisher-Yates shuffle (in place) -> returns new array copy
+  const shuffleArray = (arr) => {
+    const a = Array.isArray(arr) ? arr.slice() : [];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
   };
 
   const startRecording = async () => {
@@ -74,46 +165,112 @@ export default function SpeakingSample() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      const mr = new MediaRecorder(stream);
-      chunksRef.current = [];
-      mr.ondataavailable = (e) => { if (e.data && e.data.size) chunksRef.current.push(e.data); };
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
-        if (submitAfterStopRef.current) {
-          submitAfterStopRef.current = false;
-          setIsSubmitted(true);
-        }
-        try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
-        streamRef.current = null;
-      };
-      mediaRecorderRef.current = mr;
-      mr.start();
-      setIsRecording(true);
 
-      try {
+      if (!isSafari) {
+        // Chrome / Brave / Edge: MediaRecorder
+        const mimeType = getSupportedMimeType();
+        const options = mimeType ? { mimeType } : undefined;
+        const mr = new MediaRecorder(stream, options);
+        chunksRef.current = [];
+        mr.ondataavailable = (e) => { if (e.data && e.data.size) chunksRef.current.push(e.data); };
+        mr.onstop = () => {
+          const blobType = mr.mimeType || mimeType || 'audio/webm';
+          const blob = new Blob(chunksRef.current, { type: blobType });
+          const url = URL.createObjectURL(blob);
+          setAudioUrl(url);
+          if (submitAfterStopRef.current) {
+            submitAfterStopRef.current = false;
+            setIsSubmitted(true);
+          }
+          try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
+          streamRef.current = null;
+        };
+        mediaRecorderRef.current = mr;
+        mr.start();
+        setIsRecording(true);
+
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const audioCtx = new AudioContext();
+          audioContextRef.current = audioCtx;
+          const source = audioCtx.createMediaStreamSource(stream);
+          const analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2048;
+          source.connect(analyser);
+          analyserRef.current = analyser;
+          const bufferLength = analyser.frequencyBinCount;
+          dataArrayRef.current = new Uint8Array(bufferLength);
+          const updateMeter = () => {
+            if (!analyserRef.current) return;
+            analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
+            let sum = 0;
+            for (let i=0;i<dataArrayRef.current.length;i++){ const v = (dataArrayRef.current[i]-128)/128; sum += v*v; }
+            const rms = Math.sqrt(sum/dataArrayRef.current.length);
+            setVolume(rms);
+            animationRef.current = requestAnimationFrame(updateMeter);
+          };
+          animationRef.current = requestAnimationFrame(updateMeter);
+        } catch(e){ console.warn(e); }
+
+      } else {
+        // Safari: grabar a WAV con Web Audio
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         audioContextRef.current = audioCtx;
+        safariSampleRateRef.current = audioCtx.sampleRate;
         const source = audioCtx.createMediaStreamSource(stream);
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 2048;
-        source.connect(analyser);
-        analyserRef.current = analyser;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArrayRef.current = new Uint8Array(bufferLength);
-        const updateMeter = () => {
-          if (!analyserRef.current) return;
-          analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
+        const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+        safariProcessorRef.current = processor;
+        safariSamplesRef.current = [];
+        processor.onaudioprocess = (e) => {
+          const input = e.inputBuffer.getChannelData(0);
+          safariSamplesRef.current.push(new Float32Array(input));
+          // volumen desde el propio buffer
           let sum = 0;
-          for (let i=0;i<dataArrayRef.current.length;i++){ const v = (dataArrayRef.current[i]-128)/128; sum += v*v; }
-          const rms = Math.sqrt(sum/dataArrayRef.current.length);
+          for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
+          const rms = Math.sqrt(sum / input.length);
           setVolume(rms);
-          animationRef.current = requestAnimationFrame(updateMeter);
         };
-        animationRef.current = requestAnimationFrame(updateMeter);
-      } catch(e){ console.warn(e); }
+        source.connect(processor);
+        processor.connect(audioCtx.destination);
+
+        // "MediaRecorder" falso compatible con nuestro stopRecording
+        mediaRecorderRef.current = {
+          state: 'recording',
+          stop: () => {
+            if (mediaRecorderRef.current.state === 'inactive') return;
+            mediaRecorderRef.current.state = 'inactive';
+
+            const chunks = safariSamplesRef.current;
+            let length = 0;
+            chunks.forEach(c => { length += c.length; });
+            const samples = new Float32Array(length);
+            let offset = 0;
+            chunks.forEach(c => { samples.set(c, offset); offset += c.length; });
+
+            const blob = encodeWav(samples, safariSampleRateRef.current);
+            const url = URL.createObjectURL(blob);
+            setAudioUrl(url);
+            if (submitAfterStopRef.current) {
+              submitAfterStopRef.current = false;
+              setIsSubmitted(true);
+            }
+
+            try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
+            if (safariProcessorRef.current) {
+              try { safariProcessorRef.current.disconnect(); } catch(e){}
+              safariProcessorRef.current = null;
+            }
+            if (audioContextRef.current) {
+              try { audioContextRef.current.close(); } catch(e){}
+              audioContextRef.current = null;
+            }
+            safariSamplesRef.current = [];
+            streamRef.current = null;
+          }
+        };
+        setIsRecording(true);
+      }
 
       startElapsedTicker();
     } catch (err) {
@@ -126,6 +283,7 @@ export default function SpeakingSample() {
       try { mediaRecorderRef.current.stop(); } catch(e){}
     }
     setIsRecording(false);
+    startTimeRef.current = null;
     if (animationRef.current) { cancelAnimationFrame(animationRef.current); animationRef.current = null; }
     if (analyserRef.current) { try { analyserRef.current.disconnect(); } catch(e){} analyserRef.current = null; }
     if (audioContextRef.current) { try { audioContextRef.current.close(); } catch(e){} audioContextRef.current = null; }
@@ -142,6 +300,7 @@ export default function SpeakingSample() {
       if (animationRef.current) { cancelAnimationFrame(animationRef.current); animationRef.current = null; }
       if (analyserRef.current) { try { analyserRef.current.disconnect(); } catch(e){} analyserRef.current = null; }
       if (audioContextRef.current) { try { audioContextRef.current.close(); } catch(e){} audioContextRef.current = null; }
+      startTimeRef.current = null;
       return;
     }
     if (!audioUrl) { alert('No recording available to submit. Please record first.'); return; }
@@ -155,6 +314,13 @@ export default function SpeakingSample() {
   };
 
   const handleStartFromMenu = () => {
+    // choose starting exercise according to selected difficulty and shuffle
+    const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
+    const shuffled = shuffleArray(pool && pool.length ? pool : exercises);
+    if (shuffled && shuffled.length) {
+      setExercises(shuffled);
+      setCurrent(shuffled[0]);
+    }
     setIsStarted(true);
     setIsPreparing(true);
     setTimerKey(k => k + 1);
@@ -172,23 +338,34 @@ export default function SpeakingSample() {
     analyserRef.current = null; audioContextRef.current = null;
     try { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); } catch(e){}
     streamRef.current = null;
+    startTimeRef.current = null;
 
     if (exercises && exercises.length > 0) {
-      const idx = exercises.findIndex(x => x.id === (current && current.id));
-      const nextIdx = idx >= 0 && idx < exercises.length-1 ? idx+1 : 0;
-      setCurrent(exercises[nextIdx]);
+      // navigate within the filtered pool when a difficulty is selected
+      const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
+      if (pool && pool.length) {
+        const idx = pool.findIndex(x => x.id === (current && current.id));
+        const nextIdx = idx >= 0 && idx < pool.length-1 ? idx+1 : 0;
+        setCurrent(pool[nextIdx]);
+      } else {
+        const idx = exercises.findIndex(x => x.id === (current && current.id));
+        const nextIdx = idx >= 0 && idx < exercises.length-1 ? idx+1 : 0;
+        setCurrent(exercises[nextIdx]);
+      }
     }
     setIsPreparing(true);
     setIsRecording(false);
   };
 
+  // ==== A partir de aquí, JSX tal cual lo tenías ====
+
   if (!isStarted) {
     return (
-      <div className="App bg-gray-900 w-full min-h-[60vh] flex flex-col items-center justify-center px-5 gap-4">
+      <div className="App bg-gray-900 w-full min-h-[60vh] flex flex-col items-center justify-center px-5 gap-2">
         <h1 className="text-4xl text-white font-bold mb-1">Prepare to speak about the topic below</h1>
         <p className="text-lg text-white">Choose read & speak time and press Start.</p>
 
-        <div className="flex gap-6 mt-4">
+        <div className="flex gap-6 mt-4 items-center">
           <div className="flex items-center gap-3">
             <label className="text-white">Read time:</label>
             <select value={readTime} onChange={e=>setReadTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
@@ -205,10 +382,29 @@ export default function SpeakingSample() {
               <option value={90}>90 seconds</option>
             </select>
           </div>
+          <div className="flex items-center gap-3">
+            <label className="text-white">Difficulty:</label>
+            <select value={selectedDifficulty} onChange={e=>setSelectedDifficulty(e.target.value)} className="bg-gray-800 text-white p-2 rounded">
+              <option value="any">Any</option>
+              <option value="basic">Basic</option>
+              <option value="medium">Medium</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
         </div>
 
-        <div className="mt-6">
-          <button className="bg-green-500 text-white px-4 py-2 rounded" onClick={handleStartFromMenu}>Start</button>
+        <div className="my-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? exercises.length : exercises.filter(e => e.difficulty === selectedDifficulty).length}</div>
+
+        <div>
+          <div>
+            <button
+              className={` bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl ${ (selectedDifficulty !== 'any' && exercises.filter(e => e.difficulty === selectedDifficulty).length === 0) ? 'opacity-50 cursor-not-allowed' : ''}`}
+              onClick={handleStartFromMenu}
+              disabled={selectedDifficulty !== 'any' && exercises.filter(e => e.difficulty === selectedDifficulty).length === 0}
+            >
+              Start
+            </button>
+          </div>
         </div>
       </div>
     );
