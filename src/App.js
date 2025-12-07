@@ -14,11 +14,13 @@ import WritingSamplePage from "./pages/WritingSample";
 import SpeakAboutThePhoto from "./pages/SpeakAboutThePhoto";
 import ReadThenSpeak from "./pages/ReadThenSpeak";
 import SpeakingSample from "./pages/SpeakingSample";
+import MenuDuolingo from "./components/MenuDuolingo";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
+      <Route path="/duolingo-menu" element={<MenuDuolingo />} />
       <Route path="/listening-test" element={<ListeningTest />} />
       <Route path="/image-test" element={<ImageTest />} />
       <Route path="/read-and-complete" element={<ReadAndComplete />} />
