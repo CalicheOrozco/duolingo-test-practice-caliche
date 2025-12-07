@@ -8,6 +8,7 @@ export default function InteractiveWriting() {
   const [prepareSeconds, setPrepareSeconds] = useState(10);
   const [writeSeconds, setWriteSeconds] = useState(300); // 5 minutes default
   const [followUpSeconds, setFollowUpSeconds] = useState(180); // 3 minutes follow-up (display only)
+  const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [timerKey, setTimerKey] = useState(0);
   const [answer, setAnswer] = useState('');
   const [followUpAnswer, setFollowUpAnswer] = useState('');
@@ -26,9 +27,14 @@ export default function InteractiveWriting() {
 
   const start = () => {
     if (!topics || topics.length === 0) return;
-    // pick a random prompt
-    const idx = Math.floor(Math.random() * topics.length);
-    setCurrent(topics[idx]);
+    // pick a random prompt (respect difficulty when possible)
+    let pool = topics;
+    if (selectedDifficulty !== 'any') {
+      const filtered = topics.filter((t) => t.difficulty === selectedDifficulty);
+      if (filtered.length > 0) pool = filtered;
+    }
+    const idx = Math.floor(Math.random() * pool.length);
+    setCurrent(pool[idx]);
     setPhase('prepare');
     setTimerKey((k) => k + 1);
     setAnswer('');
@@ -119,10 +125,19 @@ export default function InteractiveWriting() {
               <option value={120}>2:00</option>
               <option value={180}>3:00</option>
             </select>
+            <label className="text-sm">Difficulty</label>
+            <select value={selectedDifficulty} onChange={(e) => setSelectedDifficulty(e.target.value)} className="bg-gray-800 p-2 rounded">
+              <option value="any">Any</option>
+              <option value="basic">Basic</option>
+              <option value="medium">Medium</option>
+              <option value="advanced">Advanced</option>
+            </select>
           </div>
 
+          <div className="my-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'any' ? topics.length : topics.filter(t => t.difficulty === selectedDifficulty).length}</div>
+
           <div className="flex justify-center">
-            <button onClick={start} className="bg-green-500 px-6 py-2 rounded font-semibold">Start</button>
+            <button onClick={start} className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl">Start</button>
           </div>
         </div>
       )}

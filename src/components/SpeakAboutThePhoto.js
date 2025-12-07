@@ -91,6 +91,69 @@ const topics = [
   "sustainability initiatives",
 ];
 
+// --- Detección de Safari ---
+const isSafari = /^((?!chrome|android).)*safari/i.test(
+  navigator.userAgent || ''
+);
+
+// Helper para elegir un mimeType soportado por el navegador (cuando usamos MediaRecorder real)
+function getSupportedMimeType() {
+  if (isSafari) {
+    return 'audio/mp4';
+  }
+
+  const types = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+    'audio/mpeg',
+  ];
+
+  for (const type of types) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+  return ''; // que use el default del navegador
+}
+
+// --- Helper: convertir Float32 -> WAV (16-bit PCM mono) para Safari ---
+function encodeWav(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+
+  const writeString = (offset, str) => {
+    for (let i = 0; i < str.length; i++) {
+      view.setUint8(offset + i, str.charCodeAt(i));
+    }
+  };
+
+  let offset = 0;
+
+  writeString(offset, 'RIFF'); offset += 4;
+  view.setUint32(offset, 36 + samples.length * 2, true); offset += 4;
+  writeString(offset, 'WAVE'); offset += 4;
+  writeString(offset, 'fmt '); offset += 4;
+  view.setUint32(offset, 16, true); offset += 4;
+  view.setUint16(offset, 1, true); offset += 2;   // PCM
+  view.setUint16(offset, 1, true); offset += 2;   // mono
+  view.setUint32(offset, sampleRate, true); offset += 4;
+  view.setUint32(offset, sampleRate * 2, true); offset += 4; // byte rate
+  view.setUint16(offset, 2, true); offset += 2;   // block align
+  view.setUint16(offset, 16, true); offset += 2;  // bits per sample
+  writeString(offset, 'data'); offset += 4;
+  view.setUint32(offset, samples.length * 2, true); offset += 4;
+
+  let index = 44;
+  for (let i = 0; i < samples.length; i++, index += 2) {
+    let s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(index, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+
+  return new Blob([view], { type: 'audio/wav' });
+}
+
 export default function SpeakAboutThePhoto() {
   const navigate = useNavigate();
   const [urlImg, setUrlImg] = useState(null);
@@ -112,6 +175,11 @@ export default function SpeakAboutThePhoto() {
   const animationRef = useRef(null);
   const intervalRef = useRef(null);
 
+  // refs extra para Safari (WAV)
+  const safariProcessorRef = useRef(null);
+  const safariSamplesRef = useRef([]);
+  const safariSampleRateRef = useRef(44100);
+
   // timer state
   const [selectedTime, setSelectedTime] = useState(90);
   const [prepareTime, setPrepareTime] = useState(20);
@@ -119,9 +187,11 @@ export default function SpeakAboutThePhoto() {
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [canSubmit, setCanSubmit] = useState(false);
   const [volume, setVolume] = useState(0);
-  const audioRef = useRef(null);
 
-  // preparation (prepare) state: user sees the image and can read/prepare for `prepareTime` seconds
+  // para contador basado en tiempo real
+  const startTimeRef = useRef(null);
+
+  // preparation (prepare) state
   const [isPreparing, setIsPreparing] = useState(false);
 
   // responsive flag for small screens
@@ -137,11 +207,21 @@ export default function SpeakAboutThePhoto() {
     const onResize = () => setIsSmallScreen(window.innerWidth < 640);
     onResize();
     window.addEventListener('resize', onResize);
+
     // cleanup on unmount
     return () => {
       window.removeEventListener('resize', onResize);
       if (streamRef.current) {
         try { streamRef.current.getTracks().forEach(t => t.stop()); } catch (e) {}
+      }
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      if (audioContextRef.current) {
+        try { audioContextRef.current.close(); } catch (e) {}
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,7 +231,11 @@ export default function SpeakAboutThePhoto() {
     const topic = topics[Math.floor(Math.random() * topics.length)];
     setUrlImg(null);
     try {
-      const resp = await fetch(`https://api.unsplash.com/photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ&query=${encodeURIComponent(topic)}&orientation=landscape`);
+      const resp = await fetch(
+        `https://api.unsplash.com/photos/random?client_id=znmwFjLJbaJ3gM24NzwykppMQewnLbWRl4QFr_L5TgQ&query=${encodeURIComponent(
+          topic
+        )}&orientation=landscape`
+      );
       const data = await resp.json();
       const candidate = data.urls?.small || data.urls?.regular || data.urls?.thumb;
       const img = new Image();
@@ -166,67 +250,171 @@ export default function SpeakAboutThePhoto() {
     }
   };
 
+  const totalSeconds = selectedTime;
+
+  const startElapsedTicker = () => {
+    startTimeRef.current = Date.now();
+    setSecondsElapsed(0);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    intervalRef.current = setInterval(() => {
+      if (!startTimeRef.current) return;
+      const diffMs = Date.now() - startTimeRef.current;
+      const diffSec = Math.floor(diffMs / 1000);
+      setSecondsElapsed(diffSec);
+      if (diffSec >= 30) setCanSubmit(true);
+      if (diffSec >= totalSeconds) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        try {
+          if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+            mediaRecorderRef.current.stop();
+          }
+        } catch (e) {}
+        setIsRecording(false);
+      }
+    }, 250);
+  };
+
   const startRecording = async () => {
     setIsSubmitted(false);
     setAudioUrl(null);
     setSecondsElapsed(0);
     setCanSubmit(false);
     setTimerKey((k) => k + 1);
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      const mr = new MediaRecorder(stream);
-      chunksRef.current = [];
-      mr.ondataavailable = (e) => {
-        if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
-      };
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
-        // if submit was requested while recording, mark submitted after blob is ready
-        if (submitAfterStopRef.current) {
-          submitAfterStopRef.current = false;
-          setIsSubmitted(true);
+
+      if (!isSafari) {
+        // Navegadores normales: MediaRecorder
+        const mimeType = getSupportedMimeType();
+        const options = mimeType ? { mimeType } : undefined;
+
+        const mr = new MediaRecorder(stream, options);
+        chunksRef.current = [];
+
+        mr.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
+        };
+
+        mr.onstop = () => {
+          const blobType = mr.mimeType || mimeType || 'audio/webm';
+          const blob = new Blob(chunksRef.current, { type: blobType });
+          const url = URL.createObjectURL(blob);
+          setAudioUrl(url);
+
+          if (submitAfterStopRef.current) {
+            submitAfterStopRef.current = false;
+            setIsSubmitted(true);
+          }
+          try { stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+          streamRef.current = null;
+        };
+
+        mediaRecorderRef.current = mr;
+        mr.start();
+        setIsRecording(true);
+
+        // Mic meter
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const audioCtx = new AudioContext();
+          audioContextRef.current = audioCtx;
+          const source = audioCtx.createMediaStreamSource(stream);
+          const analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2048;
+          source.connect(analyser);
+          analyserRef.current = analyser;
+          const bufferLength = analyser.frequencyBinCount;
+          dataArrayRef.current = new Uint8Array(bufferLength);
+
+          const updateMeter = () => {
+            if (!analyserRef.current) return;
+            analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
+            let sum = 0;
+            for (let i = 0; i < dataArrayRef.current.length; i++) {
+              const v = (dataArrayRef.current[i] - 128) / 128;
+              sum += v * v;
+            }
+            const rms = Math.sqrt(sum / dataArrayRef.current.length);
+            setVolume(rms);
+            animationRef.current = requestAnimationFrame(updateMeter);
+          };
+          animationRef.current = requestAnimationFrame(updateMeter);
+        } catch (e) {
+          console.warn('AudioContext not available for mic meter', e);
         }
-        // stop tracks
-        try { stream.getTracks().forEach(t => t.stop()); } catch (e) {}
-        streamRef.current = null;
-      };
-      mediaRecorderRef.current = mr;
-    mr.start();
-    setIsRecording(true);
-      // set up audio context and analyser for mic level feedback
-      try {
+      } else {
+        // Safari: grabar a WAV con Web Audio API
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         audioContextRef.current = audioCtx;
+        safariSampleRateRef.current = audioCtx.sampleRate;
         const source = audioCtx.createMediaStreamSource(stream);
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 2048;
-        source.connect(analyser);
-        analyserRef.current = analyser;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArrayRef.current = new Uint8Array(bufferLength);
+        const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+        safariProcessorRef.current = processor;
+        safariSamplesRef.current = [];
 
-        const updateMeter = () => {
-          if (!analyserRef.current) return;
-          analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
-          // compute RMS
+        processor.onaudioprocess = (e) => {
+          const input = e.inputBuffer.getChannelData(0);
+          safariSamplesRef.current.push(new Float32Array(input));
+
+          // volumen desde el propio buffer
           let sum = 0;
-          for (let i = 0; i < dataArrayRef.current.length; i++) {
-            const v = (dataArrayRef.current[i] - 128) / 128;
-            sum += v * v;
+          for (let i = 0; i < input.length; i++) {
+            sum += input[i] * input[i];
           }
-          const rms = Math.sqrt(sum / dataArrayRef.current.length);
+          const rms = Math.sqrt(sum / input.length);
           setVolume(rms);
-          animationRef.current = requestAnimationFrame(updateMeter);
         };
-        animationRef.current = requestAnimationFrame(updateMeter);
-      } catch (e) {
-        console.warn('AudioContext not available for mic meter', e);
+
+        source.connect(processor);
+        processor.connect(audioCtx.destination);
+
+        // "MediaRecorder" falso para usar misma lógica de stop/submit
+        mediaRecorderRef.current = {
+          state: 'recording',
+          stop: () => {
+            if (mediaRecorderRef.current.state === 'inactive') return;
+            mediaRecorderRef.current.state = 'inactive';
+
+            const chunks = safariSamplesRef.current;
+            let length = 0;
+            chunks.forEach(c => { length += c.length; });
+            const samples = new Float32Array(length);
+            let offset = 0;
+            chunks.forEach(c => { samples.set(c, offset); offset += c.length; });
+
+            const blob = encodeWav(samples, safariSampleRateRef.current);
+            const url = URL.createObjectURL(blob);
+            setAudioUrl(url);
+
+            if (submitAfterStopRef.current) {
+              submitAfterStopRef.current = false;
+              setIsSubmitted(true);
+            }
+
+            try { stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+            if (safariProcessorRef.current) {
+              try { safariProcessorRef.current.disconnect(); } catch (e) {}
+              safariProcessorRef.current = null;
+            }
+            if (audioContextRef.current) {
+              try { audioContextRef.current.close(); } catch (e) {}
+              audioContextRef.current = null;
+            }
+            safariSamplesRef.current = [];
+            streamRef.current = null;
+          }
+        };
+
+        setIsRecording(true);
       }
-      // start an elapsed timer to enforce min 30s submit
+
       startElapsedTicker();
     } catch (err) {
       console.error('startRecording failed', err);
@@ -234,34 +422,12 @@ export default function SpeakAboutThePhoto() {
     }
   };
 
-  const startElapsedTicker = () => {
-    setSecondsElapsed(0);
-    let t = 0;
-    // clear any existing interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    intervalRef.current = setInterval(() => {
-      t += 1;
-      setSecondsElapsed(t);
-      if (t >= 30) setCanSubmit(true);
-      if (t >= totalSeconds) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-        // stop recording when time finishes
-        try { if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') mediaRecorderRef.current.stop(); } catch (e) {}
-        setIsRecording(false);
-      }
-    }, 1000);
-  };
-
   const stopRecording = () => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       try { mediaRecorderRef.current.stop(); } catch (e) {}
     }
     setIsRecording(false);
-    // stop analyser and audio context meter
+    startTimeRef.current = null;
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
       animationRef.current = null;
@@ -274,7 +440,6 @@ export default function SpeakAboutThePhoto() {
       try { audioContextRef.current.close(); } catch (e) {}
       audioContextRef.current = null;
     }
-    // clear elapsed interval if present
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -282,9 +447,7 @@ export default function SpeakAboutThePhoto() {
   };
 
   const onCountdownComplete = () => {
-    // Stop recording when countdown finishes
     stopRecording();
-    // ensure submit becomes available when time finishes
     setCanSubmit(true);
   };
 
@@ -294,18 +457,14 @@ export default function SpeakAboutThePhoto() {
       return;
     }
 
-    // If currently recording, stop recorder and submit after onstop produces blob
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       submitAfterStopRef.current = true;
-      // stop the recorder
       try { mediaRecorderRef.current.stop(); } catch (e) { console.error(e); }
       setIsRecording(false);
-      // clear the elapsed interval immediately so the Recorded counter stops
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      // stop analyser and audio context meter immediately
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
         animationRef.current = null;
@@ -318,10 +477,10 @@ export default function SpeakAboutThePhoto() {
         try { audioContextRef.current.close(); } catch (e) {}
         audioContextRef.current = null;
       }
+      startTimeRef.current = null;
       return;
     }
 
-    // if not recording, require audioUrl to exist
     if (!audioUrl) {
       alert('No recording available to submit. Please record first.');
       return;
@@ -329,13 +488,6 @@ export default function SpeakAboutThePhoto() {
 
     setIsSubmitted(true);
   };
-
-  // removed sample playback — not needed for this task
-
-  // reset helper intentionally removed from UI; image can be changed via navigation if needed
-
-  // use selectedTime as countdown length
-  const totalSeconds = selectedTime;
 
   const handleStartFromMenu = () => {
     setIsStarted(true);
@@ -345,8 +497,31 @@ export default function SpeakAboutThePhoto() {
 
   const onPrepareComplete = () => {
     setIsPreparing(false);
-    // automatically start recording when prepare time ends
     startRecording();
+  };
+
+  const handleNextExercise = () => {
+    setIsSubmitted(false);
+    setAudioUrl(null);
+    setSecondsElapsed(0);
+    setCanSubmit(false);
+    setTimerKey((k) => k + 1);
+
+    try {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    } catch (e) {}
+    try { if (analyserRef.current) analyserRef.current.disconnect(); } catch (e) {}
+    try { if (audioContextRef.current) audioContextRef.current.close(); } catch (e) {}
+    analyserRef.current = null;
+    audioContextRef.current = null;
+    try { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); } catch (e) {}
+    streamRef.current = null;
+    startTimeRef.current = null;
+
+    fetchRandomImage();
   };
 
   if (!isStarted) {
@@ -358,7 +533,11 @@ export default function SpeakAboutThePhoto() {
         <div className="flex flex-col md:flex-row items-center gap-4 mt-3">
           <div className="flex items-center gap-3">
             <label className="text-white">Prepare time:</label>
-            <select value={prepareTime} onChange={(e) => setPrepareTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
+            <select
+              value={prepareTime}
+              onChange={(e) => setPrepareTime(Number(e.target.value))}
+              className="bg-gray-800 text-white p-2 rounded"
+            >
               <option value={10}>10 seconds</option>
               <option value={15}>15 seconds</option>
               <option value={20}>20 seconds</option>
@@ -368,14 +547,17 @@ export default function SpeakAboutThePhoto() {
 
           <div className="flex items-center gap-3">
             <label className="text-white">Timer:</label>
-            <select value={selectedTime} onChange={(e) => setSelectedTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
+            <select
+              value={selectedTime}
+              onChange={(e) => setSelectedTime(Number(e.target.value))}
+              className="bg-gray-800 text-white p-2 rounded"
+            >
               <option value={90}>90 seconds</option>
               <option value={75}>75 seconds</option>
               <option value={60}>60 seconds</option>
               <option value={45}>45 seconds</option>
             </select>
           </div>
-
         </div>
 
         <div className="flex mt-4">
@@ -393,14 +575,22 @@ export default function SpeakAboutThePhoto() {
   return (
     <div className="App bg-gray-900 w-full min-h-[60vh] py-6 px-4 sm:px-6 flex flex-col items-center justify-start text-white">
       <h2 className="text-3xl font-bold mb-2">Speak about the image below</h2>
-      <p className="text-gray-300 mb-4">You have {totalSeconds} seconds to speak. Minimum 30 seconds required to submit.</p>
+      <p className="text-gray-300 mb-4">
+        You have {totalSeconds} seconds to speak. Minimum 30 seconds required to submit.
+      </p>
 
       <div className="bg-gray-800 p-4 rounded-md shadow-md w-full max-w-3xl">
         <div className="flex justify-center mb-4">
           {urlImg ? (
-            <LazyLoadImage src={urlImg} alt={altImg} className="w-full max-w-md md:w-80 h-auto rounded-md object-cover" />
+            <LazyLoadImage
+              src={urlImg}
+              alt={altImg}
+              className="w-full max-w-md md:w-80 h-auto rounded-md object-cover"
+            />
           ) : (
-            <div className="w-full max-w-md md:w-80 h-48 bg-gray-700 rounded flex items-center justify-center">Loading image...</div>
+            <div className="w-full max-w-md md:w-80 h-48 bg-gray-700 rounded flex items-center justify-center">
+              Loading image...
+            </div>
           )}
         </div>
 
@@ -424,7 +614,6 @@ export default function SpeakAboutThePhoto() {
                   <button
                     className="mt-1 bg-blue-500 text-white px-3 py-1 rounded"
                     onClick={() => {
-                      // start recording immediately, cancel preparing
                       setIsPreparing(false);
                       startRecording();
                     }}
@@ -452,16 +641,17 @@ export default function SpeakAboutThePhoto() {
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex items-center gap-2">
               <div className="text-sm text-gray-300">Recorded: {secondsElapsed}s</div>
-              {/* mic status indicator */}
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500' : 'bg-gray-600'}`} />
                 <div className="w-24 h-2 bg-gray-700 rounded overflow-hidden">
-                  <div style={{ width: `${Math.min(100, Math.round(volume * 300))}%` }} className="h-2 bg-green-400" />
+                  <div
+                    style={{ width: `${Math.min(100, Math.round(volume * 300))}%` }}
+                    className="h-2 bg-green-400"
+                  />
                 </div>
               </div>
             </div>
             <div>
-              {/* Countdown clock visual */}
               <ReactCountdownClock
                 key={timerKey}
                 seconds={totalSeconds}
@@ -474,8 +664,9 @@ export default function SpeakAboutThePhoto() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex gap-3">
+        {/* Igual que SpeakingSample: fila con Submit a la izq y audio a la der */}
+        <div className="mt-4 flex items-center justify-between">
+          <div>
             <button
               className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600 cursor-not-allowed'}`}
               onClick={handleSubmit}
@@ -484,68 +675,42 @@ export default function SpeakAboutThePhoto() {
               Submit
             </button>
           </div>
-
-          <div className="text-sm text-gray-400">You can submit after 30 seconds</div>
+          <div>
+            {audioUrl && (
+              <audio src={audioUrl} controls className="rounded" />
+            )}
+          </div>
         </div>
 
-        {/* final bottom bar similar to capture: full width green area with review and navigation */}
-        {isSubmitted && audioUrl ? (
-          <div className="md:fixed left-0 right-0 bottom-0 bg-green-700 text-white p-4 shadow-inner">
-            <div className="max-w-6xl mx-auto flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-green-700 font-bold">✓</div>
-                <div>
-                  <div className="font-semibold">Review sample answer:</div>
-                  <div className="mt-2">
-                    {/* Your recording play button */}
-                    <button
-                      className="bg-black bg-opacity-30 text-white px-3 py-2 rounded mr-2"
-                      onClick={() => { if (audioRef.current) audioRef.current.play(); }}
-                    >
-                      Your recording
-                    </button>
-                    <audio ref={audioRef} src={audioUrl} className="hidden" />
-                  </div>
-                </div>
-              </div>
+        <div className="text-sm text-gray-400 mt-2">
+          You can submit after 30 seconds
+        </div>
 
-              <div className="flex items-center gap-4">
-                <button
-                  className="px-4 py-2 rounded bg-gray-900 text-white"
-                  onClick={() => navigate('/')}
-                >
-                  Back to the main
-                </button>
+        {/* Navegación, igual idea que SpeakingSample (Next abajo a la derecha) */}
+        <div className="flex justify-end gap-3 mt-4">
+          <button
+            className="px-4 py-2 rounded bg-gray-900 text-white"
+            onClick={() => navigate('/')}
+          >
+            Back to the main
+          </button>
 
-                <button
-                  className="px-4 py-2 rounded bg-white text-green-700 font-bold"
-                  onClick={() => {
-                    // Next exercises: fetch new image and reset UI/timer
-                    setIsSubmitted(false);
-                    setAudioUrl(null);
-                    setSecondsElapsed(0);
-                    setCanSubmit(false);
-                    setTimerKey((k) => k + 1);
-                    // stop any audio context
-                    try { if (animationRef.current) { cancelAnimationFrame(animationRef.current); animationRef.current = null; } } catch(e){}
-                    try { if (analyserRef.current) analyserRef.current.disconnect(); } catch(e){}
-                    try { if (audioContextRef.current) audioContextRef.current.close(); } catch(e){}
-                    analyserRef.current = null;
-                    audioContextRef.current = null;
-                    // ensure media tracks stopped
-                    try { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); } catch(e){}
-                    streamRef.current = null;
-                    fetchRandomImage();
-                  }}
-                >
-                  Next exercises
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : null}
+          <button
+            className="px-4 py-2 rounded bg-white text-green-700 font-bold disabled:bg-gray-600 disabled:text-gray-300"
+            onClick={handleNextExercise}
+            disabled={!isSubmitted || !audioUrl}
+          >
+            Next exercises
+          </button>
+        </div>
 
-        <p className="text-xs text-gray-400 mt-4">Photo by <a href={imgUserLink} className="underline">{imgUser || 'Unsplash'}</a> — images are fetched from Unsplash for practice only.</p>
+        <p className="text-xs text-gray-400 mt-4">
+          Photo by{' '}
+          <a href={imgUserLink} className="underline">
+            {imgUser || 'Unsplash'}
+          </a>{' '}
+          — images are fetched from Unsplash for practice only.
+        </p>
       </div>
     </div>
   );
