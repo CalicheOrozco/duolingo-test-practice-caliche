@@ -96,7 +96,7 @@ export default function InteractiveWriting() {
     <div className="App bg-gray-900 min-h-[60vh] text-white px-6">
       {phase === 'menu' && (
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-3xl font-bold mb-2">Interactive Writing — Practice</h1>
+          <h1 className="text-3xl font-bold mb-2">Interactive Writing</h1>
           <p className="text-gray-300 mb-6">Prepare and write responses similar to the Duolingo English Test interactive writing task.</p>
 
           <div className="flex items-center justify-center gap-3 mb-4">
