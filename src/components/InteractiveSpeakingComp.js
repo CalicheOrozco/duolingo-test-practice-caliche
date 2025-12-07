@@ -2,16 +2,82 @@ import React, { useEffect, useState, useRef } from 'react';
 import WaveAudioPlayer from './WaveAudioPlayer';
 import ReactCountdownClock from 'react-countdown-clock';
 
+// --- Detección de Safari ---
+const isSafari = /^((?!chrome|android).)*safari/i.test(
+  navigator.userAgent || ''
+);
+
+//
+// Helper: elegir un mimeType soportado por el navegador
+//
+function getSupportedMimeType() {
+  if (isSafari) {
+    return 'audio/mp4';
+  }
+
+  const types = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/ogg;codecs=opus',
+    'audio/mp4',
+    'audio/mpeg',
+  ];
+
+  for (const type of types) {
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported(type)) {
+      return type;
+    }
+  }
+  return ''; // que use el default del navegador
+}
+
+// --- Helper: convertir Float32 -> WAV (16-bit PCM mono) para Safari ---
+function encodeWav(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+
+  const writeString = (offset, str) => {
+    for (let i = 0; i < str.length; i++) {
+      view.setUint8(offset + i, str.charCodeAt(i));
+    }
+  };
+
+  let offset = 0;
+
+  writeString(offset, 'RIFF'); offset += 4;
+  view.setUint32(offset, 36 + samples.length * 2, true); offset += 4;
+  writeString(offset, 'WAVE'); offset += 4;
+  writeString(offset, 'fmt '); offset += 4;
+  view.setUint32(offset, 16, true); offset += 4;
+  view.setUint16(offset, 1, true); offset += 2;   // PCM
+  view.setUint16(offset, 1, true); offset += 2;   // mono
+  view.setUint32(offset, sampleRate, true); offset += 4;
+  view.setUint32(offset, sampleRate * 2, true); offset += 4; // byte rate
+  view.setUint16(offset, 2, true); offset += 2;   // block align
+  view.setUint16(offset, 16, true); offset += 2;  // bits per sample
+  writeString(offset, 'data'); offset += 4;
+  view.setUint32(offset, samples.length * 2, true); offset += 4;
+
+  let index = 44;
+  for (let i = 0; i < samples.length; i++, index += 2) {
+    let s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(index, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+
+  return new Blob([view], { type: 'audio/wav' });
+}
+
 export default function InteractiveSpeakingComp() {
-  const [exercises, setExercises] = useState([]);
-  const [allSets, setAllSets] = useState(null); // store raw sets if JSON contains multiple sets
-  const [current, setCurrent] = useState(null);
+  const [exercises, setExercises] = useState([]);         // ejercicios DEL BLOQUE ACTUAL
+  const [allSets, setAllSets] = useState(null);           // todos los bloques (interactive01, interactive02, ...)
+  const [current, setCurrent] = useState(null);           // pregunta actual del bloque
   const [currentSetIndex, setCurrentSetIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [started, setStarted] = useState(false);
-  const [responses, setResponses] = useState([]); // store { url, blob } per question
+  const [responses, setResponses] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [selectedTimeSeconds, setSelectedTimeSeconds] = useState(35);
+  const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [isLoading, setIsLoading] = useState(true);
   const [isPreparing, setIsPreparing] = useState(false);
   const prepareTime = 30;
@@ -32,44 +98,56 @@ export default function InteractiveSpeakingComp() {
   const dataArrayRef = useRef(null);
   const animationRef = useRef(null);
 
+  // Safari extra (WAV)
+  const safariProcessorRef = useRef(null);
+  const safariSamplesRef = useRef([]);
+  const safariSampleRateRef = useRef(44100);
+
+  // contador basado en tiempo real
+  const startTimeRef = useRef(null);
+
   useEffect(() => {
     setIsLoading(true);
     fetch('/dataInteractiveSpeaking.json')
       .then((r) => r.json())
       .then((d) => {
-        // Accept either:
-        // - an array of sets (each with a `questions` array) -> take first set's questions
-        // - a single object with `questions`
-        // - an array that's already a flat questions array
-        if (Array.isArray(d)) {
-          // if array of sets (first item has questions), map that questions array
-          if (d.length > 0 && d[0] && Array.isArray(d[0].questions)) {
-            // store all sets so we can pick another later
-            setAllSets(d);
-            setCurrentSetIndex(0);
-            const setObj = d[0];
-            const ex = setObj.questions.map((q, idx) => ({
-              id: q.id ?? idx,
-              prompt: q.prompt || '',
-              sampleAudio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
-              ...q,
-            }));
-            setExercises(ex);
-            setResponses(new Array(ex.length).fill(null));
-          } else {
-            // flat array of exercises
-            setAllSets(null);
-            setExercises(d);
-            setResponses(new Array(d.length).fill(null));
-          }
+        if (Array.isArray(d) && d.length > 0 && Array.isArray(d[0].questions)) {
+          // El formato que tú usas: array de bloques con "questions"
+          setAllSets(d);
+
+          // Para el contador en el menú, podemos calcular un total aproximado.
+          const flat = [];
+          d.forEach((setObj) => {
+            (setObj.questions || []).forEach((q) => {
+              flat.push({
+                ...q,
+                difficulty: q.difficulty || setObj.difficulty || 'basic',
+                audio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
+              });
+            });
+          });
+          setExercises(flat);
+          setResponses(new Array(flat.length).fill(null));
         } else if (d && Array.isArray(d.questions)) {
-          // single object with questions
+          // Caso: un solo bloque en vez de array de bloques
           setAllSets([d]);
-          setCurrentSetIndex(0);
           const ex = d.questions.map((q, idx) => ({
             id: q.id ?? idx,
             prompt: q.prompt || '',
-            sampleAudio: (q.audio && q.audio.length) ? q.audio : (d.file || ''),
+            audio: (q.audio && q.audio.length) ? q.audio : (d.file || ''),
+            difficulty: q.difficulty || d.difficulty || 'basic',
+            ...q,
+          }));
+          setExercises(ex);
+          setResponses(new Array(ex.length).fill(null));
+        } else if (Array.isArray(d)) {
+          // array plano de ejercicios (sin bloques)
+          setAllSets(null);
+          const ex = d.map((q, idx) => ({
+            id: q.id ?? idx,
+            prompt: q.prompt || '',
+            audio: q.audio || '',
+            difficulty: q.difficulty || 'basic',
             ...q,
           }));
           setExercises(ex);
@@ -81,8 +159,16 @@ export default function InteractiveSpeakingComp() {
       })
       .catch((e) => { console.error(e); setExercises([]); })
       .finally(() => setIsLoading(false));
+
+    // cleanup
     return () => {
       try { if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop()); } catch(e){}
+      if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
+      if (audioContextRef.current) { try { audioContextRef.current.close(); } catch(e){} }
+      if (intervalRef.current) { clearInterval(intervalRef.current); }
+      if (safariProcessorRef.current) {
+        try { safariProcessorRef.current.disconnect(); } catch(e){}
+      }
     };
   }, []);
 
@@ -93,84 +179,228 @@ export default function InteractiveSpeakingComp() {
     }
   }, [exercises, current]);
 
+  // --- Elegir un bloque (set) y cargar TODAS sus preguntas en orden ---
   const start = () => {
-    if (isLoading || !exercises || exercises.length === 0) return;
-    // start at the first prompt and enter prepare phase
-    setQuestionIndex(0);
-    setCurrent(exercises[0]);
+    if (isLoading) return;
+
+    // Si tenemos bloques (tu caso normal)
+    if (allSets && Array.isArray(allSets) && allSets.length > 0) {
+      // 1) Filtramos bloques que contengan preguntas con la dificultad elegida
+      const candidateSetIndices = allSets
+        .map((setObj, idx) => {
+          const questions = (setObj.questions || []).filter((q) =>
+            selectedDifficulty === 'any'
+              ? true
+              : (q.difficulty || setObj.difficulty || 'basic') === selectedDifficulty
+          );
+          return { idx, setObj, questions };
+        })
+        .filter(entry => entry.questions.length > 0);
+
+      // Si no hay ningún bloque que cumpla la dificultad, usamos cualquier bloque que tenga preguntas
+      const pool = candidateSetIndices.length
+        ? candidateSetIndices
+        : allSets
+            .map((setObj, idx) => ({
+              idx,
+              setObj,
+              questions: setObj.questions || [],
+            }))
+            .filter(entry => entry.questions.length > 0);
+
+      if (!pool.length) return;
+
+      // 2) Elegimos UN bloque de ese pool (por ejemplo al azar)
+      const chosen = pool[Math.floor(Math.random() * pool.length)];
+      const setObj = chosen.setObj;
+      const questions = chosen.questions;
+
+      // 3) Creamos los ejercicios del BLOQUE, en orden, uno por cada pregunta
+      const ex = questions.map((q, index) => ({
+        id: q.id ?? index,
+        prompt: q.prompt || '',
+        audio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
+        difficulty: q.difficulty || setObj.difficulty || 'basic',
+        ...q,
+      }));
+
+      setCurrentSetIndex(chosen.idx);
+      setExercises(ex);
+      setResponses(new Array(ex.length).fill(null));
+      setQuestionIndex(0);
+      setCurrent(ex[0]);
+    } else {
+      // Caso sin bloques: usamos la lista plana tal cual, filtrando por dificultad
+      const pool = selectedDifficulty === 'any'
+        ? exercises
+        : exercises.filter(e => e.difficulty === selectedDifficulty);
+      const final = pool.length ? pool : exercises;
+
+      if (!final.length) return;
+
+      setExercises(final);
+      setResponses(new Array(final.length).fill(null));
+      setQuestionIndex(0);
+      setCurrent(final[0]);
+    }
+
     setStarted(true);
     setIsPreparing(true);
     setPrepKey(k => k + 1);
-    
   };
 
   const startElapsedTicker = () => {
+    startTimeRef.current = Date.now();
     setSecondsElapsed(0);
-    let t = 0;
     if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
     intervalRef.current = setInterval(() => {
-      t += 1;
-      setSecondsElapsed(t);
-      if (t >= 10) setCanSubmit(true);
-      if (t >= selectedTimeSeconds) {
+      if (!startTimeRef.current) return;
+      const diffMs = Date.now() - startTimeRef.current;
+      const diffSec = Math.floor(diffMs / 1000);
+      setSecondsElapsed(diffSec);
+      if (diffSec >= 10) setCanSubmit(true);
+      if (diffSec >= selectedTimeSeconds) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
         stopRecording();
       }
-    }, 1000);
+    }, 250);
   };
 
   const startRecording = async () => {
     setAudioUrl(null);
     setCanSubmit(false);
     setSecondsElapsed(0);
+
     try {
       const qi = questionIndex;
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      const mr = new MediaRecorder(stream);
-      chunksRef.current = [];
-      mr.ondataavailable = (e) => { if (e.data && e.data.size) chunksRef.current.push(e.data); };
-      mr.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
-        // save response for this question index
-        setResponses(prev => {
-          const next = Array.isArray(prev) ? [...prev] : [];
-          next[qi] = { url, blob };
-          return next;
-        });
-        try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
-        streamRef.current = null;
-      };
-      mediaRecorderRef.current = mr;
-      mr.start();
-      setIsRecording(true);
 
-      // audio meter
-      try {
+      if (!isSafari) {
+        // Navegadores con MediaRecorder usable
+        const mimeType = getSupportedMimeType();
+        const options = mimeType ? { mimeType } : undefined;
+
+        const mr = new MediaRecorder(stream, options);
+        chunksRef.current = [];
+
+        mr.ondataavailable = (e) => {
+          if (e.data && e.data.size) chunksRef.current.push(e.data);
+        };
+
+        mr.onstop = () => {
+          const blobType = mr.mimeType || mimeType || 'audio/webm';
+          const blob = new Blob(chunksRef.current, { type: blobType });
+          const url = URL.createObjectURL(blob);
+          setAudioUrl(url);
+
+          setResponses(prev => {
+            const next = Array.isArray(prev) ? [...prev] : [];
+            next[qi] = { url, blob };
+            return next;
+          });
+
+          try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
+          streamRef.current = null;
+        };
+
+        mediaRecorderRef.current = mr;
+        mr.start();
+        setIsRecording(true);
+
+        // audio meter
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const audioCtx = new AudioContext();
+          audioContextRef.current = audioCtx;
+          const source = audioCtx.createMediaStreamSource(stream);
+          const analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 2048;
+          source.connect(analyser);
+          analyserRef.current = analyser;
+          const bufferLength = analyser.frequencyBinCount;
+          dataArrayRef.current = new Uint8Array(bufferLength);
+          const updateMeter = () => {
+            if (!analyserRef.current) return;
+            analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
+            let sum = 0;
+            for (let i = 0; i < dataArrayRef.current.length; i++) {
+              const v = (dataArrayRef.current[i] - 128) / 128;
+              sum += v * v;
+            }
+            const rms = Math.sqrt(sum / dataArrayRef.current.length);
+            setVolume(rms);
+            animationRef.current = requestAnimationFrame(updateMeter);
+          };
+          animationRef.current = requestAnimationFrame(updateMeter);
+        } catch(e){ console.warn(e); }
+
+      } else {
+        // Safari: capturar audio a WAV con Web Audio
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         const audioCtx = new AudioContext();
         audioContextRef.current = audioCtx;
+        safariSampleRateRef.current = audioCtx.sampleRate;
+
         const source = audioCtx.createMediaStreamSource(stream);
-        const analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 2048;
-        source.connect(analyser);
-        analyserRef.current = analyser;
-        const bufferLength = analyser.frequencyBinCount;
-        dataArrayRef.current = new Uint8Array(bufferLength);
-        const updateMeter = () => {
-          if (!analyserRef.current) return;
-          analyserRef.current.getByteTimeDomainData(dataArrayRef.current);
+        const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+        safariProcessorRef.current = processor;
+        safariSamplesRef.current = [];
+
+        processor.onaudioprocess = (e) => {
+          const input = e.inputBuffer.getChannelData(0);
+          safariSamplesRef.current.push(new Float32Array(input));
+
+          // volumen desde el propio buffer
           let sum = 0;
-          for (let i=0;i<dataArrayRef.current.length;i++){ const v = (dataArrayRef.current[i]-128)/128; sum += v*v; }
-          const rms = Math.sqrt(sum/dataArrayRef.current.length);
+          for (let i = 0; i < input.length; i++) sum += input[i] * input[i];
+          const rms = Math.sqrt(sum / input.length);
           setVolume(rms);
-          animationRef.current = requestAnimationFrame(updateMeter);
         };
-        animationRef.current = requestAnimationFrame(updateMeter);
-      } catch(e){ console.warn(e); }
+
+        source.connect(processor);
+        processor.connect(audioCtx.destination);
+
+        mediaRecorderRef.current = {
+          state: 'recording',
+          stop: () => {
+            if (mediaRecorderRef.current.state === 'inactive') return;
+            mediaRecorderRef.current.state = 'inactive';
+
+            const chunks = safariSamplesRef.current;
+            let length = 0;
+            chunks.forEach(c => { length += c.length; });
+            const samples = new Float32Array(length);
+            let offset = 0;
+            chunks.forEach(c => { samples.set(c, offset); offset += c.length; });
+
+            const blob = encodeWav(samples, safariSampleRateRef.current);
+            const url = URL.createObjectURL(blob);
+            setAudioUrl(url);
+
+            setResponses(prev => {
+              const next = Array.isArray(prev) ? [...prev] : [];
+              next[qi] = { url, blob };
+              return next;
+            });
+
+            try { stream.getTracks().forEach(t => t.stop()); } catch(e){}
+            if (safariProcessorRef.current) {
+              try { safariProcessorRef.current.disconnect(); } catch(e){}
+              safariProcessorRef.current = null;
+            }
+            if (audioContextRef.current) {
+              try { audioContextRef.current.close(); } catch(e){}
+              audioContextRef.current = null;
+            }
+            safariSamplesRef.current = [];
+            streamRef.current = null;
+          }
+        };
+
+        setIsRecording(true);
+      }
 
       startElapsedTicker();
     } catch (err) {
@@ -183,10 +413,15 @@ export default function InteractiveSpeakingComp() {
       try { mediaRecorderRef.current.stop(); } catch(e){}
     }
     setIsRecording(false);
+    startTimeRef.current = null;
     if (animationRef.current) { cancelAnimationFrame(animationRef.current); animationRef.current = null; }
     if (analyserRef.current) { try { analyserRef.current.disconnect(); } catch(e){} analyserRef.current = null; }
     if (audioContextRef.current) { try { audioContextRef.current.close(); } catch(e){} audioContextRef.current = null; }
     if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+    if (safariProcessorRef.current) {
+      try { safariProcessorRef.current.disconnect(); } catch(e){}
+      safariProcessorRef.current = null;
+    }
   };
 
   const handleSubmit = () => {
@@ -195,7 +430,6 @@ export default function InteractiveSpeakingComp() {
   };
 
   const handleNext = () => {
-    // cleanup current recording state
     stopRecording();
     setAudioUrl(null);
     setCanSubmit(false);
@@ -206,28 +440,23 @@ export default function InteractiveSpeakingComp() {
       return;
     }
 
-    // require a recorded/submitted response for the current question before advancing
     const hasResponse = responses && responses[questionIndex] && responses[questionIndex].url;
     if (!hasResponse) {
       alert('Please record and submit your response before moving to the next question.');
       return;
     }
 
-    // if there are more questions, advance to the next one immediately (skip prepare)
     if (questionIndex < exercises.length - 1) {
       const nextIndex = questionIndex + 1;
       setQuestionIndex(nextIndex);
-      setCurrent(exercises[nextIndex]);
-      // do NOT re-enter prepare phase here — show the next question immediately
+      setCurrent(exercises[nextIndex]);  // siguiente pregunta DEL MISMO BLOQUE
       setIsPreparing(false);
     } else {
-      // no more questions: show results overlay
       setShowResults(true);
     }
   };
 
   const handleCloseResults = () => {
-    // revoke created object URLs
     try {
       if (audioUrl) URL.revokeObjectURL(audioUrl);
       responses && responses.forEach(r => { if (r && r.url) try { URL.revokeObjectURL(r.url); } catch(e){} });
@@ -242,25 +471,67 @@ export default function InteractiveSpeakingComp() {
     setResponses(new Array(exercises.length).fill(null));
   };
 
+  // ==== JSX ====
+
   if (!started) {
+    const availableCount = (() => {
+      if (!allSets || !Array.isArray(allSets)) {
+        return selectedDifficulty === 'any'
+          ? exercises.length
+          : exercises.filter(e => e.difficulty === selectedDifficulty).length;
+      }
+      let cnt = 0;
+      allSets.forEach(setObj => {
+        (setObj.questions || []).forEach(q => {
+          const diff = q.difficulty || setObj.difficulty || 'basic';
+          if (selectedDifficulty === 'any' || diff === selectedDifficulty) cnt++;
+        });
+      });
+      return cnt;
+    })();
+
     return (
       <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-start text-white">
         <div className="max-w-3xl w-full px-4 text-center">
           <h1 className="text-3xl font-bold mb-2">Interactive Speaking</h1>
-          <p className="text-gray-300 mb-4">You will listen 3 question and have {selectedTimeSeconds} seconds to answer each.</p>
+          <p className="text-gray-300 mb-4">
+            You will listen several questions and have {selectedTimeSeconds} seconds to answer each.
+          </p>
           <div className="mb-4">
             <label className="mr-2">Timer:</label>
-            <select value={selectedTimeSeconds} onChange={(e)=>setSelectedTimeSeconds(Number(e.target.value))} className="text-black px-2 py-1 rounded">
+            <select
+              value={selectedTimeSeconds}
+              onChange={(e)=>setSelectedTimeSeconds(Number(e.target.value))}
+              className="text-black px-2 py-1 rounded"
+            >
               <option value={35}>35</option>
               <option value={30}>30</option>
-              <option value={25}>25</option>  
+              <option value={25}>25</option>
               <option value={20}>20</option>
-              
-
             </select>
           </div>
+          <div className="mb-4">
+            <label className="mr-2">Difficulty:</label>
+            <select
+              value={selectedDifficulty}
+              onChange={(e) => setSelectedDifficulty(e.target.value)}
+              className="text-black px-2 py-1 rounded"
+            >
+              <option value="any">Any</option>
+              <option value="basic">Basic</option>
+              <option value="medium">Medium</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          <div className="text-sm text-gray-300 mb-4">
+            Available questions: {availableCount}
+          </div>
           <div>
-            <button onClick={start} className="bg-green-500 px-4 py-2 rounded" disabled={isLoading || exercises.length === 0}>
+            <button
+              onClick={start}
+              className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
+              disabled={isLoading || availableCount === 0}
+            >
               {isLoading ? 'Loading...' : 'Start'}
             </button>
           </div>
@@ -269,26 +540,35 @@ export default function InteractiveSpeakingComp() {
     );
   }
 
-  // If we are in the prepare phase, show a full-screen prepare UI before recording
+  // Prepare phase
   if (started && isPreparing) {
     return (
       <div className="bg-gray-900 min-h-[60vh] py-8 flex flex-col items-center justify-center text-white">
         <div className="max-w-4xl mx-auto relative">
-          {/* small top-left countdown positioned above the header (reduced size and offset so it doesn't overlap title) */}
           <div className="absolute transform -translate-x-1/2 -translate-y-6 flex items-center gap-3 text-gray-300">
             <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center flex-shrink-0">
-              <ReactCountdownClock key={`prepclock-${prepKey}`} seconds={prepareTime} color="#fff" size={48} onComplete={() => { setIsPreparing(false); }} />
+              <ReactCountdownClock
+                key={`prepclock-${prepKey}`}
+                seconds={prepareTime}
+                color="#fff"
+                size={48}
+                onComplete={() => { setIsPreparing(false); }}
+              />
             </div>
             <div className="text-sm">to prepare</div>
           </div>
 
           <div className="text-center py-12 px-4">
             <h1 className="text-3xl font-bold text-center mb-2">Prepare to have a conversation</h1>
-            <p className="text-gray-300 text-center mb-6">You will listen 3 question and have {selectedTimeSeconds} seconds to answer each </p>
-
+            <p className="text-gray-300 text-center mb-6">
+              You will listen questions from one exercise block and have {selectedTimeSeconds} seconds to answer each.
+            </p>
 
             <div className="flex justify-center">
-              <button className="bg-blue-600 px-6 py-2 rounded font-semibold" onClick={() => { setIsPreparing(false); }}>
+              <button
+                className="bg-blue-600 px-6 py-2 rounded font-semibold"
+                onClick={() => { setIsPreparing(false); }}
+              >
                 Continue
               </button>
             </div>
@@ -298,15 +578,19 @@ export default function InteractiveSpeakingComp() {
     );
   }
 
-  // results are rendered inline below inside the main page container
-
   return (
     <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-start text-white">
       <div className="max-w-4xl w-full px-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-semibold">Interactive Speaking</h2>
           <div className="text-gray-300 text-sm">
-            <ReactCountdownClock seconds={selectedTimeSeconds} color="#fff" size={60} paused={!isRecording} onComplete={stopRecording} />
+            <ReactCountdownClock
+              seconds={selectedTimeSeconds}
+              color="#fff"
+              size={60}
+              paused={!isRecording}
+              onComplete={stopRecording}
+            />
           </div>
         </div>
 
@@ -323,7 +607,10 @@ export default function InteractiveSpeakingComp() {
                     <h3 className="font-semibold mb-2">Question {i+1}</h3>
                     <div className="mb-2">
                       <div className="text-sm text-gray-300 mb-1">Audio:</div>
-                              <WaveAudioPlayer key={`sample-${i}-${ex.sampleAudio || ''}`} audioSrc={ex.sampleAudio ? `Audios/${ex.sampleAudio}` : ''} />
+                      <WaveAudioPlayer
+                        key={`sample-${i}-${ex.audio || ''}`}
+                        audioSrc={ex.audio ? `Audios/${ex.audio}` : ''}
+                      />
                     </div>
                     <div>
                       <div className="text-sm text-gray-300 mb-1">Your response:</div>
@@ -342,13 +629,22 @@ export default function InteractiveSpeakingComp() {
           ) : (current ? (
             <>
               <div className="mb-4">
-                <WaveAudioPlayer key={`current-${current.id || questionIndex}`} audioSrc={current.sampleAudio ? `Audios/${current.sampleAudio}` : ''} />
+                <WaveAudioPlayer
+                  key={current.audio || current.id || questionIndex}
+                  audioSrc={current.audio ? `Audios/${current.audio}` : ''}
+                />
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
                   {!isRecording ? (
-                    <button className={`px-4 py-2 rounded ${audioUrl ? 'bg-gray-600' : 'bg-green-500'}`} onClick={startRecording} disabled={isRecording}>Record</button>
+                    <button
+                      className={`px-4 py-2 rounded ${audioUrl ? 'bg-gray-600' : 'bg-green-500'}`}
+                      onClick={startRecording}
+                      disabled={isRecording}
+                    >
+                      Record
+                    </button>
                   ) : (
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded bg-gray-700 text-white">
                       <span className="w-2 h-2 bg-red-500 rounded-full" /> Recording...
@@ -359,14 +655,23 @@ export default function InteractiveSpeakingComp() {
                 <div className="flex items-center gap-4">
                   <div className="text-sm text-gray-300">Recorded: {secondsElapsed}s</div>
                   <div className="w-24 h-2 bg-gray-700 rounded overflow-hidden">
-                    <div style={{ width: `${Math.min(100, Math.round(volume*300))}%` }} className="h-2 bg-green-400" />
+                    <div
+                      style={{ width: `${Math.min(100, Math.round(volume*300))}%` }}
+                      className="h-2 bg-green-400"
+                    />
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 flex items-center justify-between">
                 <div>
-                  <button className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600'}`} onClick={handleSubmit} disabled={!canSubmit}>Submit</button>
+                  <button
+                    className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600'}`}
+                    onClick={handleSubmit}
+                    disabled={!canSubmit}
+                  >
+                    Submit
+                  </button>
                 </div>
                 <div>
                   {audioUrl && <audio src={audioUrl} controls className="rounded" />}
@@ -383,46 +688,51 @@ export default function InteractiveSpeakingComp() {
             <>
               <button
                 onClick={() => {
-                  // stop any leftover recording and reset transient state
                   try { stopRecording(); } catch(e){}
                   setAudioUrl(null);
                   setCanSubmit(false);
                   setSecondsElapsed(0);
 
-                  // If we have multiple sets, pick a different one; otherwise restart same set
-                  if (allSets && Array.isArray(allSets) && allSets.length > 1) {
-                    // pick a different set index
-                    const nextSet = (() => {
-                      const max = allSets.length;
-                      let idx = Math.floor(Math.random() * max);
-                      if (max > 1) {
-                        let attempts = 0;
-                        while (idx === currentSetIndex && attempts < 8) { idx = Math.floor(Math.random() * max); attempts++; }
-                      }
-                      return idx;
-                    })();
+                  // ---- NUEVO BLOQUE (set) ----
+                  if (allSets && Array.isArray(allSets) && allSets.length > 0) {
+                    const max = allSets.length;
+                    let idx = Math.floor(Math.random() * max);
 
-                    // map that set's questions into exercises
-                    const setObj = allSets[nextSet];
-                    const ex = setObj.questions.map((q, idx) => ({
-                      id: q.id ?? idx,
+                    // Intentamos que no repita el mismo bloque inmediatamente si hay más de uno
+                    if (max > 1) {
+                      let attempts = 0;
+                      while (idx === currentSetIndex && attempts < 8) {
+                        idx = Math.floor(Math.random() * max);
+                        attempts++;
+                      }
+                    }
+
+                    const setObj = allSets[idx];
+
+                    const filteredQs = (setObj.questions || []).filter((q) => {
+                      const diff = q.difficulty || setObj.difficulty || 'basic';
+                      return selectedDifficulty === 'any' ? true : diff === selectedDifficulty;
+                    });
+
+                    const sourceQs = filteredQs.length > 0
+                      ? filteredQs
+                      : (setObj.questions || []);
+
+                    const ex = sourceQs.map((q, index) => ({
+                      id: q.id ?? index,
                       prompt: q.prompt || '',
-                      sampleAudio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
+                      audio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
+                      difficulty: q.difficulty || setObj.difficulty || 'basic',
                       ...q,
                     }));
+
                     setExercises(ex);
                     setResponses(new Array(ex.length).fill(null));
                     setQuestionIndex(0);
-                    setCurrentSetIndex(nextSet);
+                    setCurrentSetIndex(idx);
                     setCurrent(ex[0]);
-                  } else {
-                    // reset responses and question pointer for same set
-                    setResponses(new Array(exercises.length).fill(null));
-                    setQuestionIndex(0);
-                    if (exercises && exercises.length) setCurrent(exercises[0]);
                   }
 
-                  // ensure results hidden and start the prepare phase
                   setShowResults(false);
                   setStarted(true);
                   setIsPreparing(true);
@@ -432,10 +742,20 @@ export default function InteractiveSpeakingComp() {
               >
                 New exercise
               </button>
-              <button onClick={handleCloseResults} className="bg-gray-200 text-gray-900 px-4 py-2 rounded">Menu</button>
+              <button
+                onClick={handleCloseResults}
+                className="bg-gray-200 text-gray-900 px-4 py-2 rounded"
+              >
+                Menu
+              </button>
             </>
           ) : (
-            <button onClick={handleNext} className="bg-white text-green-700 px-4 py-2 rounded">Next</button>
+            <button
+              onClick={handleNext}
+              className="bg-white text-green-700 px-4 py-2 rounded"
+            >
+              Next
+            </button>
           )}
         </div>
       </div>
