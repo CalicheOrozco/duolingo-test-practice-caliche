@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from 'react-countdown-clock';
+import DifficultyBadge from './DifficultyBadge';
 
 // --- Detección de Safari ---
 const isSafari = /^((?!chrome|android).)*safari/i.test(
@@ -101,6 +104,7 @@ export default function SpeakingSample() {
 
   // para contador basado en tiempo real
   const startTimeRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     fetch('/dataSpeakingSample.json')
@@ -121,12 +125,36 @@ export default function SpeakingSample() {
   }, []);
 
   useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  useEffect(() => {
     if (!current && exercises && exercises.length) {
       // choose first exercise matching selected difficulty (or first overall)
       const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
       setCurrent(pool && pool.length ? pool[0] : exercises[0]);
     }
   }, [exercises, current, selectedDifficulty]);
+
+  const navigate = useNavigate();
+
+  // Auto-advance after submission/results when running Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && isSubmitted) {
+        try { pushSectionResult({ module: 'speaking-sample', totalQuestions: 1, totalCorrect: 1, totalIncorrect: 0, timestamp: Date.now() }); } catch(e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [isSubmitted, location.search, selectedDifficulty, navigate]);
 
   const startElapsedTicker = () => {
     startTimeRef.current = Date.now();
@@ -138,7 +166,8 @@ export default function SpeakingSample() {
       const diffSec = Math.floor(diffMs / 1000);
       setSecondsElapsed(diffSec);
       if (diffSec >= 30) setCanSubmit(true);
-      if (diffSec >= selectedTime) {
+      const maxAllowed = Math.min(selectedTime || 0, 180); // cap at 180 seconds
+      if (diffSec >= maxAllowed) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
         stopRecording();
@@ -326,6 +355,37 @@ export default function SpeakingSample() {
     setTimerKey(k => k + 1);
   };
 
+  // Auto-start for Full Test: trigger the same menu start
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
+          const shuffled = shuffleArray(pool && pool.length ? pool : exercises);
+          if (shuffled && shuffled.length) {
+            setExercises(shuffled);
+            setCurrent(shuffled[0]);
+          }
+          setIsStarted(true);
+          setIsPreparing(true);
+          setTimerKey(k => k + 1);
+        };
+
+        if (exercises && exercises.length > 0) {
+          doStart();
+        } else {
+          const id = setInterval(() => {
+            if (exercises && exercises.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, isStarted, exercises, selectedDifficulty]);
+
   const handleNextExercise = () => {
     setIsSubmitted(false);
     setAudioUrl(null);
@@ -376,7 +436,7 @@ export default function SpeakingSample() {
           </div>
           <div className="flex items-center gap-3">
             <label className="text-white">Speak time:</label>
-            <select value={selectedTime} onChange={e=>setSelectedTime(Number(e.target.value))} className="bg-gray-800 text-white p-2 rounded">
+            <select value={selectedTime} onChange={e=>setSelectedTime(Math.min(Number(e.target.value), 180))} className="bg-gray-800 text-white p-2 rounded">
               <option value={180}>3 minutes</option>
               <option value={120}>2 minutes</option>
               <option value={90}>90 seconds</option>
@@ -461,7 +521,10 @@ export default function SpeakingSample() {
   return (
     <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-start text-white">
       <div className="max-w-4xl w-full px-4">
-        <h2 className="text-3xl font-bold mb-2">Speaking Sample</h2>
+        <div className="flex items-center justify-center gap-3">
+          <h2 className="text-3xl font-bold mb-2">Speaking Sample</h2>
+          <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
+        </div>
         <p className="text-gray-300 mb-4">Read the prompt, then record your response. Minimum 30s required to submit.</p>
 
         <div className="bg-gray-800 p-6 rounded mb-6">
@@ -497,7 +560,7 @@ export default function SpeakingSample() {
 
               <div className="mt-4 flex items-center justify-between">
                 <div>
-                  <button className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600'}`} onClick={handleSubmit} disabled={!canSubmit}>Submit</button>
+                  <button className={`px-4 py-2 rounded ${canSubmit ? 'bg-blue-500' : 'bg-gray-600'}`} onClick={handleSubmit} disabled={!canSubmit}>Submit</button>
                 </div>
                 <div>
                   {audioUrl && <audio src={audioUrl} controls className="rounded" />}

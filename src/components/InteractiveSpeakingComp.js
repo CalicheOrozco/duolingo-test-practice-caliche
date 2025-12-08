@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import WaveAudioPlayer from './WaveAudioPlayer';
 import ReactCountdownClock from 'react-countdown-clock';
+import DifficultyBadge from './DifficultyBadge';
 
 // --- Detección de Safari ---
 const isSafari = /^((?!chrome|android).)*safari/i.test(
@@ -106,28 +109,31 @@ export default function InteractiveSpeakingComp() {
   // contador basado en tiempo real
   const startTimeRef = useRef(null);
 
+  const location = useLocation();
+
+  // keep selected difficulty updated when query changes
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // fetch data once on mount
   useEffect(() => {
     setIsLoading(true);
     fetch('/dataInteractiveSpeaking.json')
       .then((r) => r.json())
       .then((d) => {
         if (Array.isArray(d) && d.length > 0 && Array.isArray(d[0].questions)) {
-          // El formato que tú usas: array de bloques con "questions"
+          // array de bloques con "questions" -> guardamos los sets
+          // no aplanamos todo en `exercises` porque eso causa que el componente
+          // muestre múltiples bloques y re-ejecute lógicas al cambiar query
           setAllSets(d);
-
-          // Para el contador en el menú, podemos calcular un total aproximado.
-          const flat = [];
-          d.forEach((setObj) => {
-            (setObj.questions || []).forEach((q) => {
-              flat.push({
-                ...q,
-                difficulty: q.difficulty || setObj.difficulty || 'basic',
-                audio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
-              });
-            });
-          });
-          setExercises(flat);
-          setResponses(new Array(flat.length).fill(null));
+          // `exercises` se inicializará cuando el usuario haga Start (o el flujo FullTest lo auto-inicie)
+          setExercises([]);
+          setResponses([]);
         } else if (d && Array.isArray(d.questions)) {
           // Caso: un solo bloque en vez de array de bloques
           setAllSets([d]);
@@ -172,12 +178,131 @@ export default function InteractiveSpeakingComp() {
     };
   }, []);
 
+  // Auto-start for Full Test: pick a set or exercises and begin
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !started && !isLoading) {
+        // reuse the logic from start() but inline to avoid unstable deps
+        if (allSets && Array.isArray(allSets) && allSets.length > 0) {
+          const candidateSetIndices = allSets
+            .map((setObj, idx) => {
+              const questions = (setObj.questions || []).filter((q) =>
+                selectedDifficulty === 'any'
+                  ? true
+                  : (q.difficulty || setObj.difficulty || 'basic') === selectedDifficulty
+              );
+              return { idx, setObj, questions };
+            })
+            .filter(entry => entry.questions.length > 0);
+
+          const pool = candidateSetIndices.length
+            ? candidateSetIndices
+            : allSets
+                .map((setObj, idx) => ({ idx, setObj, questions: setObj.questions || [] }))
+                .filter(entry => entry.questions.length > 0);
+
+          if (!pool.length) return;
+          const chosen = pool[Math.floor(Math.random() * pool.length)];
+          console.log('InteractiveSpeaking auto-start: pool size', pool.length, 'chosen idx', chosen.idx, 'questions', chosen.questions.length);
+          const setObj = chosen.setObj;
+          const questions = chosen.questions;
+          const ex = questions.map((q, index) => ({
+            id: q.id ?? index,
+            prompt: q.prompt || '',
+            audio: (q.audio && q.audio.length) ? q.audio : (setObj.file || ''),
+            difficulty: q.difficulty || setObj.difficulty || 'basic',
+            ...q,
+          }));
+
+          setCurrentSetIndex(chosen.idx);
+          setExercises(ex);
+          setResponses(new Array(ex.length).fill(null));
+          setQuestionIndex(0);
+          setCurrent(ex[0]);
+        } else {
+          const pool = selectedDifficulty === 'any' ? exercises : exercises.filter(e => e.difficulty === selectedDifficulty);
+          const final = pool.length ? pool : exercises;
+          if (!final.length) return;
+          setExercises(final);
+          setResponses(new Array(final.length).fill(null));
+          setQuestionIndex(0);
+          setCurrent(final[0]);
+        }
+
+        setStarted(true);
+        setIsPreparing(true);
+        setPrepKey(k => k + 1);
+      }
+    } catch (e) {}
+  }, [location.search, started, isLoading, allSets, exercises, selectedDifficulty]);
+
+  const navigate = useNavigate();
+  const fullTestAdvanceRef = useRef(false);
+  // reset guard when difficulty or fullTest param changes so repeated runs work
+  useEffect(() => {
+    fullTestAdvanceRef.current = false;
+  }, [location.search]);
+
+  // During Full Test, when this module shows results, advance immediately to the next module
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && showResults) {
+        // prevent double-push / navigation loops
+        if (!fullTestAdvanceRef.current) {
+          try {
+            const total = exercises ? exercises.length : 0;
+            const correct = Array.isArray(responses) ? responses.filter(Boolean).length : 0;
+            const incorrect = Math.max(0, total - correct);
+            console.log('FullTest: interactive-speaking pushing result', { total, correct, incorrect });
+            pushSectionResult({ module: 'interactive-speaking', totalQuestions: total, totalCorrect: correct, totalIncorrect: incorrect, timestamp: Date.now() });
+          } catch(e) { console.warn('pushSectionResult failed', e); }
+
+          const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+          const idx = order.indexOf(window.location.pathname);
+          const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+          console.log('FullTest: interactive-speaking next path', { idx, next, pathname: window.location.pathname, selectedDifficulty });
+          fullTestAdvanceRef.current = true;
+          if (next) {
+            // prefer the difficulty indicated in the URL (if present), otherwise use selectedDifficulty
+            try {
+              const params = new URLSearchParams(location.search);
+              const d = params.get('difficulty') || selectedDifficulty || 'any';
+              navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(d)}`);
+            } catch (e) {
+              navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+            }
+          } else {
+            // no next path found — clear state to avoid hang
+            console.warn('FullTest: no next path from interactive-speaking, clearing state');
+            setShowResults(false);
+            setStarted(false);
+          }
+        }
+      }
+    } catch (e) {}
+  }, [showResults, location.search, selectedDifficulty, navigate, exercises, responses]);
+
   useEffect(() => {
     if (!current && exercises && exercises.length) {
       setQuestionIndex(0);
       setCurrent(exercises[0]);
     }
   }, [exercises, current]);
+
+  // If running a Full Test, once all responses have been recorded, show results automatically
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && exercises && exercises.length && Array.isArray(responses)) {
+        const allAnswered = responses.length === exercises.length && responses.every(r => r && r.url);
+        if (allAnswered) {
+          setShowResults(true);
+        }
+      }
+    } catch (e) {}
+  }, [responses, exercises, location.search]);
 
   // --- Elegir un bloque (set) y cargar TODAS sus preguntas en orden ---
   const start = () => {
@@ -214,6 +339,7 @@ export default function InteractiveSpeakingComp() {
       const chosen = pool[Math.floor(Math.random() * pool.length)];
       const setObj = chosen.setObj;
       const questions = chosen.questions;
+      console.log('InteractiveSpeaking start(): chosen set index', chosen.idx, 'questions', (questions || []).length);
 
       // 3) Creamos los ejercicios del BLOQUE, en orden, uno por cada pregunta
       const ex = questions.map((q, index) => ({
@@ -235,6 +361,7 @@ export default function InteractiveSpeakingComp() {
         ? exercises
         : exercises.filter(e => e.difficulty === selectedDifficulty);
       const final = pool.length ? pool : exercises;
+      console.log('InteractiveSpeaking start(): flat final length', final.length);
 
       if (!final.length) return;
 
@@ -436,7 +563,9 @@ export default function InteractiveSpeakingComp() {
     setSecondsElapsed(0);
 
     if (!exercises || exercises.length === 0) {
-      setStarted(false);
+      // Avoid returning to the pre-start menu mid-run. If exercises are unexpectedly empty,
+      // show results/summary instead so the UI doesn't flip back to the start menu.
+      setShowResults(true);
       return;
     }
 
@@ -582,15 +711,26 @@ export default function InteractiveSpeakingComp() {
     <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-start text-white">
       <div className="max-w-4xl w-full px-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-semibold">Interactive Speaking</h2>
-          <div className="text-gray-300 text-sm">
-            <ReactCountdownClock
-              seconds={selectedTimeSeconds}
-              color="#fff"
-              size={60}
-              paused={!isRecording}
-              onComplete={stopRecording}
-            />
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-semibold">Interactive Speaking</h2>
+            <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
+          </div>
+          <div className="flex items-center gap-4">
+            {exercises && exercises.length > 0 && (
+              <div className="text-sm text-gray-300">
+                Question {Math.min(questionIndex + 1, exercises.length)} of {exercises.length}
+              </div>
+            )}
+            <div className="text-gray-300 text-sm">
+              <ReactCountdownClock
+                key={`q-${questionIndex}-${selectedTimeSeconds}`}
+                seconds={selectedTimeSeconds}
+                color="#fff"
+                size={60}
+                paused={!isRecording}
+                onComplete={stopRecording}
+              />
+            </div>
           </div>
         </div>
 
@@ -632,6 +772,8 @@ export default function InteractiveSpeakingComp() {
                 <WaveAudioPlayer
                   key={current.audio || current.id || questionIndex}
                   audioSrc={current.audio ? `Audios/${current.audio}` : ''}
+                  autoPlay={true} 
+                  disableAfterEnd={true}
                 />
               </div>
 
@@ -666,7 +808,7 @@ export default function InteractiveSpeakingComp() {
               <div className="mt-4 flex items-center justify-between">
                 <div>
                   <button
-                    className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600'}`}
+                    className={`px-4 py-2 rounded ${canSubmit ? 'bg-blue-500' : 'bg-gray-600'}`}
                     onClick={handleSubmit}
                     disabled={!canSubmit}
                   >

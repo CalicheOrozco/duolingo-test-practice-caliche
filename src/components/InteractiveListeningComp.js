@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from 'react-countdown-clock';
 import WaveAudioPlayer from './WaveAudioPlayer';
+import DifficultyBadge from './DifficultyBadge';
 
 function InteractiveListeningComp() {
   const [scenario, setScenario] = useState(null);
@@ -14,6 +17,46 @@ function InteractiveListeningComp() {
   const [started, setStarted] = useState(false);
   const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [selectedTimeSeconds, setSelectedTimeSeconds] = useState(6 * 60 + 30); // default 6:30
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isFullTest = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('fullTest') === '1';
+    } catch (e) {
+      return false;
+    }
+  })();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // Auto-start for Full Test: choose a scenario and go directly to questions
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !started && !loading) {
+        // choose scenario respecting difficulty when possible
+        if (Array.isArray(scenarios) && scenarios.length > 0) {
+          let pool = scenarios;
+          if (selectedDifficulty !== 'any') {
+            const filtered = scenarios.filter((s) => s.difficulty === selectedDifficulty);
+            if (filtered.length > 0) pool = filtered;
+          }
+          const chosen = pool[Math.floor(Math.random() * pool.length)];
+          setScenario(chosen);
+          setAnswers({});
+          setPhase('questions');
+          setStarted(true);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, started, loading, scenarios, selectedDifficulty]);
 
   useEffect(() => {
     const load = async () => {
@@ -119,13 +162,28 @@ function InteractiveListeningComp() {
       (q) => q.type === 'Summary' && q.SummaryExample
     )?.SummaryExample;
 
+  // Compute counts for ListenAndComplete and ListenAndRespond questions
+  const listenCompleteQs = (scenario && scenario.questions)
+    ? scenario.questions.filter((q) => q.type === 'ListenAndComplete')
+    : [];
+  const listenCompleteKeys = listenCompleteQs.map((q, i) => q.id ?? q.question ?? `lc-${i}`);
+  const answeredLC = listenCompleteKeys.reduce((acc, k) => acc + (answers[k] ? 1 : 0), 0);
+
+  const respondQsAll = (scenario && scenario.questions)
+    ? scenario.questions.filter((q) => q.type === 'ListenAndRespond')
+    : [];
+  const totalRespond = respondQsAll.length;
+
 
   return (
     <div className="bg-gray-900 min-h-[60vh] py-8 flex justify-center items-start text-white">
       <div className="max-w-4xl w-full px-4">
         {/* Start menu (choose difficulty & timer) — styled like Interactive Reading */}
         <div className="flex items-center justify-between px-12 mb-4">
-          <h1 className="text-3xl font-bold">Interactive Listening</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold">Interactive Listening</h1>
+            <DifficultyBadge difficulty={scenario?.difficulty || selectedDifficulty} />
+          </div>
           {/* Global countdown visible while the exercise is started (applies to all phases including Summary) */}
           {started && (
             <div className="text-gray-300 text-sm">
@@ -213,11 +271,17 @@ function InteractiveListeningComp() {
         {/* Questions screen */}
         {started && scenario && phase === 'questions' && (
           <div className="py-6">
-            <h2 className="text-2xl font-semibold mb-4 text-center">{scenario.title}</h2>
+            <h2 className="text-2xl font-semibold mb-2 text-center">{scenario.title}</h2>
+            <div className="text-sm text-gray-300 text-center mb-4">
+              Questions: <span className="font-medium text-white">{listenCompleteQs.length}</span>
+              {' — '}
+              Answered: <span className="font-medium text-white">{answeredLC}</span>
+            </div>
 
             <div className="mb-6 flex justify-center">
               <div className="w-full max-w-3xl">
-                <WaveAudioPlayer audioSrc={`Audios/${scenario.file}`} />
+                {/* autoplay the scenario audio when entering questions and disable replay after it ends */}
+                <WaveAudioPlayer audioSrc={`Audios/${scenario.file}`} autoPlay={true} disableAfterEnd={true} />
               </div>
             </div>
 
@@ -257,7 +321,7 @@ function InteractiveListeningComp() {
             </div>
 
             <div className="w-full mt-8 flex justify-end">
-              <button onClick={handleSubmit} className="bg-green-500 text-white px-6 py-3 rounded-md">
+              <button onClick={handleSubmit} className="bg-blue-500 text-white px-6 py-3 rounded-md">
                 Submit
               </button>
             </div>
@@ -267,7 +331,12 @@ function InteractiveListeningComp() {
         {/* Respond screen: ListenAndRespond questions (one at a time) */}
         {started && scenario && phase === 'respond' && (
           <div className="py-6">
-            <h2 className="text-2xl font-semibold mb-4 text-center">{scenario.title}</h2>
+            <h2 className="text-2xl font-semibold mb-2 text-center">{scenario.title}</h2>
+            {currentRespondIdx !== null && (
+              <div className="text-sm text-gray-300 text-center mb-4">
+                Question <span className="font-medium text-white">{currentRespondIdx + 1}</span> of <span className="font-medium text-white">{totalRespond}</span>
+              </div>
+            )}
 
             <div className="max-w-3xl mx-auto w-full">
               {(() => {
@@ -334,7 +403,8 @@ function InteractiveListeningComp() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-4">
                       <div className="w-full">
-                        <WaveAudioPlayer audioSrc={q.audio} bars={40} className="rounded-lg p-3" />
+                        {/* autoplay each respond audio when shown and disable replay after playback */}
+                        <WaveAudioPlayer audioSrc={q.audio} bars={40} className="rounded-lg p-3" autoPlay={true} disableAfterEnd={true} onEnded={() => { /* ensure any UI hooks are safe */ }} />
                       </div>
                     </div>
 
@@ -484,9 +554,51 @@ function InteractiveListeningComp() {
 
               <div className="flex-shrink-0 flex items-center">
                 <button
-                  onClick={() => {
+                    onClick={() => {
                     setShowSummaryExample(false);
-                    tryAgain();
+                    if (isFullTest) {
+                      try {
+                        // compute totals using available answers; if exact expected answer exists, compare, otherwise count answered items
+                        const total = scenario ? (scenario.questions ? scenario.questions.length : 0) : 0;
+                        let correctCount = 0;
+                        if (scenario && scenario.questions) {
+                          correctCount = scenario.questions.reduce((acc, q) => {
+                            const uid = q.id;
+                            const user = answers && Object.prototype.hasOwnProperty.call(answers, uid) ? answers[uid] : null;
+
+                            // Treat ListenAndComplete items as correct when the user provided any non-empty answer
+                            if (q.type === 'ListenAndComplete') {
+                              if (user != null && String(user).trim() !== '') return acc + 1;
+                              return acc;
+                            }
+
+                            const expected = q.answer || q.correct || q.correctAnswer || '';
+                            if (user == null || String(user).trim() === '') return acc;
+                            if (expected) {
+                              try {
+                                if (String(user).trim().toLowerCase() === String(expected).trim().toLowerCase()) return acc + 1;
+                                return acc;
+                              } catch (e) { return acc; }
+                            }
+                            // if no expected answer provided, count as completed
+                            return acc + 1;
+                          }, 0);
+                        }
+                        const incorrectCount = Math.max(0, total - correctCount);
+                        try { pushSectionResult({ module: 'interactive-listening', totalQuestions: total, totalCorrect: correctCount, totalIncorrect: incorrectCount, timestamp: Date.now() }); } catch(e) {}
+                        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+                        const idx = order.indexOf(window.location.pathname);
+                        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+                        if (next) {
+                          navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+                          return;
+                        }
+                      } catch (e) {}
+                      // fallback: reset local state if no next module
+                      tryAgain();
+                    } else {
+                      tryAgain();
+                    }
                   }}
                   className="ml-6 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded shadow"
                 >

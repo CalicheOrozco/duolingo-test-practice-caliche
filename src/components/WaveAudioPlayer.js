@@ -10,12 +10,13 @@ import React, { useRef, useState, useEffect } from 'react';
 // simple in-memory cache for decoded waveform/bar data per audioSrc
 const waveCache = new Map();
 
-export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', title, onPlay, onPause, onEnded }) {
+export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', title, onPlay, onPause, onEnded, autoPlay = false, disableAfterEnd = false }) {
   const audioRef = useRef(null);
   const containerRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [hasEnded, setHasEnded] = useState(false);
   const [barsArray, setBarsArray] = useState(() => {
     // initial deterministic fallback so UI isn't empty while decoding
     const seed = audioSrc ? audioSrc.length : 1;
@@ -126,6 +127,8 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
   const toggle = () => {
     const a = audioRef.current;
     if (!a) return;
+    // if disableAfterEnd requested and audio already ended, ignore toggles
+    if (disableAfterEnd && hasEnded) return;
     if (a.paused) {
       a.play();
       setPlaying(true);
@@ -160,21 +163,45 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
     setCurrentTime(a.currentTime);
   };
 
+  // autoplay when audioSrc changes if requested
+  useEffect(() => {
+    setHasEnded(false);
+    if (!audioRef.current) return;
+    if (autoPlay) {
+      try {
+        audioRef.current.play();
+        setPlaying(true);
+        onPlay && onPlay();
+      } catch (e) {
+        // autoplay may be blocked by browser; ignore
+      }
+    }
+    // reset playback state
+    setCurrentTime(0);
+  }, [audioSrc]);
+
   return (
     <div className={`wave-audio-player ${className}`}>
       {title && <div className="text-base text-gray-200 mb-2">{title}</div>}
       <div className="w-full bg-gray-700 rounded-2xl p-4 flex items-center">
-        <button
-          onClick={toggle}
-          aria-label={playing ? 'Pause' : 'Play'}
-          className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-md hover:scale-105 transition-transform"
-        >
-          {playing ? (
-            <svg width="20" height="20" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" fill="#000" /><rect x="14" y="5" width="4" height="14" fill="#000" /></svg>
-          ) : (
-            <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 3v18l15-9L5 3z" fill="#000" /></svg>
-          )}
-        </button>
+        {(() => {
+          const isReplayDisabled = disableAfterEnd && hasEnded;
+          return (
+            <button
+              onClick={toggle}
+              aria-label={playing ? 'Pause' : (isReplayDisabled ? 'Replay disabled' : 'Play')}
+              aria-disabled={isReplayDisabled}
+              disabled={isReplayDisabled}
+              className={`w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-transform ${isReplayDisabled ? 'bg-gray-400 cursor-not-allowed opacity-80' : 'bg-green-500 hover:scale-105'}`}
+            >
+              {playing ? (
+                <svg width="20" height="20" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" fill="#000" /><rect x="14" y="5" width="4" height="14" fill="#000" /></svg>
+              ) : (
+                <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 3v18l15-9L5 3z" fill="#000" /></svg>
+              )}
+            </button>
+          );
+        })()}
 
         <div className="flex-1 ml-4">
           <div className="bg-gray-800 rounded-lg p-3">
@@ -213,6 +240,7 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
           onEnded={() => {
             setPlaying(false);
             setCurrentTime(0);
+            setHasEnded(true);
             onEnded && onEnded();
           }}
           onTimeUpdate={onTimeUpdate}

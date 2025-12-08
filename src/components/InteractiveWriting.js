@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from 'react-countdown-clock';
+import DifficultyBadge from './DifficultyBadge';
 
 export default function InteractiveWriting() {
   const [topics, setTopics] = useState([]);
@@ -24,6 +27,64 @@ export default function InteractiveWriting() {
         console.error('Failed to load interactive writing prompts', err);
       });
   }, []);
+
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // Auto-start for Full Test: pick a topic and enter prepare phase
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1') {
+        const doStart = () => {
+          if (!topics || topics.length === 0) return;
+          let pool = topics;
+          if (selectedDifficulty !== 'any') {
+            const filtered = topics.filter((t) => t.difficulty === selectedDifficulty);
+            if (filtered.length > 0) pool = filtered;
+          }
+          const idx = Math.floor(Math.random() * pool.length);
+          setCurrent(pool[idx]);
+          setPhase('prepare');
+          setTimerKey((k) => k + 1);
+          setAnswer('');
+          setWriteStage('main');
+        };
+
+        if (topics && topics.length > 0) doStart();
+        else {
+          const id = setInterval(() => {
+            if (topics && topics.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, topics, selectedDifficulty]);
+
+  const navigate = useNavigate();
+
+  // If running Full Test, when the module reaches the final sample screen, advance immediately
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && writeStage === 'followUpSample') {
+        try { pushSectionResult({ module: 'interactive-writing', totalQuestions: 1, totalCorrect: 1, totalIncorrect: 0, timestamp: Date.now() }); } catch(e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [writeStage, location.search, selectedDifficulty, navigate]);
 
   const start = () => {
     if (!topics || topics.length === 0) return;
@@ -102,7 +163,9 @@ export default function InteractiveWriting() {
     <div className="App bg-gray-900 min-h-[60vh] text-white px-6">
       {phase === 'menu' && (
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-3xl font-bold mb-2">Interactive Writing</h1>
+          <div className="flex items-center justify-center gap-3">
+            <h1 className="text-3xl font-bold mb-2">Interactive Writing</h1>
+          </div>
           <p className="text-gray-300 mb-6">Prepare and write responses similar to the Duolingo English Test interactive writing task.</p>
 
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -150,6 +213,7 @@ export default function InteractiveWriting() {
               <ReactCountdownClock key={timerKey} seconds={prepareSeconds} color="#fff" size={56} onComplete={onPrepareComplete} />
             </div>
             <div className="text-sm">to prepare</div>
+            <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
           </div>
 
           <div className="text-center py-12 px-4">
@@ -163,7 +227,7 @@ export default function InteractiveWriting() {
             </div>
 
             <div className="flex justify-center">
-              <button onClick={() => setPhase('writing')} className="bg-blue-600 px-6 py-2 rounded font-semibold">
+              <button onClick={() => setPhase('writing')} className="bg-green-600 px-6 py-2 rounded font-semibold">
                 Continue
               </button>
             </div>
@@ -187,6 +251,7 @@ export default function InteractiveWriting() {
                   />
                 </div>
                 <div className="text-sm">to {writeStage === 'followup' ? 'follow-up' : 'write'}</div>
+                <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
               </div>
               <div />
             </div>
@@ -213,7 +278,7 @@ export default function InteractiveWriting() {
                   />
 
                   <div className="flex justify-center mt-6">
-                    <button type="submit" disabled={isProcessing} className={`px-6 py-3 rounded-full font-semibold text-white ${isProcessing ? 'bg-gray-600 cursor-wait' : 'bg-gray-700'}`}>
+                    <button type="submit" disabled={isProcessing} className={`px-6 py-3 rounded-full font-semibold text-white ${isProcessing ? 'bg-gray-600 cursor-wait' : 'bg-blue-700'}`}>
                       {isProcessing ? (
                         <span className="flex items-center">
                           <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

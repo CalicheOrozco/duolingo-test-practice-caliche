@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
+import DifficultyBadge from './DifficultyBadge';
 
 function ReadAndCompleteComp() {
   const { register, handleSubmit, setFocus, getValues, reset } = useForm();
@@ -18,6 +21,73 @@ function ReadAndCompleteComp() {
   // pre-start configuration
   const [selectedSeconds, setSelectedSeconds] = useState(180); // 3:00
   const [selectedDifficulty, setSelectedDifficulty] = useState("any"); // basic/medium/advanced/any
+
+  const location = useLocation();
+  const isFullTest = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get("fullTest") === "1";
+    } catch (e) {
+      return false;
+    }
+  })();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // Auto-start for Full Test: start a round automatically
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          setFormData(null);
+          setSubmited(false);
+          setAnsweredCount(0);
+          setTotalCorrect(0);
+          setTotalIncorrect(0);
+          setCorrectList([]);
+          setWrongList([]);
+          setFrase(null);
+
+          const pool =
+            selectedDifficulty === "any"
+              ? [...allItems]
+              : allItems.filter(
+                  (it) =>
+                    (it.difficulty || "").toLowerCase() ===
+                    selectedDifficulty.toLowerCase()
+                );
+
+          const desired = 3 + Math.floor(Math.random() * 4);
+          const count = Math.min(desired, pool.length);
+          const indices = new Set();
+          while (indices.size < count && pool.length > 0) {
+            indices.add(Math.floor(Math.random() * pool.length));
+          }
+          const round = Array.from(indices).map((i) => pool[i]);
+
+          setFrases(round);
+          setTotalQuestions(round.length);
+          setIsStarted(true);
+        };
+
+        if (allItems && allItems.length > 0) doStart();
+        else {
+          const id = setInterval(() => {
+            if (allItems && allItems.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, isStarted, allItems, selectedDifficulty]);
 
   // round progress + results
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -95,6 +165,21 @@ function ReadAndCompleteComp() {
   useEffect(() => {
     loadAll();
   }, []);
+
+  const navigate = useNavigate();
+
+  // Auto-advance after results when running full test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && frase === undefined && isStarted) {
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [frase, isStarted, location.search, selectedDifficulty, navigate]);
 
   // when round starts, pull first question
   useEffect(() => {
@@ -270,12 +355,26 @@ function ReadAndCompleteComp() {
       setWrongList((arr) => [...arr, record]);
     }
 
-    // auto-advance after a short delay
-    setTimeout(() => {
-      if (frases.length > 0) {
-        getRandomFrase();
+    // auto-advance after a short delay, or immediately navigate when running full test
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get("fullTest") === "1" && frases.length === 0) {
+        try {
+          // push section summary to session storage for final aggregation
+          pushSectionResult({ module: 'read-and-complete', totalQuestions: totalQuestions || 0, totalCorrect: totalCorrect || 0, totalIncorrect: totalIncorrect || 0, timestamp: Date.now() });
+        } catch (e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      } else {
+        setTimeout(() => {
+          if (frases.length > 0) {
+            getRandomFrase();
+          }
+        }, 800);
       }
-    }, 800);
+    } catch (e) {}
   };
 
   let beforeAnswers = [];
@@ -323,8 +422,9 @@ function ReadAndCompleteComp() {
         frase ? (
           <div className="px-10">
             <div className="w-full flex justify-between items-center mt-3">
-              <div className="text-white font-semibold">
-                Question {answeredCount + 1} of {totalQuestions}
+              <div className="flex items-center gap-3 text-white font-semibold">
+                <div>Question {submited ? answeredCount : answeredCount + 1} of {totalQuestions}</div>
+                <DifficultyBadge difficulty={frase?.difficulty || selectedDifficulty} />
               </div>
               <ReactCountdownClock
                 weight={10}
@@ -337,9 +437,10 @@ function ReadAndCompleteComp() {
             </div>
             {/* Form with white space */}
             <form onSubmit={handleSubmit(onSubmit)}>
-              <h1 className=" text-4xl font-bold  text-white text-center py-5">
-                Type the missing letters to complete the text below
-              </h1>
+              <div className="flex flex-col items-center">
+                <h1 className=" text-4xl font-bold  text-white text-center py-5">Type the missing letters to complete the text below</h1>
+                
+              </div>
               <div className="flex flex-wrap p-3">
                 {frase.sentence.map((item, index) => {
                   const answerMeta =
@@ -474,14 +575,14 @@ function ReadAndCompleteComp() {
                   <input
                     type="submit"
                     value="Submit"
-                    className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+                    className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
                   />
                 </div>
               ) : null}
             </form>
 
             {/* End of round summary when no more frases */}
-            {submited && frases.length === 0 && (
+            {submited && frases.length === 0 && !isFullTest && (
               <div className="mt-6 w-full flex justify-center items-center flex-col text-white p-4">
                 <h2 className="text-3xl font-bold text-center mb-3">
                   Results

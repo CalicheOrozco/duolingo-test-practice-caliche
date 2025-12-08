@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
 import { HiSpeakerWave } from "react-icons/hi2";
+import DifficultyBadge from './DifficultyBadge';
 
 function ListeningTestComp() {
   const {
@@ -80,6 +83,93 @@ function ListeningTestComp() {
     getAudios();
   }, []);
 
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  const navigate = useNavigate();
+
+  // Auto-advance after test finished when running Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && testFinished) {
+        try {
+          // aggregate listening results
+          const total = results ? results.length : (totalCount || 0);
+          const correctCount = results ? results.filter(r => r.correct).length : 0;
+          try { pushSectionResult({ module: 'listening-test', totalQuestions: total, totalCorrect: correctCount, totalIncorrect: total - correctCount, timestamp: Date.now() }); } catch(e) {}
+        } catch (e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [testFinished, location.search, selectedDifficulty, navigate, results, totalCount]);
+
+  // Auto-start for Full Test: begin the listening test immediately
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          let filtered = pool || [];
+              // treat both 'all' and 'any' as no-filter
+              if (selectedDifficulty !== 'all' && selectedDifficulty !== 'any') {
+                filtered = filtered.filter((a) => a.difficulty === selectedDifficulty);
+              }
+
+          const minExercises = 8;
+          const maxExercises = 12;
+          const randomCount = Math.min(
+            filtered.length,
+            Math.floor(Math.random() * (maxExercises - minExercises + 1)) + minExercises
+          );
+
+          const shuffled = [...filtered];
+          for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+          }
+          const selectedSet = shuffled.slice(0, randomCount);
+
+          setAudios(selectedSet);
+          setTotalCount(randomCount);
+          setIsStarted(true);
+          setQuestionIndex(0);
+          if (selectedSet.length > 0) {
+            const arr = selectedSet;
+            const randomNumero = Math.floor(Math.random() * arr.length);
+            const randomAudio = arr[randomNumero];
+            setAudio(randomAudio);
+            setQuestionIndex((q) => q + 1);
+            const newAudios = [...arr];
+            newAudios.splice(randomNumero, 1);
+            setAudios(newAudios);
+            setReplay(3);
+            reset();
+          } else setTestFinished(true);
+        };
+
+        if (pool && pool.length > 0) doStart();
+        else {
+          const id = setInterval(() => {
+            if (pool && pool.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, pool, selectedDifficulty, isStarted, reset]);
+
   // NOTE: removed automatic getRandomAudio on `audios` changes to avoid double-advances.
 
   const onSubmit = (data) => {
@@ -146,7 +236,8 @@ function ListeningTestComp() {
   // filter pool by difficulty (pool contains the full fetched dataset)
   let filtered = pool || [];
     // use the full fetched list (we fetched into audios initially). If audios already filtered earlier, it's fine.
-    if (selectedDifficulty !== "all") {
+    // accept both 'all' and 'any' as no filtering
+    if (selectedDifficulty !== "all" && selectedDifficulty !== "any") {
       filtered = filtered.filter((a) => a.difficulty === selectedDifficulty);
     }
 
@@ -178,9 +269,9 @@ function ListeningTestComp() {
       {/* Main page (when not started) */}
       {!isStarted && !testFinished && (
         <div className="flex flex-col items-center text-center px-5 gap-4">
-          <h1 className="text-4xl text-white font-bold mb-1 ">
-            Welcome to the Listening test
-          </h1>
+          <div className="flex items-center justify-center gap-3">
+            <h1 className="text-4xl text-white font-bold mb-1 ">Welcome to the Listening test</h1>
+          </div>
           <span className="text-xl text-white">
             Choose difficulty and timer, then start. You will have the selected time to
             write what you hear.
@@ -212,7 +303,7 @@ function ListeningTestComp() {
             </select>
           </div>
 
-          <div className="mt-2 text-sm text-gray-300">Available exercises: {selectedDifficulty === 'all' ? (pool ? pool.length : 0) : (pool ? pool.filter(i => i.difficulty === selectedDifficulty).length : 0)}</div>
+          <div className="mt-2 text-sm text-gray-300">Available exercises: {(selectedDifficulty === 'all' || selectedDifficulty === 'any') ? (pool ? pool.length : 0) : (pool ? pool.filter(i => i.difficulty === selectedDifficulty).length : 0)}</div>
 
           <div className="flex">
             <input
@@ -236,7 +327,10 @@ function ListeningTestComp() {
           <div className="px-10 lg:w-1/2">
             {/* progress indicator */}
             <div className="w-full flex justify-between items-center mb-2">
-              <div className="text-white">Question {questionIndex} of {totalCount}</div>
+              <div className="flex items-center gap-3 text-white">
+                <div>Question {questionIndex} of {totalCount}</div>
+                <DifficultyBadge difficulty={audio?.difficulty || selectedDifficulty} />
+              </div>
               <div className="text-white text-sm">Remaining: {audios ? audios.length : 0}</div>
             </div>
             {/* Countdown */}
@@ -295,7 +389,7 @@ function ListeningTestComp() {
                 <input
                   type="submit"
                   value="Submit"
-                  className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+                  className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
                 />
               </div>
             </form>

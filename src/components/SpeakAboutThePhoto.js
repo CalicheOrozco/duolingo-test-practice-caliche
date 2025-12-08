@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from 'react-countdown-clock';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
@@ -199,6 +200,39 @@ export default function SpeakAboutThePhoto() {
 
   // UI flags
   const [isStarted, setIsStarted] = useState(false);
+  const location = useLocation();
+  const isFullTest = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('fullTest') === '1';
+    } catch (e) {
+      return false;
+    }
+  })();
+  const fullTestDifficulty = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('difficulty') || 'any';
+    } catch (e) {
+      return 'any';
+    }
+  })();
+
+  // Auto-start when running as part of Full Test: skip pre-start menu and begin recording
+  useEffect(() => {
+    try {
+      if (isFullTest && !isStarted) {
+        setIsStarted(true);
+        setIsPreparing(false);
+        setTimerKey((k) => k + 1);
+        // slight delay to allow component to mount before requesting mic
+        setTimeout(() => {
+          startRecording();
+        }, 150);
+      }
+    } catch (e) {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFullTest, isStarted]);
 
   useEffect(() => {
     // fetch a random image on mount
@@ -521,6 +555,21 @@ export default function SpeakAboutThePhoto() {
     streamRef.current = null;
     startTimeRef.current = null;
 
+    // If running as part of Full Test, navigate to the next module instead of loading another image
+    if (isFullTest) {
+      try {
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        console.log('SpeakAboutThePhoto next:', { idx, next, pathname: window.location.pathname });
+        if (next) {
+          try { pushSectionResult({ module: 'speak-about-photo', totalQuestions: 1, totalCorrect: 1, totalIncorrect: 0, timestamp: Date.now() }); } catch(e) {}
+          navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(fullTestDifficulty)}`);
+          return;
+        }
+      } catch (e) {}
+    }
+
     fetchRandomImage();
   };
 
@@ -574,7 +623,9 @@ export default function SpeakAboutThePhoto() {
 
   return (
     <div className="App bg-gray-900 w-full min-h-[60vh] py-6 px-4 sm:px-6 flex flex-col items-center justify-start text-white">
-      <h2 className="text-3xl font-bold mb-2">Speak about the image below</h2>
+      <div className="flex items-center justify-center gap-3">
+        <h2 className="text-3xl font-bold mb-2">Speak about the image below</h2>
+      </div>
       <p className="text-gray-300 mb-4">
         You have {totalSeconds} seconds to speak. Minimum 30 seconds required to submit.
       </p>
@@ -668,7 +719,7 @@ export default function SpeakAboutThePhoto() {
         <div className="mt-4 flex items-center justify-between">
           <div>
             <button
-              className={`px-4 py-2 rounded ${canSubmit ? 'bg-green-500' : 'bg-gray-600 cursor-not-allowed'}`}
+              className={`px-4 py-2 rounded ${canSubmit ? 'bg-blue-500' : 'bg-gray-600 cursor-not-allowed'}`}
               onClick={handleSubmit}
               disabled={!canSubmit}
             >
@@ -689,8 +740,9 @@ export default function SpeakAboutThePhoto() {
         {/* Navegación, igual idea que SpeakingSample (Next abajo a la derecha) */}
         <div className="flex justify-end gap-3 mt-4">
           <button
-            className="px-4 py-2 rounded bg-gray-900 text-white"
-            onClick={() => navigate('/')}
+            className="px-4 py-2 rounded bg-white text-green-700 font-bold disabled:bg-gray-600 disabled:text-gray-300"
+            onClick={() => { if (!isSubmitted || !audioUrl) return; window.location.href = '/speak-about-photo'; }}
+            disabled={!isSubmitted || !audioUrl}
           >
             Back to the main
           </button>

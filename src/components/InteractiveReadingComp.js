@@ -1,12 +1,67 @@
 import { useEffect, useState, useRef, useMemo } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from "react-countdown-clock";
+import DifficultyBadge from './DifficultyBadge';
 
 function InteractiveReadingComp() {
   const [allItems, setAllItems] = useState([]);
   const [selectedDifficulty, setSelectedDifficulty] = useState("any");
+
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  
   const [exercise, setExercise] = useState(null);
   const [answers, setAnswers] = useState({});
   const [started, setStarted] = useState(false);
+  // Auto-start for Full Test: start the exercise immediately
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !started) {
+        const doStart = () => {
+          const pool =
+            selectedDifficulty === "any"
+              ? allItems
+              : allItems.filter((i) => i.difficulty === selectedDifficulty);
+          if (!pool || pool.length === 0) return;
+          const candidates = pool.filter((item) => {
+            if (!item.questions || item.questions.length < 5) return false;
+            if (!item.questions.every((q) => q.type === "CompleteTheSentence")) return false;
+            const passageText = (item.passage || []).join(" ");
+            const markers = passageText.match(/\[\d+\]/g) || [];
+            return markers.length >= 5;
+          });
+          const pickPool = candidates.length > 0 ? candidates : pool;
+          const idx = Math.floor(Math.random() * pickPool.length);
+          setExercise(pickPool[idx]);
+          setAnswers({});
+          setStarted(true);
+          setShowResults(false);
+          setScore(0);
+          setViewMode("selectors");
+          setPassageStage(1);
+        };
+
+        if (allItems && allItems.length > 0) doStart();
+        else {
+          const id = setInterval(() => {
+            if (allItems && allItems.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, started, allItems, selectedDifficulty]);
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   // Timer options: seconds
@@ -167,6 +222,22 @@ function InteractiveReadingComp() {
     ? Math.round((score / exercise.questions.length) * 100)
     : 0;
 
+  const navigate = useNavigate();
+
+  // Auto-advance when this module shows results during Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && showResults) {
+        try { pushSectionResult({ module: 'interactive-reading', totalQuestions: exercise ? exercise.questions.length : 0, totalCorrect: score || 0, totalIncorrect: exercise ? (exercise.questions.length - (score || 0)) : 0, timestamp: Date.now() }); } catch(e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [showResults, location.search, selectedDifficulty, navigate, exercise, score]);
+
   // Listen for text selection inside the passage when there are HighlightTheAnswer questions
   useEffect(() => {
     if (!exercise || viewMode !== "passage") return;
@@ -259,12 +330,10 @@ function InteractiveReadingComp() {
             {!showResults ? (
               <>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">
-                    {exercise.title}{" "}
-                    <span className="text-sm text-gray-300">
-                      ({exercise.difficulty})
-                    </span>
-                  </h2>
+                    <h2 className="text-xl font-semibold">
+                      {exercise.title} {" "}
+                      <DifficultyBadge difficulty={exercise.difficulty} />
+                    </h2>
                   <div className="text-gray-300 text-sm">
                     <ReactCountdownClock
                       weight={10}
@@ -361,7 +430,7 @@ function InteractiveReadingComp() {
                             className="bg-[#0f0f0f] border border-gray-700 rounded p-3"
                           >
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">
+                              <div className="w-8 h-8 flex items-center justify-center bg-blue-500 text-gray-200 rounded">
                                 {idx + 1}
                               </div>
                               <div className="text-sm text-gray-300">
@@ -526,7 +595,7 @@ function InteractiveReadingComp() {
                                   className="bg-[#0f0f0f] border border-gray-700 rounded p-3"
                                 >
                                   <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">
+                                    <div className="w-8 h-8 flex items-center justify-center bg-blue-500 text-gray-200 rounded">
                                       {idx + 1}
                                     </div>
                                     <div className="text-sm text-gray-300">
@@ -641,7 +710,7 @@ function InteractiveReadingComp() {
                                     className="bg-[#0f0f0f] border border-gray-700 rounded p-3"
                                   >
                                     <div className="flex items-center gap-3 mb-2">
-                                      <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">
+                                      <div className="w-8 h-8 flex items-center justify-center bg-blue-500 text-gray-200 rounded">
                                         {idx + 1}
                                       </div>
                                       <div className="text-sm text-gray-300">
@@ -706,7 +775,7 @@ function InteractiveReadingComp() {
                                     className="bg-[#0f0f0f] border border-gray-700 rounded p-3"
                                   >
                                     <div className="flex items-center gap-3 mb-2">
-                                      <div className="w-8 h-8 flex items-center justify-center bg-gray-900 text-gray-200 rounded">
+                                      <div className="w-8 h-8 flex items-center justify-center bg-blue-500 text-gray-200 rounded">
                                         {idx + 1}
                                       </div>
                                       <div className="text-sm text-gray-300">
@@ -755,7 +824,7 @@ function InteractiveReadingComp() {
                       <div className="mt-4 flex justify-end items-center">
                         {passageStage < lastStage && (
                           <button
-                            className={`bg-gray-700 hover:bg-gray-900 text-white px-4 py-2 rounded mr-3 ${
+                            className={`bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded mr-3 ${
                               isNextDisabled
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""

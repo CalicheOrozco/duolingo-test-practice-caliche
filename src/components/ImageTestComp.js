@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
+import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
 const initialTopics = [
@@ -122,6 +124,24 @@ export default function ImageTestComp() {
   const [results, setResults] = useState([]);
   const [timerKey, setTimerKey] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isFullTest = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('fullTest') === '1';
+    } catch (e) {
+      return false;
+    }
+  })();
+  const fullTestDifficulty = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('difficulty') || 'any';
+    } catch (e) {
+      return 'any';
+    }
+  })();
 
   // topics are taken from initialTopics stored in state (topicsPool)
 
@@ -205,6 +225,21 @@ export default function ImageTestComp() {
       getTopic();
     } else {
       // finished all rounds
+      if (isFullTest) {
+        try {
+          // results state update is async; include the current entry in the pushed totals
+          const total = (results ? results.length : 0) + 1;
+          try { pushSectionResult({ module: 'image-test', totalQuestions: total, totalCorrect: total, totalIncorrect: 0, timestamp: Date.now() }); } catch(e) {}
+          const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+          const idx = order.indexOf(window.location.pathname);
+          const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+            if (next) {
+            navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(fullTestDifficulty)}`);
+            return;
+          }
+        } catch (e) {}
+        // fallback to showing results if navigation failed
+      }
       setShowResults(true);
     }
   };
@@ -296,6 +331,19 @@ export default function ImageTestComp() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+    // If running as part of Full Test, auto-start the exercise (no pre-start config)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+      try {
+        if (isFullTest && !isStarted) {
+          setIsStarted(true);
+          // ensure we have a topic ready; getTopic() was called on mount but call again if needed
+          if (!topic) getTopic();
+        }
+      } catch (e) {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFullTest, isStarted]);
+
   // Apply replacements using offsets returned by LanguageTool
   const applyReplacements = (errors, text) => {
     if (!errors || errors.length === 0) return text;
@@ -319,7 +367,7 @@ export default function ImageTestComp() {
 
   return (
     <div className="App bg-gray-900 w-full min-h-[60vh] py-3 flex items-center justify-center">
-      {isStarted ? (
+      {(isStarted || isFullTest) ? (
         topic ? (
           <div >
             {/* Countdown */}
@@ -339,6 +387,10 @@ export default function ImageTestComp() {
               <h1 className=" text-4xl font-bold  text-white text-center py-5">
                 Write a description of the image below for 1 minute.
               </h1>
+              {/* Round indicator: show which question out of total the user is on */}
+              <div className="text-center text-sm text-gray-300 mb-4">
+                Question {Math.min(currentRound + 1, totalRounds)} of {totalRounds}
+              </div>
               <div className="flex justify-around p-1 items-center flex-col md:flex-row  gap-6 md:gap-5">
                 <LazyLoadImage
                   className="rounded max-w-[400px] w-full h-auto"
@@ -346,9 +398,22 @@ export default function ImageTestComp() {
                   alt={altImg ? altImg : "Loading..."}
                 />
             {/* Final results modal */}
-            {showResults ? (
+              {showResults ? (
               <div className="fixed inset-0 z-50 flex items-center justify-center">
-                <div className="absolute inset-0 bg-black opacity-70" onClick={() => setShowResults(false)} />
+                <div className="absolute inset-0 bg-black opacity-70" onClick={() => {
+                  if (isFullTest) {
+                    try {
+                      const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+                      const idx = order.indexOf(window.location.pathname);
+                      const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+                      if (next) {
+                        navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(fullTestDifficulty)}`);
+                        return;
+                      }
+                    } catch (e) {}
+                  }
+                  setShowResults(false);
+                }} />
                 <div className="relative bg-gray-800 text-white rounded-lg max-w-4xl w-full p-6 z-50">
                   <h2 className="text-2xl font-bold mb-4 text-white">Resultados — Resumen de la sesión</h2>
                   <div className="space-y-4 max-h-[60vh] overflow-auto">
@@ -383,8 +448,44 @@ export default function ImageTestComp() {
                     ))}
                   </div>
                   <div className="mt-4 flex justify-end gap-2">
-                    <button className="px-4 py-2 bg-gray-700 text-white rounded" onClick={() => setShowResults(false)}>Close</button>
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded" onClick={() => resetSession()}>Restart session</button>
+                    <button
+                      className="px-4 py-2 bg-gray-700 text-white rounded"
+                      onClick={() => {
+                        if (isFullTest) {
+                          try {
+                            const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+                            const idx = order.indexOf(window.location.pathname);
+                            const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+                            if (next) {
+                              navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(fullTestDifficulty)}`);
+                              return;
+                            }
+                          } catch (e) {}
+                        }
+                        setShowResults(false);
+                      }}
+                    >
+                      Close
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-blue-600 text-white rounded"
+                      onClick={() => {
+                        if (isFullTest) {
+                          try {
+                            const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+                            const idx = order.indexOf(window.location.pathname);
+                            const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+                            if (next) {
+                              navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(fullTestDifficulty)}`);
+                              return;
+                            }
+                          } catch (e) {}
+                        }
+                        resetSession();
+                      }}
+                    >
+                      Restart session
+                    </button>
                   </div>
                 </div>
               </div>
@@ -461,7 +562,7 @@ export default function ImageTestComp() {
                   <button
                     type="submit"
                     disabled={isChecking}
-                    className={`mt-6 text-white p-2 w-32 cursor-pointer rounded-xl ${isChecking ? 'bg-gray-600 opacity-80 cursor-wait' : 'bg-green-500'}`}
+                    className={`mt-6 text-white p-2 w-32 cursor-pointer rounded-xl ${isChecking ? 'bg-gray-600 opacity-80 cursor-wait' : 'bg-blue-500'}`}
                   >
                     {isChecking ? (
                       <span className="flex items-center justify-center">
@@ -521,42 +622,47 @@ export default function ImageTestComp() {
               ) : null}
             </>
           </div>
-        ) : urlImg === null ? ( <h1 className="text-3xl text-white">Loading...</h1> ) 
-         : (
+        ) : urlImg === null ? (
+          <div className="flex flex-col items-center">
+            <h1 className="text-3xl text-white mb-2">Loading...</h1>
+            <div className="text-sm text-gray-300">Question {Math.min(currentRound + 1, totalRounds)} of {totalRounds}</div>
+          </div>
+        ) : (
           <h1 className="text-xl text-white">The images are over 😢😢</h1>
-        )
-      ) : (
-        // main page with the start menu
-        <div className="flex flex-col items-center text-center px-5 gap-4">
-          <h1 className="text-4xl text-white font-bold mb-1">Welcome to the image test</h1>
-          <p className="text-lg text-white">Choose how long you want to write and then press Start.</p>
+        ) // end topic ternary
+      ) : ( // not started -> show pre-start menu (hidden if fullTest)
+        !isFullTest ? (
+          <div className="flex flex-col items-center text-center px-5 gap-4">
+            <h1 className="text-4xl text-white font-bold mb-1">Welcome to the image test</h1>
+            <p className="text-lg text-white">Choose how long you want to write and then press Start.</p>
 
-          <div className="flex flex-col md:flex-row items-center gap-4 mt-3">
-            <label className="text-white">Timer:</label>
-            <select
-              value={selectedTime}
-              onChange={(e) => setSelectedTime(Number(e.target.value))}
-              className="bg-gray-800 text-white p-2 rounded"
-            >
-              <option value={60}>1 minuto</option>
-              <option value={55}>55 segundos</option>
-              <option value={50}>50 segundos</option>
-              <option value={45}>45 segundos</option>
-              <option value={40}>40 segundos</option>
-            </select>
-          </div>
+            <div className="flex flex-col md:flex-row items-center gap-4 mt-3">
+              <label className="text-white">Timer:</label>
+              <select
+                value={selectedTime}
+                onChange={(e) => setSelectedTime(Number(e.target.value))}
+                className="bg-gray-800 text-white p-2 rounded"
+              >
+                <option value={60}>1 minuto</option>
+                <option value={55}>55 segundos</option>
+                <option value={50}>50 segundos</option>
+                <option value={45}>45 segundos</option>
+                <option value={40}>40 segundos</option>
+              </select>
+            </div>
 
-          <div className="flex mt-4">
-            <button
-              className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
-              onClick={() => {
-                setIsStarted(true);
-              }}
-            >
-              Start
-            </button>
+            <div className="flex mt-4">
+              <button
+                className="bg-green-500 text-white p-2 w-24 cursor-pointer rounded-xl"
+                onClick={() => {
+                  setIsStarted(true);
+                }}
+              >
+                Start
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null
       )}
     </div>
   )

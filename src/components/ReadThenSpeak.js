@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ReactCountdownClock from 'react-countdown-clock';
+import { pushSectionResult } from '../utils/fullTestResults';
+import DifficultyBadge from './DifficultyBadge';
 
 // --- Detección de Safari ---
 const isSafari = /^((?!chrome|android).)*safari/i.test(
@@ -68,6 +71,17 @@ export default function ReadThenSpeak() {
   const [exercises, setExercises] = useState([]);
   const [current, setCurrent] = useState(null);
   const [selectedDifficulty, setSelectedDifficulty] = useState('any');
+
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  
 
   // recording state
   const [isRecording, setIsRecording] = useState(false);
@@ -152,6 +166,22 @@ export default function ReadThenSpeak() {
       setSelectedTime((s) => s || 90);
     }
   }, [exercises, current, selectedDifficulty]);
+
+  const navigate = useNavigate();
+
+  // Auto-advance to next module after submission/results when running Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && isSubmitted) {
+        try { pushSectionResult({ module: 'read-then-speak', totalQuestions: 1, totalCorrect: 1, totalIncorrect: 0, timestamp: Date.now() }); } catch(e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [isSubmitted, location.search, selectedDifficulty, navigate]);
 
   const startElapsedTicker = () => {
     startTimeRef.current = Date.now();
@@ -393,6 +423,36 @@ export default function ReadThenSpeak() {
     }
   };
 
+  // Auto-start when running Full Test (skip the pre-start menu)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          setIsStarted(true);
+          setIsPreparing(true);
+          setTimerKey((k) => k + 1);
+          if (exercises && exercises.length > 0) {
+            const pool = selectedDifficulty === 'any' ? exercises : exercises.filter((e) => e.difficulty === selectedDifficulty);
+            const choice = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : exercises[Math.floor(Math.random() * exercises.length)];
+            setCurrent(choice);
+          }
+        };
+
+        if (exercises && exercises.length > 0) {
+          doStart();
+        } else {
+          const id = setInterval(() => {
+            if (exercises && exercises.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, isStarted, exercises, selectedDifficulty]);
+
   const onReadComplete = () => {
     setIsPreparing(false);
     startRecording();
@@ -496,9 +556,14 @@ export default function ReadThenSpeak() {
     );
   }
 
+    
+
   return (
     <div className="App bg-gray-900 w-full min-h-[60vh] py-6 flex flex-col items-center justify-start text-white px-4 sm:px-6">
-      <h2 className="text-3xl font-bold mb-2">Read then speak</h2>
+      <div className="flex items-center justify-center gap-3">
+        <h2 className="text-3xl font-bold mb-2">Read then speak</h2>
+        <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
+      </div>
       <p className="text-gray-300 mb-4">
         Read the prompt below, then press Start to record. Minimum 30 seconds required to submit.
       </p>
@@ -567,7 +632,7 @@ export default function ReadThenSpeak() {
                   isSmallScreen ? 'w-full justify-center' : ''
                 }`}
               >
-                <span className="w-2 h-2 bg-red-500 rounded-full" />
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                 Recording...
               </div>
             )}
@@ -576,9 +641,10 @@ export default function ReadThenSpeak() {
           <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
             <div className="flex items-center gap-2 min-w-0 flex-1 md:flex-none">
               <div className="text-sm text-gray-300 truncate">Recorded: {secondsElapsed}s</div>
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500' : 'bg-gray-600'}`} />
-                <div className="flex-1 h-2 bg-gray-700 rounded overflow-hidden min-w-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-gray-600'}`} />
+                {/* fixed width bar so the green level indicator is always visible */}
+                <div className="w-24 h-2 bg-gray-700 rounded overflow-hidden">
                   <div
                     style={{ width: `${Math.min(100, Math.round(volume * 300))}%` }}
                     className="h-2 bg-green-400"
@@ -604,7 +670,7 @@ export default function ReadThenSpeak() {
           <div>
             <button
               className={`px-4 py-2 rounded ${
-                canSubmit ? 'bg-green-500' : 'bg-gray-600 cursor-not-allowed'
+                canSubmit ? 'bg-blue-500' : 'bg-gray-600 cursor-not-allowed'
               }`}
               onClick={handleSubmit}
               disabled={!canSubmit}
@@ -628,8 +694,9 @@ export default function ReadThenSpeak() {
         {/* botones de navegación debajo de la tarjeta */}
         <div className="flex justify-end gap-3 mt-4">
           <button
-            className="px-4 py-2 rounded bg-gray-700 text-white"
-            onClick={() => { window.location.href = '/read-then-speak'; }}
+            className="px-4 py-2 rounded bg-white text-green-700 font-bold disabled:bg-gray-600 disabled:text-gray-300"
+            onClick={() => { if (!isSubmitted) return; window.location.href = '/read-then-speak'; }}
+            disabled={!isSubmitted}
           >
             Back to the main
           </button>

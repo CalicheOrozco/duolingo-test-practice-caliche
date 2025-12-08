@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
 import ReactCountdownClock from "react-countdown-clock";
+import DifficultyBadge from './DifficultyBadge';
 
 function FillIntheBlanksComp() {
   const { register, handleSubmit, setFocus, getValues, reset } = useForm();
@@ -15,6 +18,57 @@ function FillIntheBlanksComp() {
   // pre-start controls
   const [selectedSeconds, setSelectedSeconds] = useState(20);
   const [selectedDifficulty, setSelectedDifficulty] = useState("any");
+
+  const location = useLocation();
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // Auto-start when running Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          setTotalCorrect(0);
+          setTotalIncorrect(0);
+          setCorrectList([]);
+          setWrongList([]);
+          setFormData(null);
+          setSubmited(false);
+          setFrase(null);
+          setAnsweredCount(0);
+
+          const pool = selectedDifficulty === 'any'
+            ? [...allItems]
+            : allItems.filter((item) => item.difficulty === selectedDifficulty);
+
+          const desired = 6 + Math.floor(Math.random() * 4);
+          const count = Math.min(desired, pool.length);
+          const indices = new Set();
+          while (indices.size < count) indices.add(Math.floor(Math.random() * pool.length));
+          const roundQuestions = Array.from(indices).map((i) => pool[i]);
+          setFrases(roundQuestions);
+          setTotalQuestions(roundQuestions.length);
+          setIsStarted(true);
+        };
+
+        if (allItems && allItems.length > 0) doStart();
+        else {
+          const id = setInterval(() => {
+            if (allItems && allItems.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, isStarted, allItems, selectedDifficulty]);
 
   // round results and progress
   const [totalCorrect, setTotalCorrect] = useState(0);
@@ -84,6 +138,21 @@ function FillIntheBlanksComp() {
   useEffect(() => {
     getFrases();
   }, []);
+
+  const navigate = useNavigate();
+
+  // Auto-advance after round results when running Full Test (skip showing results)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && frase === undefined && isStarted) {
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+      }
+    } catch (e) {}
+  }, [frase, isStarted, location.search, selectedDifficulty, navigate]);
 
   // when round starts and there is no current question, pull one
   useEffect(() => {
@@ -205,7 +274,10 @@ function FillIntheBlanksComp() {
       }
     }
     setFormData(data);
-    setSubmited(true);
+      setFormData(data);
+      setSubmited(true);
+
+      
 
     counter = 0;
     const correct_answers = afterAnswers.reduce((acc, item, index) => {
@@ -229,6 +301,17 @@ function FillIntheBlanksComp() {
       setWrongList((arr) => [...arr, record]);
     }
 
+    // If running Full Test and this was the last question, record summary and advance immediately
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && frases.length === 0) {
+        try { pushSectionResult({ module: 'fill-in-the-blanks', totalQuestions: totalQuestions || 0, totalCorrect: totalCorrect || 0, totalIncorrect: totalIncorrect || 0, timestamp: Date.now() }); } catch(e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) { navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`); }
+      }
+    } catch (e) {}
     // auto-advance to next question after short delay, if there are more
     setTimeout(() => {
       if (frases.length > 0) {
@@ -268,7 +351,10 @@ function FillIntheBlanksComp() {
         frase ? (
           <div className="px-10">
             <div className="w-full flex justify-between items-center mt-3">
-              <div className="text-white font-semibold">Question {answeredCount + 1} of {totalQuestions}</div>
+              <div className="flex items-center gap-3 text-white font-semibold">
+                <div>Question {submited ? answeredCount : answeredCount + 1} of {totalQuestions}</div>
+                <DifficultyBadge difficulty={frase?.difficulty || selectedDifficulty} />
+              </div>
               <ReactCountdownClock
                 weight={10}
                 seconds={!submited ? selectedSeconds : 0}
@@ -279,19 +365,30 @@ function FillIntheBlanksComp() {
               />
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <h1 className=" text-4xl font-bold  text-white text-center py-5">
-                Complete the sentence with the correct word.
-              </h1>
+              <h1 className=" text-4xl font-bold  text-white text-center py-5">Complete the sentence with the correct word.</h1>
               <div className="flex flex-wrap p-3">
                 {frase.sentence.map((item, index) => {
-                  if (index <= frase.correct_answers.length - 1) {
-                    const limit = frase.correct_answers[index].start;
-                    let answers = frase.correct_answers[index].word;
-                    let before = answers.slice(0, limit);
-                    let after = answers.slice(limit);
+                  // safe access to correct_answers for this index
+                  const ca = (frase && Array.isArray(frase.correct_answers)) ? frase.correct_answers[index] : null;
+                  if (ca) {
+                    const limit = ca.start || 0;
+                    const answers = ca.word || '';
+                    const before = answers.slice(0, limit);
+                    const after = answers.slice(limit);
                     beforeAnswers.push(before);
                     afterAnswers.push(after);
                   }
+                  const inputLen = ca ? Math.max(0, (ca.word ? ca.word.length : 0) - (ca.start || 0)) : 0;
+                  // (removed debug logs)
+                  // fallback: if token contains underscores or explicit placeholder, render a single input
+                  const token = frase.sentence[index] || '';
+                  const hasPlaceholder = /_+/.test(token) || token.trim() === '';
+                  const usedInputLen = ca && inputLen > 0 ? inputLen : (hasPlaceholder ? 1 : 0);
+                  const shouldRenderInputs = usedInputLen > 0;
+                  if (!ca && hasPlaceholder) {
+                    // fallback used (debug logs removed)
+                  }
+
                   return (
                     <div className="flex flex-wrap" key={`div-${index}`}>
                       <span className="text-xl text-white mt-1" key={`sentence-${index}`}>
@@ -314,50 +411,35 @@ function FillIntheBlanksComp() {
                         ) : null}
                         {!submited ? (
                           index === frase.sentence.length - 1 ? null : (
-                            Array.from(
-                              {
-                                length:
-                                  frase.correct_answers[index].word.length -
-                                  frase.correct_answers[index].start,
-                              },
-                              (v, i) => {
-                                return i > 0 ? (
-                                  <input
-                                    type="text"
-                                    key={`input-${index}-${i}`}
-                                    className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
-                                    {...register(`answer-${index}-${i}`, {
-                                      onChange: (e) => {
-                                        e.target.value.length >= 1
-                                          ? e.target.value.length >= 2
-                                            ? (e.target.value = e.target.value.slice(-1))
-                                            : getValues(`answer-${index}-${i + 1}`) !== undefined
-                                            ? setFocus(`answer-${index}-${i + 1}`)
-                                            : setFocus(`answer-${index + 1}`)
-                                          : setFocus(`answer-${index}-${i}`);
-                                      },
-                                    })}
-                                  />
-                                ) : (
-                                  <input
-                                    type="text"
-                                    key={`input-${index}`}
-                                    className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
-                                    {...register(`answer-${index}`, {
-                                      onChange: (e) => {
-                                        e.target.value.length >= 1
-                                          ? e.target.value.length >= 2
-                                            ? (e.target.value = e.target.value.slice(-1))
-                                            : getValues(`answer-${index}-${i + 1}`) !== undefined
-                                            ? setFocus(`answer-${index}-${i + 1}`)
-                                            : setFocus(`answer-${index + 1}`)
-                                          : setFocus(`answer-${index}`);
-                                      },
-                                    })}
-                                  />
-                                );
-                              }
-                            )
+                            shouldRenderInputs ? (
+                              Array.from({ length: usedInputLen }, (v, i) => {
+                                const name = i > 0 ? `answer-${index}-${i}` : `answer-${index}`;
+                                const nextName = i > 0 ? `answer-${index}-${i + 1}` : `answer-${index + 1}`;
+                                  return (
+                                    <input
+                                      type="text"
+                                      key={`input-${index}-${i}`}
+                                      name={name}
+                                      defaultValue={""}
+                                      maxLength={1}
+                                      inputMode="text"
+                                      aria-label={`answer ${index} ${i}`}
+                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                      {...register(name, {
+                                        onChange: (e) => {
+                                          // keep single character
+                                          if (e.target.value.length > 1) {
+                                            e.target.value = e.target.value.slice(-1);
+                                          }
+                                          if (e.target.value.length >= 1) {
+                                            try { setTimeout(() => setFocus(nextName), 0); } catch (err) {}
+                                          }
+                                        },
+                                      })}
+                                    />
+                                  );
+                              })
+                            ) : null
                           )
                         ) : formData[`answer-${index}`] === afterAnswers[index] ? (
                           <span className="text-xl text-green-600 font-bold" key={`answer-${index}`}>
@@ -382,7 +464,7 @@ function FillIntheBlanksComp() {
                   <input
                     type="submit"
                     value="Submit"
-                    className="mt-6 bg-green-500  text-white p-2 w-24 cursor-pointer rounded-xl"
+                    className="mt-6 bg-blue-500  text-white p-2 w-24 cursor-pointer rounded-xl"
                   />
                 </div>
               ) : null}

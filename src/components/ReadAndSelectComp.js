@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { pushSectionResult } from '../utils/fullTestResults';
 import ReactCountdownClock from "react-countdown-clock";
+import DifficultyBadge from './DifficultyBadge';
 
 function ReadAndSelectComp() {
   const [allItems, setAllItems] = useState([]);
@@ -9,6 +12,57 @@ function ReadAndSelectComp() {
   const [submited, setSubmited] = useState(false);
   const [selectedSeconds, setSelectedSeconds] = useState(5);
   const [selectedDifficulty, setSelectedDifficulty] = useState("any");
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isFullTest = (() => { try { return new URLSearchParams(location.search).get('fullTest') === '1'; } catch(e){return false;} })();
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      const d = params.get('difficulty');
+      if (d) setSelectedDifficulty(d);
+    } catch (e) {}
+  }, [location.search]);
+
+  // Auto-start for Full Test: trigger startRound when requested
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && !isStarted) {
+        const doStart = () => {
+          setCorrectList([]);
+          setWrongList([]);
+          setTotalCorrect(0);
+          setTotalIncorrect(0);
+          setAnsweredCount(0);
+          setSubmited(false);
+
+          const pool = selectedDifficulty === "any" ? [...allItems] : allItems.filter(i => i.difficulty === selectedDifficulty);
+          const desired = 15 + Math.floor(Math.random() * 4);
+          const count = Math.min(desired, pool.length);
+          const indices = new Set();
+          while (indices.size < count) indices.add(Math.floor(Math.random() * pool.length));
+          const items = Array.from(indices).map(i => pool[i]);
+          setRoundItems(items);
+          setTotalQuestions(items.length);
+          setIsStarted(true);
+          setCurrent(null);
+        };
+
+        if (allItems && allItems.length > 0) {
+          doStart();
+        } else {
+          const id = setInterval(() => {
+            if (allItems && allItems.length > 0) {
+              doStart();
+              clearInterval(id);
+            }
+          }, 150);
+        }
+      }
+    } catch (e) {}
+  }, [location.search, isStarted, allItems, selectedDifficulty]);
 
   const [answeredCount, setAnsweredCount] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -52,6 +106,24 @@ function ReadAndSelectComp() {
     if (isStarted && current === null) nextItem();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStarted]);
+
+  // Auto-advance to next module when results are shown during Full Test
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      if (params.get('fullTest') === '1' && current === undefined && isStarted) {
+        try {
+          pushSectionResult({ module: 'read-and-select', totalQuestions: totalQuestions || 0, totalCorrect: totalCorrect || 0, totalIncorrect: totalIncorrect || 0, timestamp: Date.now() });
+        } catch (e) {}
+        const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
+        const idx = order.indexOf(window.location.pathname);
+        const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
+        if (next) {
+          navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+        }
+      }
+    } catch (e) {}
+  }, [current, isStarted, location.search, selectedDifficulty, navigate, totalQuestions, totalCorrect, totalIncorrect]);
 
   const nextItem = () => {
     if (roundItems.length === 0) {
@@ -98,7 +170,10 @@ function ReadAndSelectComp() {
         current ? (
           <div className="px-10 w-full max-w-3xl">
             <div className="w-full flex justify-between items-center mt-3">
-              <div className="text-white font-semibold">Question {answeredCount + 1} of {totalQuestions}</div>
+              <div className="flex items-center gap-3 text-white font-semibold"> 
+                <div>Question {submited ? answeredCount : answeredCount + 1} of {totalQuestions}</div>
+                <DifficultyBadge difficulty={current?.difficulty || selectedDifficulty} />
+              </div>
               <ReactCountdownClock
                 weight={10}
                 seconds={!submited ? selectedSeconds : 0}
@@ -109,7 +184,9 @@ function ReadAndSelectComp() {
               />
             </div>
             <div className="w-full text-center mt-6">
-              <h1 className="text-4xl md:text-5xl text-white font-extrabold">Is this a real English word?</h1>
+              <div className="flex items-center justify-center gap-3">
+                <h1 className="text-4xl md:text-5xl text-white font-extrabold">Is this a real English word?</h1>
+              </div>
               <div className="text-6xl md:text-7xl text-white font-extrabold my-10">{current.word}</div>
               <div className="flex gap-6 justify-center">
                 <button
@@ -128,39 +205,44 @@ function ReadAndSelectComp() {
             </div>
           </div>
         ) : current === undefined ? (
-          <div className="px-6 w-full max-w-3xl">
-            <h2 className="text-white text-3xl font-bold text-center">Results</h2>
-            <div className="text-white text-center mt-2">Total: <span className="font-semibold">{totalQuestions}</span> · Correct: <span className="text-green-400 font-semibold">{totalCorrect}</span> · Incorrect: <span className="text-red-400 font-semibold">{totalIncorrect}</span></div>
-            <div className="text-center mt-2 text-white">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
+          isFullTest ? (
+            // Do not show per-module results during a Full Test — advance immediately.
+            <div className="px-6 w-full max-w-3xl text-center text-white">Continuing to next module…</div>
+          ) : (
+            <div className="px-6 w-full max-w-3xl">
+              <h2 className="text-white text-3xl font-bold text-center">Results</h2>
+              <div className="text-white text-center mt-2">Total: <span className="font-semibold">{totalQuestions}</span> · Correct: <span className="text-green-400 font-semibold">{totalCorrect}</span> · Incorrect: <span className="text-red-400 font-semibold">{totalIncorrect}</span></div>
+              <div className="text-center mt-2 text-white">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {correctList.length > 0 && (
-                <div>
-                  <h3 className="text-green-400 text-xl font-semibold mb-2">Correct</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {correctList.map((w, i) => (
-                      <span key={`c-${i}`} className="px-2 py-1 bg-green-700 text-white rounded">{w.word}</span>
-                    ))}
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                {correctList.length > 0 && (
+                  <div>
+                    <h3 className="text-green-400 text-xl font-semibold mb-2">Correct</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {correctList.map((w, i) => (
+                        <span key={`c-${i}`} className="px-2 py-1 bg-green-700 text-white rounded">{w.word}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {wrongList.length > 0 && (
-                <div>
-                  <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {wrongList.map((w, i) => (
-                      <span key={`w-${i}`} className="px-2 py-1 bg-red-700 text-white rounded">{w.word}</span>
-                    ))}
+                {wrongList.length > 0 && (
+                  <div>
+                    <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {wrongList.map((w, i) => (
+                        <span key={`w-${i}`} className="px-2 py-1 bg-red-700 text-white rounded">{w.word}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
-            <div className="w-full flex justify-center mt-6">
-              <button className="mt-6 bg-blue-500 text-white p-2 px-6 cursor-pointer rounded-xl" onClick={() => setIsStarted(false)}>Play again</button>
+              <div className="w-full flex justify-center mt-6">
+                <button className="mt-6 bg-blue-500 text-white p-2 px-6 cursor-pointer rounded-xl" onClick={() => setIsStarted(false)}>Play again</button>
+              </div>
             </div>
-          </div>
+          )
         ) : (
           <h1 className="text-3xl text-white">Loading...</h1>
         )
