@@ -220,7 +220,7 @@ function ReadAndSelectComp() {
                     <h3 className="text-green-400 text-xl font-semibold mb-2">Correct</h3>
                     <div className="flex flex-wrap gap-2">
                       {correctList.map((w, i) => (
-                        <span key={`c-${i}`} className="px-2 py-1 bg-green-700 text-white rounded">{w.word}</span>
+                        <span key={`c-${i}`} className={`px-2 py-1 ${w.is_real ? 'bg-green-700' : 'bg-red-700'} text-white rounded`}>{w.word}</span>
                       ))}
                     </div>
                   </div>
@@ -231,7 +231,7 @@ function ReadAndSelectComp() {
                     <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect</h3>
                     <div className="flex flex-wrap gap-2">
                       {wrongList.map((w, i) => (
-                        <span key={`w-${i}`} className="px-2 py-1 bg-red-700 text-white rounded">{w.word}</span>
+                        <span key={`w-${i}`} className={`px-2 py-1 ${w.is_real ? 'bg-green-700' : 'bg-red-700'} text-white rounded`}>{w.word}</span>
                       ))}
                     </div>
                   </div>
