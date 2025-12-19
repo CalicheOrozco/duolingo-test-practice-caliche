@@ -313,11 +313,16 @@ function FillIntheBlanksComp() {
       }
     } catch (e) {}
     // auto-advance to next question after short delay, if there are more
-    setTimeout(() => {
-      if (frases.length > 0) {
-        getRandomFrase();
-      }
-    }, 800);
+    if (frases.length === 0) {
+      // mark round as finished so UI shows results-only (no last question above results)
+      setFrase(undefined);
+    } else {
+      setTimeout(() => {
+        if (frases.length > 0) {
+          getRandomFrase();
+        }
+      }, 800);
+    }
   };
 
   let beforeAnswers = [];
@@ -325,22 +330,35 @@ function FillIntheBlanksComp() {
 
   const renderSentenceWithAnswers = (sent, befores, afters, user) => {
     return (
-      <div className="flex flex-wrap bg-[#737373] rounded-xl p-3 my-2">
-        {sent.map((item, index) => (
-          <div className="flex flex-wrap" key={`sum-div-${index}`}>
-            <span className="text-xl text-white mt-1" key={`sum-sentence-${index}`}>{item}</span>
-            <div className={sent[index + 1]?.charAt(0) === "." || sent[index + 1]?.charAt(0) === "," ? `flex pl-1 mt-1` : "flex px-1 mt-1"}>
-              {befores[index] !== undefined && (
-                <span className="text-xl text-white"> {befores[index]} </span>
-              )}
-              {afters[index] !== undefined && (
-                <span className={`text-xl font-bold ${user ? (user[index] === afters[index] ? "text-green-600" : "text-red-600") : "text-green-600"}`}>
-                  {user ? user[index] ?? afters[index] : afters[index]}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+      <div className="bg-[#737373] rounded-xl p-3 my-2 text-lg">
+        {sent.map((item, index) => {
+          const nextToken = sent[index + 1] || "";
+          const nextIsPunct = /^[\.,:;!?]/.test((nextToken || "").trim());
+          const needsLeadingSpace = item && !/\s$/.test(item);
+          const leading = needsLeadingSpace ? " " : "";
+          const trailing = !nextIsPunct ? " " : "";
+          return (
+            <span className="inline" key={`sum-div-${index}`}>
+              <span>{item}</span>
+              <span className="inline whitespace-nowrap break-normal ">
+                {befores[index] ? `${leading}${befores[index]}` : (needsLeadingSpace ? leading : "")}
+                {afters[index] !== undefined ? (
+                  user ? (
+                    user[index] === afters[index] ? (
+                      <span className={`font-bold text-green-600`}>{afters[index]}{trailing}</span>
+                    ) : user[index] ? (
+                      <span className="font-bold text-red-600">{user[index]}{trailing}</span>
+                    ) : (
+                      <span className={`font-bold text-yellow-400`}>{afters[index]}{trailing}</span>
+                    )
+                  ) : (
+                    <span className={`font-bold text-green-600`}>{afters[index]}{trailing}</span>
+                  )
+                ) : null}
+              </span>
+            </span>
+          );
+        })}
       </div>
     );
   };
@@ -424,18 +442,107 @@ function FillIntheBlanksComp() {
                                       maxLength={1}
                                       inputMode="text"
                                       aria-label={`answer ${index} ${i}`}
-                                      className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
-                                      {...register(name, {
-                                        onChange: (e) => {
-                                          // keep single character
-                                          if (e.target.value.length > 1) {
-                                            e.target.value = e.target.value.slice(-1);
+                                        className="bg-[#737373] border-2 border-[#8A8EA6] text-orange-600 focus:border-orange-600 outline-none text-xl w-6 h-7 text-center rounded-t-md font-bold"
+                                        {...register(name, {
+                                          onChange: (e) => {
+                                            // keep single character
+                                            if (e.target.value.length > 1) {
+                                              e.target.value = e.target.value.slice(-1);
+                                            }
+                                            // try to focus next right away for better mobile support
+                                            const tryFocusNext = () => {
+                                              try {
+                                                const els = document.getElementsByName(nextName);
+                                                if (els && els.length > 0) {
+                                                  els[0].focus();
+                                                  if (els[0].select) els[0].select();
+                                                  return true;
+                                                }
+                                              } catch (err) {}
+                                              try {
+                                                const el = document.querySelector(`[name="${nextName}"]`);
+                                                if (el) {
+                                                  el.focus();
+                                                  if (el.select) el.select();
+                                                  return true;
+                                                }
+                                              } catch (err) {}
+                                              try {
+                                                // fallback: find all answer inputs and focus the next one in DOM order
+                                                const all = Array.from(document.querySelectorAll('input[name^="answer-"]'));
+                                                const idx = all.indexOf(e.target);
+                                                if (idx >= 0 && idx < all.length - 1) {
+                                                  all[idx + 1].focus();
+                                                  if (all[idx + 1].select) all[idx + 1].select();
+                                                  return true;
+                                                }
+                                              } catch (err) {}
+                                              try { setFocus(nextName); } catch (err) {}
+                                              return false;
+                                            };
+                                            if (e.target.value && e.target.value.length >= 1) {
+                                              setTimeout(tryFocusNext, 0);
+                                            }
+                                          },
+                                        })}
+                                        onKeyUp={(e) => {
+                                          // move to next input when a visible character is entered (desktop)
+                                          const val = e.target.value || "";
+                                          if (val.length >= 1) {
+                                            setTimeout(() => {
+                                              try {
+                                                const els = document.getElementsByName(nextName);
+                                                if (els && els.length > 0) {
+                                                  els[0].focus();
+                                                  if (els[0].select) els[0].select();
+                                                  return;
+                                                }
+                                              } catch (err) {}
+                                              try { setFocus(nextName); } catch (err) {}
+                                              try {
+                                                const all = Array.from(document.querySelectorAll('input[name^="answer-"]'));
+                                                const idx = all.indexOf(e.target);
+                                                if (idx >= 0 && idx < all.length - 1) {
+                                                  all[idx + 1].focus();
+                                                  if (all[idx + 1].select) all[idx + 1].select();
+                                                }
+                                              } catch (err) {}
+                                            }, 0);
                                           }
-                                          if (e.target.value.length >= 1) {
-                                            try { setTimeout(() => setFocus(nextName), 0); } catch (err) {}
+                                        }}
+                                        onPaste={(e) => {
+                                          // if user pastes multiple chars, keep only the first and move focus
+                                          const paste = (e.clipboardData || window.clipboardData).getData('text');
+                                          if (paste && paste.length > 0) {
+                                            e.preventDefault();
+                                            const ch = paste.charAt(0);
+                                            e.target.value = ch;
+                                            try {
+                                              // update react-hook-form internal value
+                                              const evt = new Event('input', { bubbles: true });
+                                              e.target.dispatchEvent(evt);
+                                            } catch (err) {}
+                                            setTimeout(() => {
+                                              try {
+                                                const els = document.getElementsByName(nextName);
+                                                if (els && els.length > 0) {
+                                                  els[0].focus();
+                                                  if (els[0].select) els[0].select();
+                                                  return;
+                                                }
+                                              } catch (err) {}
+                                              try { setFocus(nextName); } catch (err) {}
+                                              try {
+                                                const all = Array.from(document.querySelectorAll('input[name^="answer-"]'));
+                                                const idx = all.indexOf(e.target);
+                                                if (idx >= 0 && idx < all.length - 1) {
+                                                  all[idx + 1].focus();
+                                                  if (all[idx + 1].select) all[idx + 1].select();
+                                                }
+                                              } catch (err) {}
+                                            }, 0);
                                           }
-                                        },
-                                      })}
+                                        }}
                                     />
                                   );
                               })
@@ -498,7 +605,13 @@ function FillIntheBlanksComp() {
                     <div className="flex flex-col gap-3">
                       {wrongList.length > 0 ? wrongList.map((rec, idx) => (
                         <div key={`wrong-${idx}`} className="p-3 rounded border border-red-700 bg-red-900/5">
+                          <div className="mb-2 text-sm text-red-300 font-semibold">Your answer</div>
                           {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, rec.received)}
+
+                          <div className="mt-4 p-3 rounded border border-green-700 bg-green-900/5">
+                            <div className="mb-2 text-sm text-green-300 font-semibold">Correct answers</div>
+                            {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, null)}
+                          </div>
                         </div>
                       )) : <div className="text-sm text-gray-300">No incorrect answers this round.</div>}
                     </div>
@@ -518,7 +631,55 @@ function FillIntheBlanksComp() {
 
           </div>
         ) : frase === undefined ? (
-          <h1 className="text-xl text-white">The round is over.</h1>
+          // When round finished we want to show results (no last question above results)
+          <div className="mt-6 w-full max-w-4xl text-white p-4">
+            <h2 className="text-3xl font-bold text-center mb-3">Results</h2>
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <div className="text-lg">Total: <span className="font-semibold">{totalQuestions}</span></div>
+              <div className="text-lg text-green-400">Correct: <span className="font-semibold">{totalCorrect}</span></div>
+              <div className="text-lg text-red-400">Incorrect: <span className="font-semibold">{totalIncorrect}</span></div>
+              <div className="ml-auto text-lg">Score: <span className="font-bold">{totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0}%</span></div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-green-400 text-xl font-semibold mb-2">Correct answers</h3>
+                <div className="flex flex-col gap-3">
+                  {correctList.length > 0 ? correctList.map((rec, idx) => (
+                    <div key={`corr-${idx}`} className="p-3 rounded border border-green-700 bg-green-900/5">
+                      {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, rec.received)}
+                    </div>
+                  )) : <div className="text-sm text-gray-300">No correct answers this round.</div>}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-red-400 text-xl font-semibold mb-2">Incorrect answers</h3>
+                <div className="flex flex-col gap-3">
+                  {wrongList.length > 0 ? wrongList.map((rec, idx) => (
+                    <div key={`wrong-${idx}`} className="p-3 rounded border border-red-700 bg-red-900/5">
+                      <div className="mb-2 text-sm text-red-300 font-semibold">Your answer</div>
+                      {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, rec.received)}
+
+                      <div className="mt-4 p-3 rounded border border-green-700 bg-green-900/5">
+                        <div className="mb-2 text-sm text-green-300 font-semibold">Correct answers</div>
+                        {renderSentenceWithAnswers(rec.sentence, rec.befores, rec.expected, null)}
+                      </div>
+                    </div>
+                  )) : <div className="text-sm text-gray-300">No incorrect answers this round.</div>}
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full flex justify-center mt-6">
+              <button
+                className="mt-6 bg-blue-500 text-white p-2 px-6 cursor-pointer rounded-xl"
+                onClick={() => setIsStarted(false)}
+              >
+                Play again
+              </button>
+            </div>
+          </div>
         ) : (
           <h1 className="text-3xl text-white">Loading...</h1>
         )
