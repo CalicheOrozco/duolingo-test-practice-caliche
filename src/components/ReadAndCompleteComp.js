@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
@@ -167,6 +167,7 @@ function ReadAndCompleteComp() {
   }, []);
 
   const navigate = useNavigate();
+  const submittingRef = useRef(false);
 
   // Auto-advance after results when running full test
   useEffect(() => {
@@ -290,6 +291,8 @@ function ReadAndCompleteComp() {
   }, [setFocus, getValues, frase]);
 
   const onSubmit = (data) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     // join the answers
     let counter = 0;
     let newData = data;
@@ -366,16 +369,22 @@ function ReadAndCompleteComp() {
         const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
         const idx = order.indexOf(window.location.pathname);
         const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
-        if (next) navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+        if (next) {
+          submittingRef.current = false;
+          navigate(`${next}?fullTest=1&difficulty=${encodeURIComponent(selectedDifficulty)}`);
+        }
       } else {
         // If there are no more frases, mark the round finished so results render alone
         if (frases.length === 0) {
           setFrase(undefined);
+          submittingRef.current = false;
         } else {
           setTimeout(() => {
             if (frases.length > 0) {
               getRandomFrase();
             }
+            // allow next submissions after advancing
+            submittingRef.current = false;
           }, 800);
         }
       }
