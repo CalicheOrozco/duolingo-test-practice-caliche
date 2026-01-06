@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { pushSectionResult } from '../utils/fullTestResults';
 import { useForm } from "react-hook-form";
@@ -140,6 +140,7 @@ function FillIntheBlanksComp() {
   }, []);
 
   const navigate = useNavigate();
+  const submittingRef = useRef(false);
 
   // Auto-advance after round results when running Full Test (skip showing results)
   useEffect(() => {
@@ -257,6 +258,8 @@ function FillIntheBlanksComp() {
   }, [setFocus, getValues, frase]);
 
   const onSubmit = (data) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     let counter = 0;
     let newData = data;
     for (const [key] of Object.entries(newData)) {
@@ -274,8 +277,7 @@ function FillIntheBlanksComp() {
       }
     }
     setFormData(data);
-      setFormData(data);
-      setSubmited(true);
+    setSubmited(true);
 
       
 
@@ -321,7 +323,14 @@ function FillIntheBlanksComp() {
         if (frases.length > 0) {
           getRandomFrase();
         }
+        // allow next submissions after advancing
+        submittingRef.current = false;
       }, 800);
+    }
+
+    // if there are no more questions we can clear the submitting flag so results UI can accept actions
+    if (frases.length === 0) {
+      submittingRef.current = false;
     }
   };
 
