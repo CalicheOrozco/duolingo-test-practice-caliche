@@ -66,7 +66,20 @@ function ListeningTestComp() {
     const newAudios = [...arr];
     newAudios.splice(randomNumero, 1);
     setAudios(newAudios);
+    // reset inputs for next question
     restart();
+    // autoplay the newly selected audio and consume one replay
+    try {
+      setReplay((r) => Math.max(0, r - 1));
+      // reduce the countdown by 1 second as this playback counts as the first play
+      setTimerSeconds((s) => Math.max(0, parseInt(selectedTimer, 10) ? parseInt(selectedTimer, 10) - 1 : (s - 1)));
+      const audioFile = new Audio(`Audios/${randomAudio.file}`);
+      setIsPlaying(true);
+      audioFile.play().catch(() => {});
+      audioFile.onended = () => {
+        setIsPlaying(false);
+      };
+    } catch (err) {}
   };
 
   // function to restart the form
@@ -152,8 +165,19 @@ function ListeningTestComp() {
             const newAudios = [...arr];
             newAudios.splice(randomNumero, 1);
             setAudios(newAudios);
+            // set replay to 3 then consume one play for autoplay
             setReplay(3);
             reset();
+            try {
+              setReplay((r) => Math.max(0, r - 1));
+              setTimerSeconds((s) => Math.max(0, parseInt(selectedTimer, 10) ? parseInt(selectedTimer, 10) - 1 : (s - 1)));
+              const audioFile = new Audio(`Audios/${randomAudio.file}`);
+              setIsPlaying(true);
+              audioFile.play().catch(() => {});
+              audioFile.onended = () => {
+                setIsPlaying(false);
+              };
+            } catch (err) {}
           } else setTestFinished(true);
         };
 
@@ -173,13 +197,22 @@ function ListeningTestComp() {
   // NOTE: removed automatic getRandomAudio on `audios` changes to avoid double-advances.
 
   const onSubmit = (data) => {
-    // set the answere to trim and first letter to capital
-    data["answereText"] = data["answereText"].trim();
-    data["answereText"] =
-      data["answereText"].charAt(0).toUpperCase() +
-      data["answereText"].slice(1);
-    // compare the answers
-    const correct = data["answereText"] === (audio && audio.answer);
+    // normalize user answer: trim and capitalize first letter
+    const rawUser = (data["answereText"] || "").trim();
+    const normalizedUser = rawUser
+      ? rawUser.charAt(0).toUpperCase() + rawUser.slice(1)
+      : rawUser;
+    data["answereText"] = normalizedUser;
+
+    // compare the answers with tolerance for missing trailing period
+    const correctAnswer = (audio && audio.answer) || "";
+    let correct = false;
+    if (normalizedUser === correctAnswer) {
+      correct = true;
+    } else if (correctAnswer.endsWith('.') && (normalizedUser + '.') === correctAnswer) {
+      // accept user answer without final period when correct answer has one
+      correct = true;
+    }
 
     // store result (but don't show per-question feedback)
     setResults((prev) => [
