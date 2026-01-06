@@ -70,6 +70,7 @@ function InteractiveReadingComp() {
   const [passageStage, setPassageStage] = useState(1); // 1: sentence-choice, 2: highlight
   const [highlightIdx, setHighlightIdx] = useState(0); // índice actual de highlight
   const passageRef = useRef(null);
+  const normalize = (s) => (s || "").replace(/\s+/g, " ").trim();
 
   // Group questions by type to avoid repeated maps and filters
   const questionGroups = useMemo(() => {
@@ -351,40 +352,49 @@ function InteractiveReadingComp() {
                   <div className="grid grid-cols-2 gap-6">
                     {/* Left: passage preview (visible while selecting) */}
                     <div className="bg-[#1f1f1f] rounded p-6 max-h-[70vh] overflow-auto border border-gray-700">
-                      {exercise.passage.map((p, pi) => {
-                        const parts = p.split(/(\[\d+\])/);
-                        return (
-                          <p key={pi} className="text-gray-200 leading-7 mb-4">
-                            {parts.map((part, k) => {
-                              const m = part.match(/^\[(\d+)\]$/);
-                              if (m) {
-                                const num = parseInt(m[1], 10);
-                                const qObj = exercise.questions[num - 1];
-                                const sel = answers[num - 1];
-                                const display =
-                                  sel !== undefined && qObj
-                                    ? qObj.choices[sel]
-                                    : "";
-                                const blankClasses =
-                                  sel === undefined
-                                    ? "inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-900 text-gray-200 border border-gray-600"
-                                    : "inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-700 text-gray-100 border border-gray-600";
-                                return (
-                                  <span key={k} className={blankClasses}>
-                                    <span className="text-xs mr-2 px-1">
-                                      {num}
+                      {(() => {
+                        let last = null;
+                        return exercise.passage.map((p, pi) => {
+                          const np = normalize(p);
+                          if (last !== null && np === last) {
+                            // skip consecutive duplicate paragraph
+                            return null;
+                          }
+                          last = np;
+                          const parts = p.split(/(\[\d+\])/);
+                          return (
+                            <p key={pi} className="text-gray-200 leading-7 mb-4">
+                              {parts.map((part, k) => {
+                                const m = part.match(/^\[(\d+)\]$/);
+                                if (m) {
+                                  const num = parseInt(m[1], 10);
+                                  const qObj = exercise.questions[num - 1];
+                                  const sel = answers[num - 1];
+                                  const display =
+                                    sel !== undefined && qObj
+                                      ? qObj.choices[sel]
+                                      : "";
+                                  const blankClasses =
+                                    sel === undefined
+                                      ? "inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-900 text-gray-200 border border-gray-600"
+                                      : "inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-gray-700 text-gray-100 border border-gray-600";
+                                  return (
+                                    <span key={k} className={blankClasses}>
+                                      <span className="text-xs mr-2 px-1">
+                                        {num}
+                                      </span>
+                                      <span className="whitespace-nowrap">
+                                        {display || "______"}
+                                      </span>
                                     </span>
-                                    <span className="whitespace-nowrap">
-                                      {display || "______"}
-                                    </span>
-                                  </span>
-                                );
-                              }
-                              return <span key={k}>{part}</span>;
-                            })}
-                          </p>
-                        );
-                      })}
+                                  );
+                                }
+                                return <span key={k}>{part}</span>;
+                              })}
+                            </p>
+                          );
+                        });
+                      })()}
 
                       {selectBestQs.map(({ q, idx }) => {
                         const sel = answers[idx];
@@ -483,38 +493,6 @@ function InteractiveReadingComp() {
                       ref={passageRef}
                       className="bg-[#1f1f1f] rounded p-6 max-h-[70vh] overflow-auto border border-gray-700"
                     >
-                      {exercise.passage.map((p, pi) => {
-                        const parts = p.split(/(\[\d+\])/);
-                        return (
-                          <p key={pi} className="text-gray-200 leading-7 mb-4">
-                            {parts.map((part, k) => {
-                              const m = part.match(/^\[(\d+)\]$/);
-                              if (m) {
-                                const num = parseInt(m[1], 10);
-                                const qObj = exercise.questions[num - 1];
-                                const correctIdx =
-                                  qObj && typeof qObj.correct === "number"
-                                    ? qObj.correct
-                                    : undefined;
-                                const display =
-                                  correctIdx !== undefined && qObj
-                                    ? qObj.choices[correctIdx]
-                                    : "";
-                                const plainClasses = "text-gray-200";
-                                return (
-                                  <span key={k} className={plainClasses}>
-                                    <span className="whitespace-nowrap">
-                                      {display || "______"}
-                                    </span>
-                                  </span>
-                                );
-                              }
-                              return <span key={k}>{part}</span>;
-                            })}
-                          </p>
-                        );
-                      })}
-
                       {selectBestQs.map(({ q, idx }) => {
                         const before = q.beforeSelectTheBestSentence || "";
                         const after = q.afterSelectTheBestSentence || "";
