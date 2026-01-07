@@ -35,7 +35,7 @@ function MenuDuolingo() {
               const cardClass = `flex items-center gap-4 rounded-lg p-6 border border-gray-700 ${isReal ? 'bg-gray-700 opacity-60' : 'bg-gray-800 hover:bg-gray-700'}`;
 
               return (
-                <Link key={item.to} to={item.to} className={outerLinkClass}>
+                <Link key={item.to} to={item.to} className={outerLinkClass} target="_blank" rel="noopener noreferrer">
                   <div className={cardClass}>
                     <div className="flex-shrink-0 w-12 h-12 rounded flex items-center justify-center">
                       <img src={item.icon} alt={item.label} className="w-12 h-12" />
