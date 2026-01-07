@@ -29,18 +29,24 @@ function MenuDuolingo() {
         <div className="px-4 py-6 w-full">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {menuItems.map((item) => (
-              <Link key={item.to} to={item.to} className="no-underline">
-                <div className="flex items-center gap-4 bg-gray-800 hover:bg-gray-700 rounded-lg p-6 border border-gray-700">
-                  <div className="flex-shrink-0 w-12 h-12 rounded flex items-center justify-center">
-                    <img src={item.icon} alt={item.label} className="w-12 h-12" />
+            {menuItems.map((item) => {
+              const isReal = item.label === 'Real Words';
+              const outerLinkClass = `no-underline`;
+              const cardClass = `flex items-center gap-4 rounded-lg p-6 border border-gray-700 ${isReal ? 'bg-gray-700 opacity-60' : 'bg-gray-800 hover:bg-gray-700'}`;
+
+              return (
+                <Link key={item.to} to={item.to} className={outerLinkClass}>
+                  <div className={cardClass}>
+                    <div className="flex-shrink-0 w-12 h-12 rounded flex items-center justify-center">
+                      <img src={item.icon} alt={item.label} className="w-12 h-12" />
+                    </div>
+                    <div>
+                      <div className="text-gray-200 font-semibold text-lg">{item.label}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-gray-200 font-semibold text-lg">{item.label}</div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
