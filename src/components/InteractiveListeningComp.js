@@ -15,6 +15,7 @@ function InteractiveListeningComp() {
   const [phase, setPhase] = useState('intro'); 
   const [answers, setAnswers] = useState({});
   const [started, setStarted] = useState(false);
+  const [hasAudio, setHasAudio] = useState(true);
   const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [selectedTimeSeconds, setSelectedTimeSeconds] = useState(6 * 60 + 30); // default 6:30
 
@@ -80,6 +81,31 @@ function InteractiveListeningComp() {
     };
     load();
   }, []);
+
+  // when scenario changes, verify that the audio file exists
+  useEffect(() => {
+    const checkAudio = async () => {
+      try {
+        const file = scenario?.file;
+        if (!file) {
+          setHasAudio(false);
+          return;
+        }
+        const resp = await fetch(`Audios/${file}`, { method: 'HEAD' });
+        setHasAudio(resp && resp.ok);
+      } catch (e) {
+        try {
+          const file = scenario?.file;
+          if (!file) { setHasAudio(false); return; }
+          const resp2 = await fetch(`Audios/${file}`);
+          setHasAudio(resp2 && resp2.ok);
+        } catch (err) {
+          setHasAudio(false);
+        }
+      }
+    };
+    checkAudio();
+  }, [scenario]);
 
   // Intro UI es manejado por WaveAudioPlayer
 
@@ -254,7 +280,10 @@ function InteractiveListeningComp() {
             </h2>
 
             <div className="w-full max-w-3xl">
-              <WaveAudioPlayer audioSrc={`Audios/${scenario.file}`} onEnded={handleStart} />
+              <WaveAudioPlayer audioSrc={scenario?.file ? `Audios/${scenario.file}` : null} onEnded={handleStart} disabled={!hasAudio} playOnce={true} disableAfterEnd={true} />
+              {!hasAudio && (
+                <div className="text-sm text-yellow-300 mt-2">Audio not available for this scenario — playback disabled.</div>
+              )}
             </div>
 
             <div className="w-full mt-8 flex justify-end">
@@ -281,7 +310,10 @@ function InteractiveListeningComp() {
             <div className="mb-6 flex justify-center">
               <div className="w-full max-w-3xl">
                 {/* autoplay the scenario audio when entering questions and disable replay after it ends */}
-                <WaveAudioPlayer audioSrc={`Audios/${scenario.file}`} autoPlay={true} disableAfterEnd={true} />
+                <WaveAudioPlayer audioSrc={scenario?.file ? `Audios/${scenario.file}` : null} autoPlay={true} disableAfterEnd={true} disabled={!hasAudio} />
+                {!hasAudio && (
+                  <div className="text-sm text-yellow-300 mt-2">Audio not available for this scenario — playback disabled.</div>
+                )}
               </div>
             </div>
 
@@ -319,6 +351,7 @@ function InteractiveListeningComp() {
                 })}
 
             </div>
+
 
             <div className="w-full mt-8 flex justify-end">
               <button onClick={handleSubmit} className="bg-blue-500 text-white px-6 py-3 rounded-md">
