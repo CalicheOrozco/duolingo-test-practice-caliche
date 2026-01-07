@@ -33,7 +33,7 @@ function MenuDuolingo() {
               <Link key={item.to} to={item.to} className="no-underline">
                 <div className="flex items-center gap-4 bg-gray-800 hover:bg-gray-700 rounded-lg p-6 border border-gray-700">
                   <div className="flex-shrink-0 w-12 h-12 rounded flex items-center justify-center">
-                    <img src={item.icon} alt={item.label} className="w-32 h-32" />
+                    <img src={item.icon} alt={item.label} className="w-12 h-12" />
                   </div>
                   <div>
                     <div className="text-gray-200 font-semibold text-lg">{item.label}</div>
