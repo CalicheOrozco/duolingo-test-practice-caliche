@@ -78,6 +78,12 @@ function FillIntheBlanksComp() {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [answeredCount, setAnsweredCount] = useState(0);
 
+  // Keep totals in sync with the visible lists to avoid mismatched counts
+  useEffect(() => {
+    setTotalCorrect(correctList.length);
+    setTotalIncorrect(wrongList.length);
+  }, [correctList, wrongList]);
+
   const getFrases = async () => {
     const response = await fetch("dataFillIntheBlanks.json");
     const data = await response.json();
@@ -293,31 +299,54 @@ function FillIntheBlanksComp() {
       }
     }
     const isAllCorrect = JSON.stringify(data) === JSON.stringify(correct_answers);
-    setAnsweredCount((v) => v + 1);
+    // answeredCount will be incremented only when this submission actually adds a record
     const record = { sentence: frase.sentence, befores: beforeAnswers.slice(), expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
     if (isAllCorrect) {
-      setTotalCorrect((v) => v + 1);
-      setCorrectList((arr) => {
-        try {
-          if (arr.length > 0 && JSON.stringify(arr[arr.length - 1]) === JSON.stringify(record)) return arr;
-        } catch (e) {}
-        return [...arr, record];
-      });
+      // Only increment totals and add to list if this record isn't already the last one
+      try {
+        if (!(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record))) {
+          setCorrectList((arr) => [...arr, record]);
+        }
+      } catch (e) {
+        setCorrectList((arr) => [...arr, record]);
+      }
     } else {
-      setTotalIncorrect((v) => v + 1);
-      setWrongList((arr) => {
-        try {
-          if (arr.length > 0 && JSON.stringify(arr[arr.length - 1]) === JSON.stringify(record)) return arr;
-        } catch (e) {}
-        return [...arr, record];
-      });
+      try {
+        if (!(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record))) {
+          setWrongList((arr) => [...arr, record]);
+        }
+      } catch (e) {
+        setWrongList((arr) => [...arr, record]);
+      }
+    }
+
+    // increment answeredCount only if this submission added a new record (not a duplicate)
+    try {
+      const addedToCorrect = isAllCorrect && !(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record));
+      const addedToWrong = !isAllCorrect && !(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record));
+      if (addedToCorrect || addedToWrong) {
+        setAnsweredCount((v) => v + 1);
+      }
+    } catch (e) {
+      setAnsweredCount((v) => v + 1);
     }
 
     // If running Full Test and this was the last question, record summary and advance immediately
     try {
       const params = new URLSearchParams(location.search);
       if (params.get('fullTest') === '1' && frases.length === 0) {
-        try { pushSectionResult({ module: 'fill-in-the-blanks', totalQuestions: totalQuestions || 0, totalCorrect: totalCorrect || 0, totalIncorrect: totalIncorrect || 0, timestamp: Date.now() }); } catch(e) {}
+        // compute accurate totals including the record we just added (state updates are async)
+        let addedToCorrect = false;
+        let addedToWrong = false;
+        try {
+          addedToCorrect = isAllCorrect && !(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record));
+        } catch (e) {}
+        try {
+          addedToWrong = !isAllCorrect && !(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record));
+        } catch (e) {}
+        const finalCorrect = (correctList.length || 0) + (addedToCorrect ? 1 : 0);
+        const finalIncorrect = (wrongList.length || 0) + (addedToWrong ? 1 : 0);
+        try { pushSectionResult({ module: 'fill-in-the-blanks', totalQuestions: totalQuestions || 0, totalCorrect: finalCorrect, totalIncorrect: finalIncorrect, timestamp: Date.now() }); } catch(e) {}
         const order = ['/read-and-select','/fill-in-the-blanks','/read-and-complete','/interactive-reading','/listening-test','/interactive-listening','/image-test','/interactive-writing','/speak-about-photo','/read-then-speak','/interactive-speaking','/speaking-sample','/writing-sample'];
         const idx = order.indexOf(window.location.pathname);
         const next = idx >= 0 && idx < order.length - 1 ? order[idx + 1] : null;
