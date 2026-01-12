@@ -297,10 +297,20 @@ function FillIntheBlanksComp() {
     const record = { sentence: frase.sentence, befores: beforeAnswers.slice(), expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
     if (isAllCorrect) {
       setTotalCorrect((v) => v + 1);
-      setCorrectList((arr) => [...arr, record]);
+      setCorrectList((arr) => {
+        try {
+          if (arr.length > 0 && JSON.stringify(arr[arr.length - 1]) === JSON.stringify(record)) return arr;
+        } catch (e) {}
+        return [...arr, record];
+      });
     } else {
       setTotalIncorrect((v) => v + 1);
-      setWrongList((arr) => [...arr, record]);
+      setWrongList((arr) => {
+        try {
+          if (arr.length > 0 && JSON.stringify(arr[arr.length - 1]) === JSON.stringify(record)) return arr;
+        } catch (e) {}
+        return [...arr, record];
+      });
     }
 
     // If running Full Test and this was the last question, record summary and advance immediately
