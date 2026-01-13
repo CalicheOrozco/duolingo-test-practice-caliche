@@ -84,6 +84,11 @@ function FillIntheBlanksComp() {
     setTotalIncorrect(wrongList.length);
   }, [correctList, wrongList]);
 
+  // derive answeredCount from lists to avoid double increments
+  useEffect(() => {
+    setAnsweredCount(correctList.length + wrongList.length);
+  }, [correctList, wrongList]);
+
   const getFrases = async () => {
     const response = await fetch("dataFillIntheBlanks.json");
     const data = await response.json();
@@ -123,6 +128,7 @@ function FillIntheBlanksComp() {
   };
 
   const getRandomFrase = () => {
+    console.debug('[Fill] getRandomFrase called, frases.length=', frases.length);
     if (frases.length === 0) {
       setFrase(undefined);
       return;
@@ -147,6 +153,7 @@ function FillIntheBlanksComp() {
 
   const navigate = useNavigate();
   const submittingRef = useRef(false);
+  const timeoutRef = useRef(null);
 
   // Auto-advance after round results when running Full Test (skip showing results)
   useEffect(() => {
@@ -264,7 +271,11 @@ function FillIntheBlanksComp() {
   }, [setFocus, getValues, frase]);
 
   const onSubmit = (data) => {
-    if (submittingRef.current) return;
+    console.debug('[Fill] onSubmit start', { submitting: submittingRef.current, time: Date.now() });
+    if (submittingRef.current) {
+      console.debug('[Fill] onSubmit ignored because submittingRef is true');
+      return;
+    }
     submittingRef.current = true;
     let counter = 0;
     let newData = data;
@@ -302,33 +313,25 @@ function FillIntheBlanksComp() {
     // answeredCount will be incremented only when this submission actually adds a record
     const record = { sentence: frase.sentence, befores: beforeAnswers.slice(), expected: afterAnswers.slice(), received: Object.keys(correct_answers).map((k, i) => data[`answer-${i}`] || "") };
     if (isAllCorrect) {
-      // Only increment totals and add to list if this record isn't already the last one
-      try {
-        if (!(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record))) {
-          setCorrectList((arr) => [...arr, record]);
+      setCorrectList((arr) => {
+        try {
+          const exists = arr.some((el) => JSON.stringify(el) === JSON.stringify(record));
+          if (exists) return arr;
+          return [...arr, record];
+        } catch (e) {
+          return [...arr, record];
         }
-      } catch (e) {
-        setCorrectList((arr) => [...arr, record]);
-      }
+      });
     } else {
-      try {
-        if (!(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record))) {
-          setWrongList((arr) => [...arr, record]);
+      setWrongList((arr) => {
+        try {
+          const exists = arr.some((el) => JSON.stringify(el) === JSON.stringify(record));
+          if (exists) return arr;
+          return [...arr, record];
+        } catch (e) {
+          return [...arr, record];
         }
-      } catch (e) {
-        setWrongList((arr) => [...arr, record]);
-      }
-    }
-
-    // increment answeredCount only if this submission added a new record (not a duplicate)
-    try {
-      const addedToCorrect = isAllCorrect && !(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record));
-      const addedToWrong = !isAllCorrect && !(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record));
-      if (addedToCorrect || addedToWrong) {
-        setAnsweredCount((v) => v + 1);
-      }
-    } catch (e) {
-      setAnsweredCount((v) => v + 1);
+      });
     }
 
     // If running Full Test and this was the last question, record summary and advance immediately
@@ -339,10 +342,12 @@ function FillIntheBlanksComp() {
         let addedToCorrect = false;
         let addedToWrong = false;
         try {
-          addedToCorrect = isAllCorrect && !(correctList.length > 0 && JSON.stringify(correctList[correctList.length - 1]) === JSON.stringify(record));
+          const existsCorrect = (correctList || []).some((el) => JSON.stringify(el) === JSON.stringify(record));
+          addedToCorrect = isAllCorrect && !existsCorrect;
         } catch (e) {}
         try {
-          addedToWrong = !isAllCorrect && !(wrongList.length > 0 && JSON.stringify(wrongList[wrongList.length - 1]) === JSON.stringify(record));
+          const existsWrong = (wrongList || []).some((el) => JSON.stringify(el) === JSON.stringify(record));
+          addedToWrong = !isAllCorrect && !existsWrong;
         } catch (e) {}
         const finalCorrect = (correctList.length || 0) + (addedToCorrect ? 1 : 0);
         const finalIncorrect = (wrongList.length || 0) + (addedToWrong ? 1 : 0);
@@ -358,17 +363,22 @@ function FillIntheBlanksComp() {
       // mark round as finished so UI shows results-only (no last question above results)
       setFrase(undefined);
     } else {
-      setTimeout(() => {
+      // clear any previously scheduled advance to avoid double-advancing
+      try { if (timeoutRef.current) clearTimeout(timeoutRef.current); } catch (e) {}
+      timeoutRef.current = setTimeout(() => {
+        console.debug('[Fill] advancing to next question via timeout, frases.length=', frases.length);
         if (frases.length > 0) {
           getRandomFrase();
         }
         // allow next submissions after advancing
         submittingRef.current = false;
+        timeoutRef.current = null;
       }, 800);
     }
 
     // if there are no more questions we can clear the submitting flag so results UI can accept actions
     if (frases.length === 0) {
+      try { if (timeoutRef.current) clearTimeout(timeoutRef.current); timeoutRef.current = null; } catch (e) {}
       submittingRef.current = false;
     }
   };
@@ -427,7 +437,7 @@ function FillIntheBlanksComp() {
                 color="#fff"
                 size={80}
                 paused={submited}
-                onComplete={handleSubmit(onSubmit)}
+                onComplete={() => { if (!submittingRef.current) { handleSubmit(onSubmit)(); } }}
               />
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
