@@ -93,6 +93,7 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
     return () => {
       mounted = false;
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioSrc, bars, disabled]);
 
   // make waveform responsive: adjust number of visible bars and bar width based on container width
@@ -181,6 +182,7 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
     }
     // reset playback state
     setCurrentTime(0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioSrc, disabled]);
 
   return (
