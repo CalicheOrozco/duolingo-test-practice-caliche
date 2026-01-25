@@ -399,7 +399,7 @@ function ReadAndCompleteComp() {
       <div className="bg-[#737373] rounded-xl p-3 my-2 text-lg">
         {sent.map((item, index) => {
           const nextToken = sent[index + 1] || "";
-          const nextIsPunct = /^[\.,:;!?]/.test((nextToken || "").trim());
+          const nextIsPunct = /^[\\.,:;!?]/.test((nextToken || "").trim());
           const needsLeadingSpace = item && !/\s$/.test(item);
           const leading = needsLeadingSpace ? " " : "";
           const trailing = !nextIsPunct ? " " : "";
