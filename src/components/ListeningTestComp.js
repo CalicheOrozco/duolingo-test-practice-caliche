@@ -192,6 +192,7 @@ function ListeningTestComp() {
         }
       }
     } catch (e) {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search, pool, selectedDifficulty, isStarted, reset]);
 
   // NOTE: removed automatic getRandomAudio on `audios` changes to avoid double-advances.
