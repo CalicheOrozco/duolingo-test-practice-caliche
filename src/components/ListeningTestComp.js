@@ -257,6 +257,15 @@ function ListeningTestComp() {
     }
   };
 
+    // Reset to initial menu
+  const resetToMenu = () => {
+    setIsStarted(false);
+    setTestFinished(false);
+    setResults([]);
+    setAudios([]);
+    setAudio(null);
+  };
+
   const startTest = () => {
     // set timer seconds
     setTimerSeconds(parseInt(selectedTimer, 10));
@@ -460,6 +469,24 @@ function ListeningTestComp() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="w-full flex justify-end gap-3 mt-6">
+            <button
+              className="bg-yellow-500 text-white p-2 rounded-xl w-36"
+              onClick={() => {
+                // start a new exercise run with current settings
+                startTest();
+              }}
+            >
+              New Exercise
+            </button>
+
+            <button
+              className="bg-gray-700 text-white p-2 rounded-xl w-36"
+              onClick={resetToMenu}
+            >
+              Back to menu
+            </button>
           </div>
         </div>
       )}
