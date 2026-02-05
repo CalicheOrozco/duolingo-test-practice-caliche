@@ -81,7 +81,7 @@
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "lost",
@@ -140,7 +140,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "help",
@@ -257,7 +257,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "check",
@@ -321,7 +321,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "dollars",
@@ -329,7 +329,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "repair",
@@ -372,7 +372,7 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "learning",
@@ -380,7 +380,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "write",
@@ -396,7 +396,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "cursive",
@@ -420,7 +420,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "make",
@@ -521,7 +521,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "buy",
@@ -595,7 +595,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "puts",
@@ -607,7 +607,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -619,7 +619,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -681,7 +681,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "squirrels",
@@ -697,7 +697,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "were",
@@ -713,7 +713,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "right",
@@ -869,11 +869,11 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "harder",
@@ -881,7 +881,7 @@
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "puzzle",
@@ -893,7 +893,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "were",
@@ -909,7 +909,7 @@
       },
       {
         "word": "us",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -1016,7 +1016,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "found",
@@ -1028,7 +1028,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "room",
@@ -1052,7 +1052,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -1082,7 +1082,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -1181,7 +1181,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "pot",
@@ -1209,7 +1209,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -1409,11 +1409,11 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "but",
@@ -1513,7 +1513,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "held",
@@ -1529,7 +1529,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -1592,11 +1592,11 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "more",
@@ -1663,7 +1663,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "baking",
@@ -1804,7 +1804,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -1913,7 +1913,7 @@
     "correct_answers": [
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "without",
@@ -1921,7 +1921,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "instructions",
@@ -1961,7 +1961,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -1992,7 +1992,7 @@
     "correct_answers": [
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "her",
@@ -2000,7 +2000,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "online",
@@ -2008,7 +2008,7 @@
       },
       {
         "word": "At",
-        "start": 0
+        "start": 1
       },
       {
         "word": "she",
@@ -2024,7 +2024,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -2044,7 +2044,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "she",
@@ -2082,7 +2082,7 @@
     "correct_answers": [
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "running",
@@ -2094,7 +2094,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -2106,7 +2106,7 @@
       },
       {
         "word": "He",
-        "start": 0
+        "start": 1
       },
       {
         "word": "about",
@@ -2118,7 +2118,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -2162,7 +2162,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "two",
@@ -2202,7 +2202,7 @@
       },
       {
         "word": "It",
-        "start": 0
+        "start": 1
       },
       {
         "word": "important",
@@ -2248,11 +2248,11 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -2313,7 +2313,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "their",
@@ -2386,7 +2386,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "route",
@@ -2562,7 +2562,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -2666,7 +2666,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "what",
@@ -2739,7 +2739,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "started",
@@ -2798,7 +2798,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "them",
@@ -2872,7 +2872,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "found",
@@ -2994,7 +2994,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -3035,11 +3035,11 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "dad",
@@ -3055,7 +3055,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -3157,7 +3157,7 @@
       },
       {
         "word": "or",
-        "start": 0
+        "start": 1
       },
       {
         "word": "equipment",
@@ -3195,11 +3195,11 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "many",
@@ -3235,7 +3235,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -3277,7 +3277,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "kitchen",
@@ -3313,7 +3313,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "much",
@@ -3325,7 +3325,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -3513,7 +3513,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "instead",
@@ -3560,7 +3560,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "best",
@@ -3568,7 +3568,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "because",
@@ -3580,7 +3580,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "this",
@@ -3608,7 +3608,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -3662,11 +3662,11 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "campus",
@@ -3731,7 +3731,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "should",
@@ -3799,7 +3799,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "basic",
@@ -3815,11 +3815,11 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "patient",
@@ -3978,7 +3978,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "for",
@@ -3994,7 +3994,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "with",
@@ -4055,7 +4055,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -4114,7 +4114,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "Last",
@@ -4126,7 +4126,7 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "comedy",
@@ -4179,7 +4179,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -4187,7 +4187,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "his",
@@ -4199,11 +4199,11 @@
       },
       {
         "word": "At",
-        "start": 0
+        "start": 1
       },
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "his",
@@ -4211,7 +4211,7 @@
       },
       {
         "word": "if",
-        "start": 0
+        "start": 1
       },
       {
         "word": "could",
@@ -4256,7 +4256,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -4276,11 +4276,11 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -4333,7 +4333,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "The",
@@ -4451,7 +4451,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "key",
@@ -4528,7 +4528,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "father",
@@ -4552,7 +4552,7 @@
       },
       {
         "word": "us",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -4609,7 +4609,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "back",
@@ -4641,7 +4641,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "small",
@@ -4680,7 +4680,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "The",
@@ -4692,11 +4692,11 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "but",
@@ -4708,7 +4708,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -4754,7 +4754,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "wall",
@@ -4778,7 +4778,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "shopping",
@@ -4880,7 +4880,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -4921,7 +4921,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "with",
@@ -4969,7 +4969,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "this",
@@ -4977,7 +4977,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "came",
@@ -4985,7 +4985,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "free",
@@ -4997,7 +4997,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "place",
@@ -5047,11 +5047,11 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "during",
@@ -5124,7 +5124,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "The",
@@ -5136,7 +5136,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sure",
@@ -5268,7 +5268,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sort",
@@ -5308,7 +5308,7 @@
       },
       {
         "word": "or",
-        "start": 0
+        "start": 1
       },
       {
         "word": "clean",
@@ -5382,7 +5382,7 @@
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -5394,7 +5394,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "unfamiliar",
@@ -5418,7 +5418,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -5513,7 +5513,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "trunk",
@@ -5607,7 +5607,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "gentle",
@@ -5712,15 +5712,15 @@
     "correct_answers": [
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -5728,7 +5728,7 @@
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -5740,15 +5740,15 @@
       },
       {
         "word": "It",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -5822,7 +5822,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "hit",
@@ -5834,7 +5834,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "that",
@@ -5890,11 +5890,11 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "but",
@@ -5906,7 +5906,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -5947,7 +5947,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "schedule",
@@ -5983,11 +5983,11 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "each",
@@ -6022,7 +6022,7 @@
       },
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "done",
@@ -6038,7 +6038,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "work",
@@ -6050,7 +6050,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "gallery",
@@ -6084,11 +6084,11 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "industry",
@@ -6096,7 +6096,7 @@
       },
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "still",
@@ -6132,7 +6132,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -6157,11 +6157,11 @@
     "correct_answers": [
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -6197,7 +6197,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "changed",
@@ -6229,7 +6229,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -6265,7 +6265,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -6298,7 +6298,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "books",
@@ -6314,7 +6314,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "seen",
@@ -6322,7 +6322,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "proper",
@@ -6371,7 +6371,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -6424,7 +6424,7 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "damaged",
@@ -6436,7 +6436,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "are",
@@ -6452,7 +6452,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "prices",
@@ -6460,7 +6460,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "smarter",
@@ -6524,7 +6524,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -6654,7 +6654,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "pulling",
@@ -6689,11 +6689,11 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "topics",
@@ -6758,7 +6758,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "easy",
@@ -6774,7 +6774,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "equipment",
@@ -6872,7 +6872,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "confidence",
@@ -6911,7 +6911,7 @@
     "correct_answers": [
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "world",
@@ -6935,7 +6935,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "from",
@@ -6943,7 +6943,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sand",
@@ -6959,7 +6959,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "used",
@@ -7011,7 +7011,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "winter",
@@ -7061,7 +7061,7 @@
     "correct_answers": [
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "middle",
@@ -7136,7 +7136,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "for",
@@ -7144,7 +7144,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "winter",
@@ -7215,11 +7215,11 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "warming",
@@ -7231,7 +7231,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "only",
@@ -7293,7 +7293,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "first",
@@ -7335,7 +7335,7 @@
       },
       {
         "word": "if",
-        "start": 0
+        "start": 1
       },
       {
         "word": "have",
@@ -7355,7 +7355,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "crucial",
@@ -7406,7 +7406,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "corner",
@@ -7422,15 +7422,15 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "beach",
@@ -7470,7 +7470,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "different",
@@ -7478,7 +7478,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "country",
@@ -7494,7 +7494,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "different",
@@ -7532,7 +7532,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "ahead",
@@ -7560,11 +7560,11 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "interview",
@@ -7616,11 +7616,11 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "thirty",
@@ -7640,7 +7640,7 @@
       },
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "not",
@@ -7648,7 +7648,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "older",
@@ -7660,7 +7660,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "much",
@@ -7693,7 +7693,7 @@
     "correct_answers": [
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "should",
@@ -7701,7 +7701,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "every",
@@ -7741,11 +7741,11 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -7777,7 +7777,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "other",
@@ -7789,15 +7789,15 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "other",
@@ -7809,7 +7809,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "weeks",
@@ -7829,7 +7829,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "its",
@@ -7952,7 +7952,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -7976,7 +7976,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -8002,7 +8002,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "you",
@@ -8030,7 +8030,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "museum",
@@ -8062,7 +8062,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "there",
@@ -8086,7 +8086,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "from",
@@ -8121,11 +8121,11 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "house",
@@ -8161,7 +8161,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -8214,11 +8214,11 @@
       },
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "old",
@@ -8260,11 +8260,11 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -8276,7 +8276,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "roads",
@@ -8288,7 +8288,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -8389,7 +8389,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -8492,7 +8492,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "details",
@@ -8512,7 +8512,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "plot",
@@ -8544,7 +8544,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "them",
@@ -8552,7 +8552,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "tonight",
@@ -8580,7 +8580,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -8620,11 +8620,11 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "trees",
@@ -8648,7 +8648,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "knight",
@@ -8682,7 +8682,7 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "thought",
@@ -8690,7 +8690,7 @@
       },
       {
         "word": "as",
-        "start": 0
+        "start": 1
       },
       {
         "word": "part",
@@ -8710,7 +8710,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "ultimate",
@@ -8718,7 +8718,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -8743,11 +8743,11 @@
     "correct_answers": [
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "absorb",
@@ -8763,7 +8763,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "looks",
@@ -8824,7 +8824,7 @@
     "correct_answers": [
       {
         "word": "if",
-        "start": 0
+        "start": 1
       },
       {
         "word": "fail",
@@ -8931,7 +8931,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -8988,15 +8988,15 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "from",
@@ -9177,7 +9177,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "ready",
@@ -9240,7 +9240,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -9248,11 +9248,11 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -9288,7 +9288,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       },
       {
         "word": "crucial",
@@ -9296,7 +9296,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -9308,7 +9308,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "global",
@@ -9395,7 +9395,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "they",
@@ -9479,7 +9479,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "face",
@@ -9487,7 +9487,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "face",
@@ -9527,11 +9527,11 @@
     "correct_answers": [
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "friends",
@@ -9555,11 +9555,11 @@
       },
       {
         "word": "me",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "help",
@@ -9579,7 +9579,7 @@
       },
       {
         "word": "am",
-        "start": 0
+        "start": 1
       },
       {
         "word": "not",
@@ -9591,7 +9591,7 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "actor",
@@ -9634,7 +9634,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "years",
@@ -9642,7 +9642,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -9658,7 +9658,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "old",
@@ -9705,7 +9705,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "over",
@@ -9745,7 +9745,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "them",
@@ -9753,7 +9753,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -9823,7 +9823,7 @@
       },
       {
         "word": "or",
-        "start": 0
+        "start": 1
       },
       {
         "word": "twice",
@@ -9839,11 +9839,11 @@
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "take",
@@ -9863,7 +9863,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "a",
@@ -9887,7 +9887,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -9907,7 +9907,7 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "unusual",
@@ -9948,7 +9948,7 @@
       },
       {
         "word": "if",
-        "start": 0
+        "start": 1
       },
       {
         "word": "want",
@@ -9976,7 +9976,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "earn",
@@ -9984,7 +9984,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "degree",
@@ -10004,7 +10004,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "career",
@@ -10028,7 +10028,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -10071,7 +10071,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "the",
@@ -10087,7 +10087,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "all",
@@ -10120,7 +10120,7 @@
     "correct_answers": [
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "very",
@@ -10136,7 +10136,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "town",
@@ -10156,7 +10156,7 @@
       },
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "and",
@@ -10164,7 +10164,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "years",
@@ -10207,7 +10207,7 @@
     "correct_answers": [
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "applied",
@@ -10219,7 +10219,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "home",
@@ -10271,7 +10271,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -10302,7 +10302,7 @@
       },
       {
         "word": "to",
-        "start": 0
+        "start": 1
       },
       {
         "word": "multiple",
@@ -10310,7 +10310,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sciences",
@@ -10363,7 +10363,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "turn",
@@ -10567,7 +10567,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "existing",
@@ -10575,7 +10575,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "mine",
@@ -10718,7 +10718,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "green",
@@ -11427,7 +11427,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "mostly",
@@ -11633,7 +11633,7 @@
     "correct_answers": [
       {
         "word": "me",
-        "start": 0
+        "start": 1
       },
       {
         "word": "teacher",
@@ -11764,7 +11764,7 @@
       },
       {
         "word": "me",
-        "start": 0
+        "start": 1
       },
       {
         "word": "blue",
@@ -12021,7 +12021,7 @@
       },
       {
         "word": "It",
-        "start": 0
+        "start": 1
       },
       {
         "word": "wash",
@@ -12496,7 +12496,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -12903,7 +12903,7 @@
       },
       {
         "word": "No",
-        "start": 0
+        "start": 1
       },
       {
         "word": "reply",
@@ -13751,7 +13751,7 @@
     "correct_answers": [
       {
         "word": "my",
-        "start": 0
+        "start": 1
       },
       {
         "word": "shop",
@@ -15097,7 +15097,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -15605,7 +15605,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sure",
@@ -15721,7 +15721,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "poor",
@@ -16711,7 +16711,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -17122,7 +17122,7 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "yellow",
@@ -17591,7 +17591,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "snow",
@@ -17905,7 +17905,7 @@
       },
       {
         "word": "an",
-        "start": 0
+        "start": 1
       },
       {
         "word": "knife",
@@ -18267,7 +18267,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "mouse",
@@ -18447,7 +18447,7 @@
       },
       {
         "word": "us",
-        "start": 0
+        "start": 1
       },
       {
         "word": "choose",
@@ -18821,7 +18821,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -19015,11 +19015,11 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "we",
-        "start": 0
+        "start": 1
       },
       {
         "word": "mistake",
@@ -19065,7 +19065,7 @@
       },
       {
         "word": "is",
-        "start": 0
+        "start": 1
       },
       {
         "word": "groups",
@@ -19085,7 +19085,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -19463,7 +19463,7 @@
     "correct_answers": [
       {
         "word": "he",
-        "start": 0
+        "start": 1
       },
       {
         "word": "time",
@@ -19906,7 +19906,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "remember",
@@ -20125,7 +20125,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "quick",
@@ -20305,7 +20305,7 @@
       },
       {
         "word": "So",
-        "start": 0
+        "start": 1
       },
       {
         "word": "Perhaps",
@@ -20313,7 +20313,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "copy",
@@ -20381,7 +20381,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -20546,7 +20546,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "type",
@@ -20764,7 +20764,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "catch",
@@ -20846,7 +20846,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "instead",
@@ -21118,7 +21118,7 @@
     "correct_answers": [
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "white",
@@ -21214,7 +21214,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -21336,7 +21336,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -21363,7 +21363,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sudden",
@@ -21391,11 +21391,11 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -21793,7 +21793,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "inside",
@@ -21801,7 +21801,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "often",
@@ -21865,7 +21865,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "again",
@@ -22157,7 +22157,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "cry",
@@ -22331,7 +22331,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "else",
@@ -22641,7 +22641,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -22982,7 +22982,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "remember",
@@ -22990,7 +22990,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "new",
@@ -23115,7 +23115,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "from",
@@ -23300,7 +23300,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -23352,7 +23352,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "many",
@@ -23443,7 +23443,7 @@
     "correct_answers": [
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "home",
@@ -23528,7 +23528,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "buy",
@@ -23580,7 +23580,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "around",
@@ -23686,7 +23686,7 @@
       },
       {
         "word": "at",
-        "start": 0
+        "start": 1
       },
       {
         "word": "indoor",
@@ -23881,7 +23881,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "buy",
@@ -23994,7 +23994,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "extra",
@@ -24010,7 +24010,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "else",
@@ -24073,7 +24073,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "say",
@@ -24305,7 +24305,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "north",
@@ -24417,7 +24417,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "worry",
@@ -24493,7 +24493,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sure",
@@ -24561,7 +24561,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -24621,7 +24621,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -24648,7 +24648,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sudden",
@@ -24676,11 +24676,11 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -25078,7 +25078,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "inside",
@@ -25086,7 +25086,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "often",
@@ -25150,7 +25150,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "again",
@@ -25442,7 +25442,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "cry",
@@ -25802,7 +25802,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -25917,7 +25917,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -25976,7 +25976,7 @@
       },
       {
         "word": "of",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -26032,7 +26032,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "now",
@@ -26071,7 +26071,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "extra",
@@ -26095,7 +26095,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -26258,7 +26258,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "break",
@@ -26331,7 +26331,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "repeat",
@@ -26602,7 +26602,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       },
       {
         "word": "bill",
@@ -27450,7 +27450,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "text",
@@ -28057,7 +28057,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "more",
@@ -28110,7 +28110,7 @@
       },
       {
         "word": "be",
-        "start": 0
+        "start": 1
       },
       {
         "word": "example",
@@ -28234,7 +28234,7 @@
       },
       {
         "word": "it",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -28438,7 +28438,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "close",
@@ -28470,7 +28470,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -28818,7 +28818,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "happen",
@@ -28865,7 +28865,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "local",
@@ -28994,7 +28994,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "miss",
@@ -29228,7 +29228,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "attend",
@@ -29280,7 +29280,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "back",
@@ -29292,7 +29292,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "pay",
@@ -29551,7 +29551,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "enjoy",
@@ -30031,7 +30031,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "good",
@@ -30440,7 +30440,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "leave",
@@ -30749,7 +30749,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -31051,7 +31051,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "fine",
@@ -31387,7 +31387,7 @@
       },
       {
         "word": "CD",
-        "start": 0
+        "start": 1
       },
       {
         "word": "exciting",
@@ -31999,7 +31999,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "have",
@@ -32048,7 +32048,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "away",
@@ -32224,7 +32224,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "come",
@@ -32356,7 +32356,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -32740,7 +32740,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "work",
@@ -33244,7 +33244,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "sometimes",
@@ -33307,7 +33307,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "certainly",
@@ -33666,7 +33666,7 @@
       },
       {
         "word": "up",
-        "start": 0
+        "start": 1
       },
       {
         "word": "come",
@@ -34078,7 +34078,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "visit",
@@ -34233,7 +34233,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "say",
@@ -35443,7 +35443,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "make",
@@ -35511,7 +35511,7 @@
       },
       {
         "word": "so",
-        "start": 0
+        "start": 1
       },
       {
         "word": "swim",
@@ -35632,7 +35632,7 @@
       },
       {
         "word": "on",
-        "start": 0
+        "start": 1
       },
       {
         "word": "high",
@@ -36371,7 +36371,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -36956,7 +36956,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "friend",
@@ -37178,7 +37178,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "dresser",
@@ -37328,7 +37328,7 @@
     "correct_answers": [
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "west",
@@ -37659,7 +37659,7 @@
       },
       {
         "word": "go",
-        "start": 0
+        "start": 1
       },
       {
         "word": "anywhere",
@@ -38015,7 +38015,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "hear",
@@ -38075,7 +38075,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "leave",
@@ -38325,7 +38325,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       }
     ]
   },
@@ -38607,7 +38607,7 @@
       },
       {
         "word": "in",
-        "start": 0
+        "start": 1
       },
       {
         "word": "south",
@@ -38852,7 +38852,7 @@
       },
       {
         "word": "no",
-        "start": 0
+        "start": 1
       },
       {
         "word": "download",
@@ -39022,7 +39022,7 @@
       },
       {
         "word": "by",
-        "start": 0
+        "start": 1
       },
       {
         "word": "grilled",
@@ -39458,7 +39458,7 @@
       },
       {
         "word": "do",
-        "start": 0
+        "start": 1
       },
       {
         "word": "answer",
@@ -51349,10 +51349,6 @@
       }
     ]
   },
-
-
-
-
 
 
 
