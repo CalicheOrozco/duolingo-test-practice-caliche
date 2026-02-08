@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-const CARD_OPTIONS = [10, 15, 20, 25, 30];
+const CARD_OPTIONS = [5, 10, 15, 20, 25, 30];
 
 function normalizeAnswer(value) {
   return String(value || "")
@@ -113,6 +113,15 @@ function WordRecallComp() {
     setResults([]);
   };
 
+  const repeatSameWords = () => {
+    if (!roundItems.length) return;
+    setCurrentIndex(0);
+    setCurrentInput("");
+    setResults([]);
+    setIsFinished(false);
+    setIsStarted(true);
+  };
+
   if (!isStarted) {
     return (
       <div className="App bg-gray-900 w-full min-h-[60vh] flex items-center py-3 justify-center">
@@ -219,6 +228,13 @@ function WordRecallComp() {
               onClick={reset}
             >
               Play again
+            </button>
+            <button
+              className="bg-green-600 hover:bg-green-700 text-white p-2 px-6 cursor-pointer rounded-xl disabled:opacity-50"
+              onClick={repeatSameWords}
+              disabled={!roundItems.length}
+            >
+              Repeat same words
             </button>
             <button
               className="bg-gray-700 text-white p-2 px-6 cursor-pointer rounded-xl"
