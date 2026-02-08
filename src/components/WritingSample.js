@@ -165,6 +165,13 @@ export default function WritingSample() {
     return text.trim() ? text.trim().split(/\s+/).length : 0;
   };
 
+  const wordCountClass = (n) => {
+    if (n >= 120 && n <= 150) return 'text-green-400';
+    if (n >= 100 && n < 120) return 'text-yellow-300';
+    if (n < 90) return 'text-red-400';
+    return 'text-yellow-300';
+  };
+
   return (
     <div className="App bg-gray-900 min-h-[60vh] text-white px-6">
       {phase === 'menu' && (
@@ -266,7 +273,16 @@ export default function WritingSample() {
                   </div>
                 </form>
 
-                <div className="text-gray-300 text-center mt-3">Words: {wordCount(answer)}</div>
+                <div className="text-gray-300 text-center mt-3">
+                  Expected length: <span className="font-semibold text-white">120–150</span> words
+                  <span className="text-gray-400"> (120–150 green · 100–119 yellow · under 90 red)</span>
+                </div>
+                <div className="text-gray-300 text-center mt-1">
+                  Words:{' '}
+                  <span className={`font-bold ${wordCountClass(wordCount(answer))}`}>
+                    {wordCount(answer)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -320,7 +336,16 @@ export default function WritingSample() {
             <div className="max-w-5xl w-full text-left text-gray-100/80 text-base leading-relaxed bg-black/40 p-6 rounded shadow-lg overflow-auto" style={{maxHeight: '70vh'}}>
               <div className="flex items-center justify-between mb-4">
                 <div className="text-lg font-semibold">Your response</div>
-                <div className="text-sm text-gray-300">{wordCount(answer)} {wordCount(answer) === 1 ? 'word' : 'words'}</div>
+                <div className="text-sm text-gray-300">
+                  Words:{' '}
+                  <span className={`font-bold ${wordCountClass(wordCount(answer))}`}>
+                    {wordCount(answer)}
+                  </span>
+                </div>
+              </div>
+              <div className="text-xs text-gray-300 mb-3">
+                Expected length: <span className="font-semibold text-white">120–150</span> words
+                <span className="ml-2">(120–150 Ideal · 100–119 Acceptable · under 90 Short)</span>
               </div>
               <div className="whitespace-pre-wrap text-sm">
                 {answer ? answer : <span className="text-gray-400">No response recorded.</span>}

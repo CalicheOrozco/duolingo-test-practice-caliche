@@ -15,6 +15,7 @@ export default function InteractiveWriting() {
   const [timerKey, setTimerKey] = useState(0);
   const [answer, setAnswer] = useState('');
   const [followUpAnswer, setFollowUpAnswer] = useState('');
+  const [showResults, setShowResults] = useState(false);
   const isProcessing = false;
   const [writeStage, setWriteStage] = useState('main'); // main | mainSample | followup | followUpSample
 
@@ -29,6 +30,14 @@ export default function InteractiveWriting() {
   }, []);
 
   const location = useLocation();
+  const isFullTest = (() => {
+    try {
+      const params = new URLSearchParams(location.search);
+      return params.get('fullTest') === '1';
+    } catch (e) {
+      return false;
+    }
+  })();
   useEffect(() => {
     try {
       const params = new URLSearchParams(location.search);
@@ -119,6 +128,7 @@ export default function InteractiveWriting() {
     // If follow-up completes, show follow-up sample
     if (writeStage === 'followup') {
       setWriteStage('followUpSample');
+      if (!isFullTest) setShowResults(true);
       return;
     }
   };
@@ -143,6 +153,7 @@ export default function InteractiveWriting() {
     if (writeStage === 'followup') {
       // user finished follow-up: show follow-up sample
       setWriteStage('followUpSample');
+      if (!isFullTest) setShowResults(true);
       return;
     }
   };
@@ -152,11 +163,26 @@ export default function InteractiveWriting() {
     setFollowUpAnswer('');
     setPhase('menu');
     setCurrent(null);
+    setShowResults(false);
   };
 
   const wordCount = (text) => {
     if (!text) return 0;
     return text.trim() ? text.trim().split(/\s+/).length : 0;
+  };
+
+  const summaryWordCountClass = (n) => {
+    if (n >= 120 && n <= 150) return 'text-green-400';
+    if (n >= 100 && n < 120) return 'text-yellow-300';
+    if (n < 90) return 'text-red-400';
+    return 'text-yellow-300';
+  };
+
+  const followUpWordCountClass = (n) => {
+    if (n >= 60 && n <= 90) return 'text-green-400';
+    if (n >= 50 && n < 60) return 'text-yellow-300';
+    if (n < 40) return 'text-red-400';
+    return 'text-yellow-300';
   };
 
   return (
@@ -341,7 +367,103 @@ export default function InteractiveWriting() {
         </div>
       )}
 
-      {writeStage === 'followUpSample' && current && (
+      {writeStage === 'followUpSample' && current && showResults && !isFullTest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black opacity-70" onClick={() => setShowResults(false)} />
+
+          <div className="relative bg-gray-800 text-white rounded-lg max-w-5xl w-full p-6 z-50">
+            <h2 className="text-2xl font-bold mb-2 text-white">Results — Session summary</h2>
+            <div className="text-sm text-gray-300 mb-4">
+              <div>
+                Main expected length: <span className="font-semibold text-white">120–150</span> words
+                <span className="ml-2">(120–150 Ideal · 100–119 Acceptable · under 90 Short)</span>
+              </div>
+              <div>
+                Follow-up expected length: <span className="font-semibold text-white">60–90</span> words
+                <span className="ml-2">(60–90 Ideal · 50–59 Acceptable · under 40 Short)</span>
+              </div>
+            </div>
+
+            <div className="space-y-4 max-h-[60vh] overflow-auto">
+              <div className="p-4 border border-gray-700 rounded bg-gray-900">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="text-lg font-semibold">Main response</div>
+                  <div className="text-sm text-gray-300">
+                    Words:{' '}
+                    <span className={`font-bold ${summaryWordCountClass(wordCount(answer))}`}>
+                      {wordCount(answer)}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-2 text-gray-200 whitespace-pre-wrap">{answer || '(empty)'}</div>
+                <div className="mt-4 text-sm text-gray-300 font-semibold">Example</div>
+                <div className="text-gray-200 whitespace-pre-wrap">{current.sample}</div>
+              </div>
+
+              <div className="p-4 border border-gray-700 rounded bg-gray-900">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="text-lg font-semibold">Follow-up response</div>
+                  <div className="text-sm text-gray-300">
+                    Words:{' '}
+                    <span className={`font-bold ${followUpWordCountClass(wordCount(followUpAnswer))}`}>
+                      {wordCount(followUpAnswer)}
+                    </span>
+                  </div>
+                </div>
+                <div className="mt-2 text-gray-200 whitespace-pre-wrap">{followUpAnswer || '(empty)'}</div>
+                <div className="mt-4 text-sm text-gray-300 font-semibold">Example</div>
+                <div className="text-gray-200 whitespace-pre-wrap">{current.followUpSample || 'No follow-up sample provided.'}</div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end gap-2">
+              <button className="px-4 py-2 bg-gray-700 text-white rounded" onClick={() => setShowResults(false)}>
+                Close
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+                onClick={() => {
+                  setShowResults(false);
+                  setWriteStage('main');
+                  setPhase('prepare');
+                  setTimerKey((k) => k + 1);
+                  setAnswer('');
+                  setFollowUpAnswer('');
+                }}
+              >
+                Restart
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-600 text-white rounded"
+                onClick={() => {
+                  // pick next exercise
+                  if (!topics || topics.length === 0) return;
+                  let nextIdx = Math.floor(Math.random() * topics.length);
+                  // try to pick a different prompt
+                  if (topics.length > 1) {
+                    let tries = 0;
+                    while (topics[nextIdx].id === current.id && tries < 10) {
+                      nextIdx = Math.floor(Math.random() * topics.length);
+                      tries++;
+                    }
+                  }
+                  setShowResults(false);
+                  setCurrent(topics[nextIdx]);
+                  setPhase('prepare');
+                  setWriteStage('main');
+                  setTimerKey((k) => k + 1);
+                  setAnswer('');
+                  setFollowUpAnswer('');
+                }}
+              >
+                Next exercise
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {writeStage === 'followUpSample' && current && !isFullTest && !showResults && (
         <div className="fixed left-0 right-0 bottom-0 z-40">
           <div className="bg-green-600 text-white p-6 flex items-start justify-between">
             <div className="max-w-5xl mx-auto w-full">
@@ -356,26 +478,8 @@ export default function InteractiveWriting() {
               </div>
             </div>
             <div className="pr-6 flex items-center gap-3">
+              <button onClick={() => setShowResults(true)} className="bg-gray-800 px-4 py-2 rounded font-semibold">Show results</button>
               <button onClick={() => restart()} className="bg-blue-600 px-4 py-2 rounded font-semibold">Back to main</button>
-              <button onClick={() => {
-                // pick next exercise
-                if (!topics || topics.length === 0) return;
-                let nextIdx = Math.floor(Math.random() * topics.length);
-                // try to pick a different prompt
-                if (topics.length > 1) {
-                  let tries = 0;
-                  while (topics[nextIdx].id === current.id && tries < 10) {
-                    nextIdx = Math.floor(Math.random() * topics.length);
-                    tries++;
-                  }
-                }
-                setCurrent(topics[nextIdx]);
-                setPhase('prepare');
-                setWriteStage('main');
-                setTimerKey(k => k + 1);
-                setAnswer('');
-                setFollowUpAnswer('');
-              }} className="bg-gray-800 px-4 py-2 rounded font-semibold">Next exercise</button>
             </div>
           </div>
         </div>

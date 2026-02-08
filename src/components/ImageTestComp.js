@@ -151,7 +151,7 @@ export default function ImageTestComp() {
 
   const wordCountClass = (n) => {
     if (n >= 50 && n <= 60) return 'text-green-400';
-    if (n >= 40 && n <= 49) return 'text-yellow-300';
+    if (n >= 35 && n <= 49) return 'text-yellow-300';
     return 'text-red-400';
   };
 
@@ -430,7 +430,7 @@ export default function ImageTestComp() {
                   <h2 className="text-2xl font-bold mb-4 text-white">Results — Session Summary</h2>
                   <div className="text-sm text-gray-300 mb-4">
                     Expected length: <span className="font-semibold text-white">50–60</span> words.
-                    <span className="ml-2">(50–60 green · 40–49 yellow · under 40 red)</span>
+                    <span className="ml-2">(50–60 Ideal · 35–49 Acceptable · under 30 Short)</span>
                   </div>
                   <div className="space-y-4 max-h-[60vh] overflow-auto">
                     {results.map((r, i) => (
