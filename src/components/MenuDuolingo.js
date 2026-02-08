@@ -6,6 +6,7 @@ import Footer from "./Footer";
 const menuItems = [
   { to: "/full-test", label: "Full Test", icon: "/icons/DET.svg" },
   { to: "/real-words-test", label: "Real Words", icon: "/icons/real-words.svg" },
+  { to: "/word-recall", label: "Word Recall", icon: "/icons/recall.png" },
   { to: "/read-and-select", label: "Read and Select", icon: "/icons/read-and-select.svg" },
   { to: "/fill-in-the-blanks", label: "Fill in the Blanks", icon: "/icons/Fill-In-The-Blanks.svg" },
   { to: "/read-and-complete", label: "Read and Complete", icon: "/icons/read-and-complete.svg" },

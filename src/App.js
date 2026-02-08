@@ -16,6 +16,7 @@ import ReadThenSpeak from "./pages/ReadThenSpeak";
 import SpeakingSample from "./pages/SpeakingSample";
 import FullTest from "./pages/FullTest";
 import MenuDuolingo from "./components/MenuDuolingo";
+import WordRecall from "./pages/WordRecall";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/" element={<Index />} />
       <Route path="/full-test" element={<FullTest />} />
       <Route path="/duolingo-menu" element={<MenuDuolingo />} />
+      <Route path="/word-recall" element={<WordRecall />} />
       <Route path="/listening-test" element={<ListeningTest />} />
       <Route path="/image-test" element={<ImageTest />} />
       <Route path="/read-and-complete" element={<ReadAndComplete />} />
