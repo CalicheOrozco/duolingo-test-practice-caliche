@@ -18,6 +18,8 @@ function InteractiveListeningComp() {
   const [hasAudio, setHasAudio] = useState(true);
   const [selectedDifficulty, setSelectedDifficulty] = useState('any');
   const [selectedTimeSeconds, setSelectedTimeSeconds] = useState(6 * 60 + 30); // default 6:30
+  const [countdownSeconds, setCountdownSeconds] = useState(6 * 60 + 30);
+  const [countdownKey, setCountdownKey] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +38,27 @@ function InteractiveListeningComp() {
       if (d) setSelectedDifficulty(d);
     } catch (e) {}
   }, [location.search]);
+
+  // keep countdown in sync with the selected timer before starting
+  useEffect(() => {
+    if (!started) setCountdownSeconds(selectedTimeSeconds);
+  }, [selectedTimeSeconds, started]);
+
+  // when starting, initialize countdown from the selected timer
+  useEffect(() => {
+    if (!started) return;
+    setCountdownSeconds(selectedTimeSeconds);
+    setCountdownKey((k) => k + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [started]);
+
+  // Requirement: when entering Summary, reset timer to 75 seconds regardless of remaining time.
+  useEffect(() => {
+    if (!started) return;
+    if (phase !== 'summary') return;
+    setCountdownSeconds(75);
+    setCountdownKey((k) => k + 1);
+  }, [phase, started]);
 
   // Auto-start for Full Test: choose a scenario and go directly to questions
   useEffect(() => {
@@ -214,8 +237,9 @@ function InteractiveListeningComp() {
           {started && (
             <div className="text-gray-300 text-sm">
               <ReactCountdownClock
+                key={countdownKey}
                 weight={10}
-                seconds={selectedTimeSeconds}
+                seconds={countdownSeconds}
                 color="#fff"
                 size={64}
                 paused={showReview || showSummaryExample}
