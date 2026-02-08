@@ -280,7 +280,13 @@ function InteractiveListeningComp() {
             </h2>
 
             <div className="w-full max-w-3xl">
-              <WaveAudioPlayer audioSrc={scenario?.file ? `Audios/${scenario.file}` : null} onEnded={handleStart} disabled={!hasAudio} playOnce={true} disableAfterEnd={true} />
+              <WaveAudioPlayer
+                audioSrc={scenario?.file ? `Audios/${scenario.file}` : null}
+                disabled={!hasAudio}
+                playOnce={false}
+                disableAfterEnd={false}
+                allowPause={true}
+              />
               {!hasAudio && (
                 <div className="text-sm text-yellow-300 mt-2">Audio not available for this scenario — playback disabled.</div>
               )}
@@ -309,8 +315,14 @@ function InteractiveListeningComp() {
 
             <div className="mb-6 flex justify-center">
               <div className="w-full max-w-3xl">
-                {/* autoplay the scenario audio when entering questions and disable replay after it ends */}
-                <WaveAudioPlayer audioSrc={scenario?.file ? `Audios/${scenario.file}` : null} autoPlay={true} disableAfterEnd={true} disabled={!hasAudio} />
+                {/* autoplay the scenario audio when entering ListenAndComplete questions */}
+                <WaveAudioPlayer
+                  audioSrc={scenario?.file ? `Audios/${scenario.file}` : null}
+                  autoPlay={true}
+                  disableAfterEnd={false}
+                  disabled={!hasAudio}
+                  allowPause={true}
+                />
                 {!hasAudio && (
                   <div className="text-sm text-yellow-300 mt-2">Audio not available for this scenario — playback disabled.</div>
                 )}
@@ -437,7 +449,7 @@ function InteractiveListeningComp() {
                     <div className="flex items-center gap-4">
                       <div className="w-full">
                         {/* autoplay each respond audio when shown and disable replay after playback */}
-                        <WaveAudioPlayer audioSrc={q.audio} bars={40} className="rounded-lg p-3" autoPlay={true} disableAfterEnd={true} onEnded={() => { /* ensure any UI hooks are safe */ }} />
+                        <WaveAudioPlayer audioSrc={q.audio} bars={40} className="rounded-lg p-3" autoPlay={true} disableAfterEnd={true} allowPause={false} onEnded={() => { /* ensure any UI hooks are safe */ }} />
                       </div>
                     </div>
 

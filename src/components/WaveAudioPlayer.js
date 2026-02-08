@@ -10,7 +10,7 @@ import React, { useRef, useState, useEffect } from 'react';
 // simple in-memory cache for decoded waveform/bar data per audioSrc
 const waveCache = new Map();
 
-export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', title, onPlay, onPause, onEnded, autoPlay = false, disableAfterEnd = false, disabled = false, playOnce = false }) {
+export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', title, onPlay, onPause, onEnded, autoPlay = false, disableAfterEnd = false, disabled = false, playOnce = false, allowPause = true }) {
   const audioRef = useRef(null);
   const containerRef = useRef(null);
   const [playing, setPlaying] = useState(false);
@@ -137,6 +137,7 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
       setPlaying(true);
       onPlay && onPlay();
     } else {
+      if (!allowPause) return;
       a.pause();
       setPlaying(false);
       onPause && onPause();
@@ -191,7 +192,7 @@ export default function WaveAudioPlayer({ audioSrc, bars = 48, className = '', t
       <div className="w-full bg-gray-700 rounded-2xl p-4 flex items-center">
         {(() => {
           const isReplayDisabled = disableAfterEnd && hasEnded;
-          const isDisabledButton = isReplayDisabled || localDisabled;
+          const isDisabledButton = isReplayDisabled || localDisabled || (playing && !allowPause);
           return (
             <button
                   onClick={toggle}
