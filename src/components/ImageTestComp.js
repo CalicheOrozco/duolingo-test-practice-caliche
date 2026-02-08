@@ -143,6 +143,18 @@ export default function ImageTestComp() {
     }
   })();
 
+  const countWords = (text) => {
+    const t = String(text || '').trim();
+    if (!t) return 0;
+    return t.split(/\s+/).filter(Boolean).length;
+  };
+
+  const wordCountClass = (n) => {
+    if (n >= 50 && n <= 60) return 'text-green-400';
+    if (n >= 40 && n <= 49) return 'text-yellow-300';
+    return 'text-red-400';
+  };
+
   // topics are taken from initialTopics stored in state (topicsPool)
 
   const getImg = async (forTopic) => {
@@ -415,7 +427,11 @@ export default function ImageTestComp() {
                   setShowResults(false);
                 }} />
                 <div className="relative bg-gray-800 text-white rounded-lg max-w-4xl w-full p-6 z-50">
-                  <h2 className="text-2xl font-bold mb-4 text-white">Resultados — Resumen de la sesión</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-white">Results — Session Summary</h2>
+                  <div className="text-sm text-gray-300 mb-4">
+                    Expected length: <span className="font-semibold text-white">50–60</span> words.
+                    <span className="ml-2">(50–60 green · 40–49 yellow · under 40 red)</span>
+                  </div>
                   <div className="space-y-4 max-h-[60vh] overflow-auto">
                     {results.map((r, i) => (
                       <div key={i} className="flex gap-4 p-3 border border-gray-700 rounded bg-gray-900">
@@ -424,6 +440,12 @@ export default function ImageTestComp() {
                           <p className="text-sm text-gray-300">Topic: {r.topic}</p>
                           <p className="font-semibold text-white">Your answer:</p>
                           <p className="text-sm mb-2 text-gray-100">{r.userAnswer}</p>
+                          <p className="text-sm text-gray-300 mb-2">
+                            Words:{' '}
+                            <span className={`font-bold ${wordCountClass(countWords(r.userAnswer))}`}>
+                              {countWords(r.userAnswer)}
+                            </span>
+                          </p>
                           {r.suggested ? (
                             <>
                               <p className="font-semibold text-white">ChatGPT suggested:</p>
