@@ -147,6 +147,9 @@
   { "word": "preach", "translate": "predicar" },
   {"word": "outplay", "translate": "superar" },
   {"word": "woodwind", "translate": "instrumento de viento madera" },
-  { "word": "theoretical", "translate": "orquesta" }
+  { "word": "theoretical", "translate": "teórico" },
+  {"word": "streamline", "translate": "simplificar,optimizar,agilizar, hacer mas eficiente" },
+  {"word": "succeeding", "translate": "subsiguiente" }
+
 
 ]
