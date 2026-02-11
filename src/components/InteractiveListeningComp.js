@@ -58,6 +58,8 @@ function InteractiveListeningComp() {
     if (phase !== 'summary') return;
     setCountdownSeconds(75);
     setCountdownKey((k) => k + 1);
+    setSummaryLocked(false);
+    setShowSummaryResults(false);
   }, [phase, started]);
 
   // Auto-start for Full Test: choose a scenario and go directly to questions
@@ -156,6 +158,35 @@ function InteractiveListeningComp() {
   // Summary phase state
   const [summaryText, setSummaryText] = useState('');
   const [showSummaryExample, setShowSummaryExample] = useState(false);
+  const [showSummaryResults, setShowSummaryResults] = useState(false);
+  const [summaryLocked, setSummaryLocked] = useState(false);
+
+  const summaryWordCount = (text) => {
+    if (!text) return 0;
+    const t = String(text).trim();
+    return t ? t.split(/\s+/).length : 0;
+  };
+
+  const summaryWordCountClass = (n) => {
+    // Ideal: 50–75, Acceptable: 40–49, Short: <40
+    if (n >= 50 ) return 'text-green-400';
+    if (n >= 40 && n < 50) return 'text-yellow-300';
+    if (n < 40) return 'text-red-400';
+    return 'text-white';
+  };
+
+  const openSummaryResults = () => {
+    setSummaryLocked(true);
+    setShowSummaryResults(true);
+  };
+
+  const handleCountdownComplete = () => {
+    if (phase === 'summary') {
+      openSummaryResults();
+      return;
+    }
+    handleSubmit();
+  };
 
   const continueFromReview = () => {
     // close review and go to the ListenAndRespond section
@@ -242,8 +273,8 @@ function InteractiveListeningComp() {
                 seconds={countdownSeconds}
                 color="#fff"
                 size={64}
-                paused={showReview || showSummaryExample}
-                onComplete={handleSubmit}
+                paused={showReview || showSummaryExample || showSummaryResults}
+                onComplete={handleCountdownComplete}
               />
             </div>
           )}
@@ -427,6 +458,8 @@ function InteractiveListeningComp() {
                             setPhase('summary');
                             setSummaryText('');
                             setShowSummaryExample(false);
+                            setSummaryLocked(false);
+                            setShowSummaryResults(false);
                           }}
                           className="bg-green-500 text-white px-4 py-2 rounded"
                         >
@@ -463,6 +496,8 @@ function InteractiveListeningComp() {
                     setPhase('summary');
                     setSummaryText('');
                     setShowSummaryExample(false);
+                    setSummaryLocked(false);
+                    setShowSummaryResults(false);
                   } else {
                     setCurrentRespondIdx(nextIdx);
                   }
@@ -545,28 +580,195 @@ function InteractiveListeningComp() {
                   <div className="text-sm text-gray-300">
                     Words:{' '}
                     <span className="font-medium text-white">
-                      {(summaryText || '').trim()
-                        ? summaryText.trim().split(/\s+/).length
-                        : 0}
+                      {summaryWordCount(summaryText)}
                     </span>
                   </div>
                 </div>
 
                 <textarea
                   value={summaryText}
-                  onChange={(e) => setSummaryText(e.target.value)}
+                  onChange={(e) => {
+                    if (summaryLocked) return;
+                    setSummaryText(e.target.value);
+                  }}
+                  readOnly={summaryLocked}
                   placeholder="Your response"
-                  className="w-full h-[340px] p-4 rounded border border-gray-700 bg-[#0b0b0b] text-gray-200 resize-none"
+                  className={`w-full h-[340px] p-4 rounded border border-gray-700 bg-[#0b0b0b] text-gray-200 resize-none ${
+                    summaryLocked ? 'opacity-70' : ''
+                  }`}
                 />
 
                 <div className="mt-6 flex justify-end items-center gap-4">
                   <button
-                    onClick={() => setShowSummaryExample(true)}
+                    onClick={openSummaryResults}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                   >
                     SUBMIT
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Summary Results (Interactive Writing style) */}
+        {showSummaryResults && scenario && phase === 'summary' && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black opacity-70"
+              onClick={() => {
+                if (isFullTest) return;
+                setShowSummaryResults(false);
+              }}
+            />
+
+            <div className="relative bg-gray-800 text-white rounded-lg max-w-5xl w-full p-6 z-50">
+              <h2 className="text-2xl font-bold mb-2 text-white">Results — Summary</h2>
+              <div className="text-sm text-gray-300 mb-4">
+                Expected length: <span className="font-semibold text-white">50–75</span> words
+                <span className="ml-2">(50–75 Ideal · 40–49 Acceptable · under 40 Short)</span>
+              </div>
+
+              <div className="space-y-4 max-h-[60vh] overflow-auto">
+                <div className="p-4 border border-gray-700 rounded bg-gray-900">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="text-lg font-semibold">Your summary</div>
+                    <div className="text-sm text-gray-300">
+                      Words:{' '}
+                      <span
+                        className={`font-bold ${summaryWordCountClass(
+                          summaryWordCount(summaryText)
+                        )}`}
+                      >
+                        {summaryWordCount(summaryText)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-2 text-gray-200 whitespace-pre-wrap">
+                    {summaryText || '(empty)'}
+                  </div>
+
+                  <div className="mt-4 text-sm text-gray-300 font-semibold">Example</div>
+                  <div className="text-gray-200 whitespace-pre-wrap">
+                    {summaryExample ||
+                      'In the conversation, the speakers discussed various topics including their weekend plans, favorite hobbies, and recent movies they have watched. They shared their thoughts and opinions, highlighting the importance of balancing work and leisure time.'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-end gap-2">
+                {!isFullTest && (
+                  <button
+                    className="px-4 py-2 bg-gray-700 text-white rounded"
+                    onClick={() => setShowSummaryResults(false)}
+                  >
+                    Close
+                  </button>
+                )}
+                {!isFullTest && (
+                  <button
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                    onClick={() => {
+                      setShowSummaryResults(false);
+                      setSummaryLocked(false);
+                      setSummaryText('');
+                    }}
+                  >
+                    Restart
+                  </button>
+                )}
+                <button
+                  className="px-4 py-2 bg-green-600 text-white rounded"
+                  onClick={() => {
+                    setShowSummaryResults(false);
+                    if (isFullTest) {
+                      try {
+                        const total = scenario
+                          ? scenario.questions
+                            ? scenario.questions.length
+                            : 0
+                          : 0;
+                        let correctCount = 0;
+                        if (scenario && scenario.questions) {
+                          correctCount = scenario.questions.reduce((acc, q) => {
+                            const uid = q.id;
+                            const user =
+                              answers &&
+                              Object.prototype.hasOwnProperty.call(answers, uid)
+                                ? answers[uid]
+                                : null;
+
+                            if (q.type === 'ListenAndComplete') {
+                              if (user != null && String(user).trim() !== '')
+                                return acc + 1;
+                              return acc;
+                            }
+
+                            const expected =
+                              q.answer || q.correct || q.correctAnswer || '';
+                            if (user == null || String(user).trim() === '') return acc;
+                            if (expected) {
+                              try {
+                                if (
+                                  String(user).trim().toLowerCase() ===
+                                  String(expected).trim().toLowerCase()
+                                )
+                                  return acc + 1;
+                                return acc;
+                              } catch (e) {
+                                return acc;
+                              }
+                            }
+                            return acc + 1;
+                          }, 0);
+                        }
+                        const incorrectCount = Math.max(0, total - correctCount);
+                        try {
+                          pushSectionResult({
+                            module: 'interactive-listening',
+                            totalQuestions: total,
+                            totalCorrect: correctCount,
+                            totalIncorrect: incorrectCount,
+                            timestamp: Date.now(),
+                          });
+                        } catch (e) {}
+                        const order = [
+                          '/read-and-select',
+                          '/fill-in-the-blanks',
+                          '/read-and-complete',
+                          '/interactive-reading',
+                          '/listening-test',
+                          '/interactive-listening',
+                          '/image-test',
+                          '/interactive-writing',
+                          '/speak-about-photo',
+                          '/read-then-speak',
+                          '/interactive-speaking',
+                          '/speaking-sample',
+                          '/writing-sample',
+                        ];
+                        const idx = order.indexOf(window.location.pathname);
+                        const next =
+                          idx >= 0 && idx < order.length - 1
+                            ? order[idx + 1]
+                            : null;
+                        if (next) {
+                          navigate(
+                            `${next}?fullTest=1&difficulty=${encodeURIComponent(
+                              selectedDifficulty
+                            )}`
+                          );
+                          return;
+                        }
+                      } catch (e) {}
+                      tryAgain();
+                    } else {
+                      tryAgain();
+                    }
+                  }}
+                >
+                  CONTINUE
+                </button>
               </div>
             </div>
           </div>
