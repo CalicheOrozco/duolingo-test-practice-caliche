@@ -8,7 +8,7 @@ export default function InteractiveWriting() {
   const [topics, setTopics] = useState([]);
   const [current, setCurrent] = useState(null);
   const [phase, setPhase] = useState('menu'); // menu | prepare | writing | review
-  const [prepareSeconds, setPrepareSeconds] = useState(10);
+  const [prepareSeconds, setPrepareSeconds] = useState(30);
   const [writeSeconds, setWriteSeconds] = useState(300); // 5 minutes default
   const [followUpSeconds, setFollowUpSeconds] = useState(180); // 3 minutes follow-up (display only)
   const [selectedDifficulty, setSelectedDifficulty] = useState('any');
@@ -198,8 +198,9 @@ export default function InteractiveWriting() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <label className="text-sm">Prepare sec</label>
             <select value={prepareSeconds} onChange={(e) => setPrepareSeconds(Number(e.target.value))} className="bg-gray-800 p-2 rounded">
-              <option value={5}>5</option>
-              <option value={10}>10</option>
+              <option value={30}>30</option>
+              <option value={25}>25</option>
+              <option value={20}>20</option>
               <option value={15}>15</option>
             </select>
             <label className="text-sm">Write sec</label>
