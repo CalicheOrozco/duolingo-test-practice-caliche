@@ -150,9 +150,10 @@ export default function ImageTestComp() {
   };
 
   const wordCountClass = (n) => {
-    if (n >= 50 && n <= 60) return 'text-green-400';
+    if (n >= 50) return 'text-green-400';
     if (n >= 35 && n <= 49) return 'text-yellow-300';
-    return 'text-red-400';
+    if (n < 30) return 'text-red-400';
+    return 'text-white';
   };
 
   // topics are taken from initialTopics stored in state (topicsPool)

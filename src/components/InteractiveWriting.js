@@ -179,10 +179,11 @@ export default function InteractiveWriting() {
   };
 
   const followUpWordCountClass = (n) => {
-    if (n >= 60 && n <= 90) return 'text-green-400';
-    if (n >= 50 && n < 60) return 'text-yellow-300';
+    // For follow-up, longer is generally better: anything >= 60 is ideal.
+    if (n >= 60) return 'text-green-400';
+    if (n >= 40) return 'text-yellow-300';
     if (n < 40) return 'text-red-400';
-    return 'text-yellow-300';
+    return 'text-white';
   };
 
   return (

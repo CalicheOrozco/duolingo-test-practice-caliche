@@ -166,10 +166,10 @@ export default function WritingSample() {
   };
 
   const wordCountClass = (n) => {
-    if (n >= 120 && n <= 150) return 'text-green-400';
+    if (n >= 120) return 'text-green-400';
     if (n >= 100 && n < 120) return 'text-yellow-300';
     if (n < 90) return 'text-red-400';
-    return 'text-yellow-300';
+    return 'text-white';
   };
 
   return (
