@@ -870,6 +870,117 @@ function InteractiveReadingComp() {
 
                 </div>
 
+                <div className="mt-4 grid grid-cols-1 gap-4">
+                  <div className="bg-[#111111] border border-gray-700 rounded p-4">
+                    <h4 className="text-lg font-semibold text-gray-200 mb-2">
+                      Correct passage
+                    </h4>
+                    <div className="text-sm text-gray-400 mb-3">
+                      Read the full correct text with all blanks filled.
+                    </div>
+
+                    <div className="bg-[#1f1f1f] border border-gray-700 rounded p-4 max-h-[45vh] overflow-auto">
+                      {exercise.passage && exercise.passage.length > 0 ? (
+                        (() => {
+                          const getCorrectTextForMarker = (num) => {
+                            const qObj = exercise.questions?.[num - 1];
+                            if (!qObj) return "";
+                            if (qObj.type === "HighlightTheAnswer") {
+                              return typeof qObj.correct === "string"
+                                ? qObj.correct
+                                : "";
+                            }
+                            if (
+                              Array.isArray(qObj.choices) &&
+                              typeof qObj.correct === "number"
+                            ) {
+                              return qObj.choices[qObj.correct] || "";
+                            }
+                            return "";
+                          };
+
+                          let last = null;
+                          return exercise.passage.map((p, pi) => {
+                            const np = normalize(p);
+                            if (last !== null && np === last) return null;
+                            last = np;
+
+                            const parts = p.split(/(\[\d+\])/);
+                            return (
+                              <p key={pi} className="text-gray-200 leading-7 mb-4">
+                                {parts.map((part, k) => {
+                                  const m = part.match(/^\[(\d+)\]$/);
+                                  if (m) {
+                                    const num = parseInt(m[1], 10);
+                                    const display = getCorrectTextForMarker(num);
+                                    return (
+                                      <span
+                                        key={k}
+                                        className="inline-flex items-center px-2 py-1 mx-1 rounded text-sm font-medium bg-green-900/20 text-green-200 border border-green-700"
+                                      >
+                                        <span className="text-xs mr-2 px-1">{num}</span>
+                                        <span className="whitespace-nowrap">
+                                          {display || "______"}
+                                        </span>
+                                      </span>
+                                    );
+                                  }
+                                  return <span key={k}>{part}</span>;
+                                })}
+                              </p>
+                            );
+                          });
+                        })()
+                      ) : (
+                        <div className="text-gray-400">
+                          No passage text available for this exercise.
+                        </div>
+                      )}
+
+                      {selectBestQs.length > 0 && (
+                        <div className="mt-6">
+                          <h5 className="text-sm font-semibold text-gray-300 mb-2">
+                            Correct sentence selections
+                          </h5>
+                          <div className="space-y-4">
+                            {selectBestQs.map(({ q, idx }) => {
+                              const before = q.beforeSelectTheBestSentence || "";
+                              const after = q.afterSelectTheBestSentence || "";
+                              const correctIdx =
+                                typeof q.correct === "number" ? q.correct : undefined;
+                              const modelText =
+                                correctIdx !== undefined
+                                  ? q.choices?.[correctIdx] || ""
+                                  : "";
+
+                              if (!before && !after && !modelText) return null;
+                              return (
+                                <div key={`correct-sentence-${idx}`}>
+                                  {before ? (
+                                    <p className="text-gray-200 leading-7 mb-2">
+                                      {before}
+                                    </p>
+                                  ) : null}
+                                  {modelText ? (
+                                    <div className="p-3 rounded border border-green-700 bg-green-900/10 text-green-100">
+                                      {modelText}
+                                    </div>
+                                  ) : null}
+                                  {after ? (
+                                    <p className="text-gray-200 leading-7 mt-2">
+                                      {after}
+                                    </p>
+                                  ) : null}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
                 <div className="mt-3 grid grid-cols-1 gap-3">
                   {exercise.questions.map((q, i) => (
                     <div
