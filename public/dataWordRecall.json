@@ -21,9 +21,7 @@
   { "word": "responsible", "translate": "responsable" },
   { "word": "discussion", "translate": "discusión" },
   { "word": "suggest", "translate": "sugerir" },
-  { "word": "solution", "translate": "solución" },
   { "word": "available", "translate": "disponible" },
-  { "word": "consider", "translate": "considerar" },
   { "word": "however", "translate": "sin embargo" },
   { "word": "whereas", "translate": "mientras que" },
   { "word": "whether", "translate": "si (en preguntas indirectas)" },
@@ -163,7 +161,19 @@
   { "word": "illustrates", "translate": "ilustra" },
   { "word": "conveys", "translate": "transmite" },
   { "word": "exemplifies", "translate": "ejemplifica" },
-  { "word": "embodies", "translate": "encarna" }
+  { "word": "embodies", "translate": "encarna" },
+  { "word": "endangered", "translate": "en peligro de extinción" },
+  { "word": "awareness", "translate": "conciencia" },
+  { "word": "sustainability", "translate": "sostenibilidad" },
+  { "word": "recycling", "translate": "reciclaje" },
+  { "word": "mountain", "translate": "montaña" },
+  { "word": "enough", "translate": "suficiente" },
+  { "word": "quiet", "translate": "tranquilo" },
+  { "word": "loud", "translate": "ruidoso" },
+  { "word": "graphic", "translate": "gráfico" }
+
+
+
 
 
 
