@@ -82,6 +82,22 @@ function ListeningTestComp() {
     } catch (err) {}
   };
 
+  const dedupeByFile = (items) => {
+    const list = Array.isArray(items) ? items : [];
+    const seen = new Set();
+    const out = [];
+    for (const item of list) {
+      const fileKey = (item && item.file ? String(item.file) : '').trim();
+      const answerKey = (item && item.answer ? String(item.answer) : '').trim();
+      const key = fileKey || answerKey;
+      if (!key) continue;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(item);
+    }
+    return out;
+  };
+
   // function to restart the form
   const restart = () => {
     // reset per-question state (no per-question feedback shown)
@@ -137,6 +153,9 @@ function ListeningTestComp() {
               if (selectedDifficulty !== 'all' && selectedDifficulty !== 'any') {
                 filtered = filtered.filter((a) => a.difficulty === selectedDifficulty);
               }
+
+          // Avoid repeated questions caused by duplicate audio entries
+          filtered = dedupeByFile(filtered);
 
           const minExercises = 8;
           const maxExercises = 12;
@@ -283,6 +302,9 @@ function ListeningTestComp() {
     if (selectedDifficulty !== "all" && selectedDifficulty !== "any") {
       filtered = filtered.filter((a) => a.difficulty === selectedDifficulty);
     }
+
+    // Avoid repeated questions caused by duplicate audio entries
+    filtered = dedupeByFile(filtered);
 
     // choose random number of exercises between 8 and 12 (inclusive)
     const minExercises = 8;
