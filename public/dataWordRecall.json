@@ -110,7 +110,6 @@
   { "word": "prevent", "translate": "prevenir" },
   { "word": "process", "translate": "proceso" },
   { "word": "provide", "translate": "proporcionar" },
-  { "word": "publish", "translate": "publicar" },
   { "word": "purchase", "translate": "comprar" },
   { "word": "recognize", "translate": "reconocer" },
   { "word": "recommend", "translate": "recomendar" },
@@ -170,7 +169,38 @@
   { "word": "enough", "translate": "suficiente" },
   { "word": "quiet", "translate": "tranquilo" },
   { "word": "loud", "translate": "ruidoso" },
-  { "word": "graphic", "translate": "gráfico" }
+  { "word": "graphic", "translate": "gráfico" },
+  { "word": "fur", "translate": "pelaje" },
+  { "word": "statistics", "translate": "estadísticas" },
+  { "word": "essay", "translate": "ensayo" },
+  { "word": "beatify", "translate": "mariposa" },
+  { "word": "photograph", "translate": "fotografía" },
+  { "word": "turtle", "translate": "tortuga" },
+  { "word": "sell", "translate": "vender" },
+  {"word": "knowledge", "translate": "conocimiento" },
+  { "word": "appositive", "translate": "aposición" },
+  {"word": "imposing", "translate": "imponente" },
+  {"word": "dazzling", "translate": "deslumbrante" },
+  {"word": "stunning", "translate": "impresionante" },
+  { "word": "campaigning", "translate": "hacer campaña" },
+  { "word": "persuasive", "translate": "persuasivo" },
+  { "word": "compelling", "translate": "convincente" },
+  { "word": "torn", "translate": "desgarrado" },
+  { "word": "politeness", "translate": "educación/cortesía" },
+  { "word": "manners", "translate": "modales" },
+  { "word": "appealing", "translate": "agradable / atractivo" },
+  { "word": "courtesy", "translate": "cortesía" },
+  { "word": "composure", "translate": "serenidad" },
+  { "word": "engineer", "translate": "ingeniero" }
+
+  
+
+
+
+
+
+
+
 
 
 
